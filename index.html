@@ -1,0 +1,2166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BJ's × Delight AI — The Future of Member Experience</title>
+    <style>
+        /* =========================================== DESIGN TOKENS =========================================== */
+        :root {
+            --black: #0D0D0D;
+            --white: #FFFFFF;
+            --offwhite: #F5F5F0;
+            --tan: #a88a5b;
+            --teal: #2a9d8f;
+            --purple: #7c5cff;
+            --bjs-red: #D31242;
+            --light-gray: #f8f9fa;
+            --border-gray: #e9ecef;
+            --text-dark: #0D0D0D;
+            --text-mid: #555555;
+            --text-light: #888888;
+            --font-headline: Georgia, 'Times New Roman', serif;
+            --font-body: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --title-size: clamp(2.2rem, 5.5vw, 4.5rem);
+            --h2-size: clamp(1.5rem, 3.5vw, 2.8rem);
+            --h3-size: clamp(1.1rem, 2.2vw, 1.6rem);
+            --body-size: clamp(0.78rem, 1.3vw, 1.05rem);
+            --small-size: clamp(0.68rem, 1vw, 0.88rem);
+            --tiny-size: clamp(0.58rem, 0.85vw, 0.75rem);
+            --label-size: clamp(0.55rem, 0.75vw, 0.7rem);
+            --slide-padding: clamp(2rem, 5vw, 5rem);
+            --content-gap: clamp(0.75rem, 2vw, 1.75rem);
+            --element-gap: clamp(0.3rem, 0.8vw, 0.6rem);
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --dur: 0.7s;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            height: 100%;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--offwhite);
+            color: var(--text-dark);
+            height: 100%;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* =========================================== SLIDES =========================================== */
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            padding: var(--slide-padding);
+        }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-height: 100%;
+            overflow: hidden;
+        }
+
+        .slide.dark { background: var(--black); color: var(--white); }
+        .slide.light { background: var(--offwhite); color: var(--text-dark); }
+
+        /* =========================================== PROGRESS & NAV =========================================== */
+        .progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 2px;
+            background: var(--tan);
+            width: 0%;
+            z-index: 100;
+            transition: width 0.3s ease;
+        }
+
+        .nav-dots {
+            position: fixed;
+            right: clamp(0.75rem, 2vw, 1.5rem);
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--border-gray);
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+
+        .nav-dot.active {
+            background: var(--tan);
+            border-color: var(--tan);
+            transform: scale(1.4);
+        }
+
+        .keyboard-hint {
+            position: fixed;
+            bottom: clamp(0.75rem, 2vh, 1.25rem);
+            right: clamp(0.75rem, 2vw, 1.5rem);
+            font-size: var(--tiny-size);
+            color: var(--text-light);
+            opacity: 0.5;
+            z-index: 100;
+        }
+
+        .key {
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            padding: 0 4px;
+            font-size: 0.7em;
+            line-height: 1.6;
+        }
+
+        /* =========================================== TYPOGRAPHY =========================================== */
+        h1 {
+            font-family: var(--font-headline);
+            font-size: var(--title-size);
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -0.015em;
+        }
+
+        h2 {
+            font-family: var(--font-headline);
+            font-size: var(--h2-size);
+            font-weight: 400;
+            line-height: 1.15;
+            letter-spacing: -0.015em;
+        }
+
+        h3 {
+            font-family: var(--font-headline);
+            font-size: var(--h3-size);
+            font-weight: 400;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+
+        p, li {
+            font-size: var(--body-size);
+            line-height: 1.55;
+            color: var(--text-mid);
+        }
+
+        .slide.dark p, .slide.dark li { color: rgba(255,255,255,0.6); }
+
+        .label {
+            font-family: var(--font-body);
+            font-size: var(--label-size);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--tan);
+        }
+
+        .slide.dark .label { color: var(--tan); }
+
+        /* =========================================== ANIMATIONS =========================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+        }
+
+        .slide.visible .reveal { opacity: 1; transform: translateY(0); }
+
+        .d1 { transition-delay: 0.08s; }
+        .d2 { transition-delay: 0.16s; }
+        .d3 { transition-delay: 0.24s; }
+        .d4 { transition-delay: 0.32s; }
+        .d5 { transition-delay: 0.4s; }
+        .d6 { transition-delay: 0.48s; }
+        .d7 { transition-delay: 0.56s; }
+        .d8 { transition-delay: 0.64s; }
+
+        /* =========================================== DARK BOOKEND SLIDES =========================================== */
+        .title-slide .slide-content {
+            align-items: flex-start;
+            gap: clamp(0.5rem, 1.5vh, 1rem);
+        }
+
+        .title-slide .subtitle {
+            font-size: clamp(0.9rem, 1.8vw, 1.2rem);
+            color: rgba(255,255,255,0.5);
+            max-width: 600px;
+            margin-top: var(--element-gap);
+        }
+
+        .title-badge {
+            display: inline-block;
+            font-size: var(--label-size);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--tan);
+            border: 1px solid rgba(168,138,91,0.3);
+            padding: clamp(0.15rem, 0.3vw, 0.25rem) clamp(0.35rem, 0.6vw, 0.5rem);
+            border-radius: 3px;
+            width: fit-content;
+        }
+
+        /* =========================================== SECTION BREAK SLIDES =========================================== */
+        .section-break .slide-content {
+            align-items: flex-start;
+            gap: clamp(0.4rem, 1vh, 0.75rem);
+        }
+
+        .section-break h2 {
+            font-size: clamp(1.8rem, 4.5vw, 3.5rem);
+            max-width: 700px;
+        }
+
+        .section-break .section-desc {
+            font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+            color: rgba(255,255,255,0.45);
+            max-width: 500px;
+        }
+
+        .section-number {
+            font-family: var(--font-body);
+            font-size: var(--tiny-size);
+            font-weight: 700;
+            color: var(--tan);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        /* =========================================== AGENDA SLIDE =========================================== */
+        .agenda-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: clamp(0.75rem, 1.5vw, 1.25rem);
+            margin-top: var(--content-gap);
+        }
+
+        .agenda-item {
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 12px;
+            padding: clamp(1rem, 2vw, 1.75rem);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.3rem, 0.6vh, 0.5rem);
+        }
+
+        .agenda-item .agenda-num {
+            font-family: var(--font-body);
+            font-size: var(--tiny-size);
+            font-weight: 700;
+            color: var(--tan);
+            letter-spacing: 0.1em;
+        }
+
+        .agenda-item h3 {
+            font-size: var(--h3-size);
+            color: var(--text-dark);
+        }
+
+        .agenda-item p {
+            font-size: var(--small-size);
+            color: var(--text-light);
+        }
+
+        .agenda-item .time-badge {
+            display: inline-block;
+            font-size: var(--label-size);
+            font-weight: 700;
+            color: var(--text-light);
+            background: var(--light-gray);
+            padding: 2px 8px;
+            border-radius: 4px;
+            width: fit-content;
+            margin-top: auto;
+        }
+
+        /* =========================================== WAVES SLIDE =========================================== */
+        .waves-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(0.75rem, 1.5vw, 1.25rem);
+            margin-top: var(--content-gap);
+        }
+
+        .wave-card {
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 12px;
+            padding: clamp(1rem, 2vw, 1.5rem);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.3rem, 0.6vh, 0.5rem);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wave-card.current {
+            border-color: var(--purple);
+            border-width: 2px;
+        }
+
+        .wave-card.current::before {
+            content: 'NOW';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: var(--label-size);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--white);
+            background: var(--purple);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .wave-card .wave-era {
+            font-size: var(--label-size);
+            font-weight: 700;
+            color: var(--text-light);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .wave-card h3 {
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            color: var(--text-dark);
+            margin-top: 2px;
+        }
+
+        .wave-card p {
+            font-size: var(--small-size);
+        }
+
+        .wave-traits {
+            list-style: none;
+            margin-top: auto;
+            padding-top: clamp(0.3rem, 0.5vh, 0.5rem);
+            border-top: 1px solid var(--border-gray);
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .wave-traits li {
+            font-size: var(--tiny-size);
+            color: var(--text-light);
+            padding-left: 12px;
+            position: relative;
+        }
+
+        .wave-traits li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--border-gray);
+            transform: translateY(-50%);
+        }
+
+        .wave-card.current .wave-traits li::before { background: var(--purple); }
+
+        /* =========================================== COMPETITOR SLIDE =========================================== */
+        .competitors-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(0.75rem, 1.5vw, 1.25rem);
+            margin-top: var(--content-gap);
+        }
+
+        .competitor-card {
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 12px;
+            padding: clamp(1rem, 2vw, 1.5rem);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.3rem, 0.5vh, 0.4rem);
+        }
+
+        .competitor-card .comp-name {
+            font-family: var(--font-body);
+            font-size: var(--body-size);
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .competitor-card .comp-detail {
+            font-size: var(--tiny-size);
+            color: var(--text-light);
+        }
+
+        .competitor-card .comp-building {
+            font-size: var(--small-size);
+            color: var(--text-mid);
+            margin-top: 4px;
+        }
+
+        .gap-callout {
+            background: var(--black);
+            color: var(--white);
+            border-radius: 12px;
+            padding: clamp(1rem, 2vw, 1.75rem);
+            margin-top: clamp(0.5rem, 1vw, 1rem);
+            display: flex;
+            align-items: center;
+            gap: clamp(0.75rem, 1.5vw, 1.25rem);
+        }
+
+        .gap-callout .gap-icon {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            flex-shrink: 0;
+        }
+
+        .gap-callout p {
+            color: rgba(255,255,255,0.7);
+            font-size: var(--body-size);
+        }
+
+        .gap-callout strong { color: var(--white); }
+
+        /* =========================================== TWO CAPABILITIES SLIDE =========================================== */
+        .two-caps {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: clamp(0.75rem, 2vw, 2rem);
+            margin-top: var(--content-gap);
+            align-items: stretch;
+        }
+
+        .cap-card {
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 14px;
+            padding: clamp(1.25rem, 2.5vw, 2rem);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.4rem, 0.8vh, 0.7rem);
+        }
+
+        .cap-card .cap-icon {
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+        }
+
+        .cap-card h3 {
+            font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+            color: var(--text-dark);
+        }
+
+        .cap-card p {
+            font-size: var(--small-size);
+        }
+
+        .cap-card .cap-tag {
+            display: inline-block;
+            font-size: var(--label-size);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 4px;
+            width: fit-content;
+        }
+
+        .cap-card.fyc-cap .cap-tag { background: rgba(42,157,143,0.1); color: var(--teal); }
+        .cap-card.steward-cap .cap-tag { background: rgba(124,92,255,0.1); color: var(--purple); }
+
+        .cap-plus {
+            font-family: var(--font-headline);
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+        }
+
+        .cap-result {
+            background: var(--black);
+            color: var(--white);
+            border-radius: 14px;
+            padding: clamp(1rem, 2vw, 1.5rem);
+            margin-top: clamp(0.5rem, 1vw, 1rem);
+            text-align: center;
+        }
+
+        .cap-result h3 {
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            color: var(--white);
+        }
+
+        .cap-result p { color: rgba(255,255,255,0.5); font-size: var(--small-size); }
+
+        /* =========================================== FYC LIFECYCLE SLIDE =========================================== */
+        .lifecycle-compact {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(0.5rem, 1.2vw, 1rem);
+            margin-top: var(--content-gap);
+        }
+
+        .lc-phase {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lc-phase-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: clamp(0.3rem, 0.6vh, 0.5rem);
+            margin-bottom: clamp(0.3rem, 0.6vh, 0.5rem);
+            border-bottom: 2px solid var(--border-gray);
+        }
+
+        .lc-phase-num {
+            font-family: var(--font-body);
+            font-size: var(--tiny-size);
+            font-weight: 700;
+            color: var(--white);
+            background: var(--teal);
+            width: clamp(18px, 2vw, 22px);
+            height: clamp(18px, 2vw, 22px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .lc-phase-title {
+            font-family: var(--font-body);
+            font-size: var(--small-size);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-dark);
+        }
+
+        .lc-items {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.25rem, 0.5vh, 0.4rem);
+        }
+
+        .lc-item {
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            padding: clamp(0.4rem, 0.8vw, 0.6rem) clamp(0.5rem, 1vw, 0.75rem);
+        }
+
+        .lc-item .lc-name {
+            font-size: var(--small-size);
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .lc-item .lc-desc {
+            font-size: var(--tiny-size);
+            color: var(--text-light);
+            margin-top: 1px;
+        }
+
+        .lc-item.quick-win {
+            border-left: 3px solid var(--teal);
+        }
+
+        /* =========================================== PRIORITY MATRIX =========================================== */
+        .priority-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: clamp(0.5rem, 1vw, 0.75rem);
+            margin-top: var(--content-gap);
+        }
+
+        .priority-box {
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 12px;
+            padding: clamp(0.75rem, 1.5vw, 1.25rem);
+        }
+
+        .priority-box .pb-label {
+            font-size: var(--label-size);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 6px;
+        }
+
+        .priority-box.qw .pb-label { color: var(--teal); }
+        .priority-box.sb .pb-label { color: var(--purple); }
+        .priority-box.ea .pb-label { color: var(--tan); }
+        .priority-box.bt .pb-label { color: var(--text-light); }
+
+        .priority-box.qw { border-color: var(--teal); border-width: 2px; }
+
+        .pb-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .pb-chip {
+            font-size: var(--tiny-size);
+            font-weight: 500;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: var(--light-gray);
+            color: var(--text-mid);
+        }
+
+        .priority-box.qw .pb-chip { background: rgba(42,157,143,0.1); color: var(--teal); }
+
+        /* =========================================== DOUBLE WORK SLIDE =========================================== */
+        .double-work {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: clamp(1rem, 2.5vw, 2.5rem);
+            margin-top: var(--content-gap);
+            align-items: center;
+        }
+
+        .job-card {
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 14px;
+            padding: clamp(1.25rem, 2.5vw, 2rem);
+            text-align: center;
+        }
+
+        .job-card .job-time {
+            font-family: var(--font-headline);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            color: var(--text-dark);
+            line-height: 1;
+        }
+
+        .job-card .job-label {
+            font-size: var(--small-size);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+
+        .job-card.job1 .job-label { color: var(--teal); }
+        .job-card.job2 .job-label { color: var(--bjs-red); }
+
+        .job-card .job-desc {
+            font-size: var(--small-size);
+            color: var(--text-light);
+        }
+
+        .job-tasks {
+            list-style: none;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            text-align: left;
+        }
+
+        .job-tasks li {
+            font-size: var(--tiny-size);
+            color: var(--text-light);
+            padding: 4px 8px;
+            background: var(--light-gray);
+            border-radius: 6px;
+        }
+
+        .vs-divider {
+            font-family: var(--font-body);
+            font-size: var(--small-size);
+            font-weight: 700;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        .dw-insight {
+            background: var(--black);
+            color: var(--white);
+            border-radius: 12px;
+            padding: clamp(0.75rem, 1.5vw, 1.25rem) clamp(1rem, 2vw, 1.75rem);
+            margin-top: clamp(0.5rem, 1vw, 1rem);
+            text-align: center;
+        }
+
+        .dw-insight p { color: rgba(255,255,255,0.6); }
+        .dw-insight strong { color: var(--white); }
+
+        /* =========================================== ARCHITECTURE SLIDE =========================================== */
+        .arch-flow {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.5rem, 1vw, 0.75rem);
+            margin-top: var(--content-gap);
+            align-items: center;
+        }
+
+        .arch-row {
+            display: flex;
+            align-items: center;
+            gap: clamp(0.5rem, 1vw, 0.75rem);
+            width: 100%;
+            justify-content: center;
+        }
+
+        .arch-box {
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 10px;
+            padding: clamp(0.6rem, 1.2vw, 1rem) clamp(0.8rem, 1.5vw, 1.25rem);
+            text-align: center;
+            flex: 0 1 auto;
+            min-width: clamp(100px, 15vw, 180px);
+        }
+
+        .arch-box.primary {
+            background: var(--black);
+            color: var(--white);
+            border-color: var(--black);
+        }
+
+        .arch-box.primary p { color: rgba(255,255,255,0.6); }
+
+        .arch-box.sub-agent {
+            background: rgba(124,92,255,0.06);
+            border-color: rgba(124,92,255,0.25);
+        }
+
+        .arch-box .arch-label {
+            font-size: var(--tiny-size);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-light);
+        }
+
+        .arch-box.primary .arch-label { color: var(--tan); }
+        .arch-box.sub-agent .arch-label { color: var(--purple); }
+
+        .arch-box .arch-name {
+            font-size: var(--body-size);
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-top: 2px;
+        }
+
+        .arch-box.primary .arch-name { color: var(--white); }
+
+        .arch-box .arch-desc {
+            font-size: var(--tiny-size);
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        .arch-arrow {
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            color: var(--text-light);
+        }
+
+        .arch-arrow.down {
+            transform: rotate(90deg);
+        }
+
+        .sub-agents-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(0.4rem, 0.8vw, 0.6rem);
+            width: 100%;
+            max-width: 700px;
+        }
+
+        /* =========================================== USE CASE CARDS =========================================== */
+        .usecase-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(0.5rem, 1.2vw, 1rem);
+            margin-top: var(--content-gap);
+        }
+
+        .usecase-card {
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 12px;
+            padding: clamp(0.75rem, 1.5vw, 1.25rem);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.25rem, 0.5vh, 0.4rem);
+        }
+
+        .usecase-card .uc-num {
+            font-size: var(--label-size);
+            font-weight: 700;
+            color: var(--purple);
+            letter-spacing: 0.1em;
+        }
+
+        .usecase-card h3 {
+            font-size: clamp(0.9rem, 1.8vw, 1.2rem);
+            color: var(--text-dark);
+        }
+
+        .usecase-card .uc-scenario {
+            font-size: var(--small-size);
+            color: var(--text-mid);
+            font-style: italic;
+        }
+
+        .usecase-card .uc-steps {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            margin-top: auto;
+            padding-top: 6px;
+            border-top: 1px solid var(--border-gray);
+        }
+
+        .usecase-card .uc-steps li {
+            font-size: var(--tiny-size);
+            color: var(--text-light);
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .uc-steps .step-icon {
+            flex-shrink: 0;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(124,92,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            color: var(--purple);
+            margin-top: 1px;
+        }
+
+        /* =========================================== BIG UNLOCK SLIDE =========================================== */
+        .unlock-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(0.75rem, 1.5vw, 1.25rem);
+            margin-top: var(--content-gap);
+        }
+
+        .unlock-center {
+            background: var(--black);
+            color: var(--white);
+            border-radius: 14px;
+            padding: clamp(1rem, 2vw, 1.5rem) clamp(1.5rem, 3vw, 2.5rem);
+            text-align: center;
+        }
+
+        .unlock-center .unlock-icon { font-size: clamp(1.5rem, 3vw, 2.5rem); }
+        .unlock-center h3 { color: var(--white); font-size: clamp(1rem, 2vw, 1.4rem); }
+        .unlock-center p { color: rgba(255,255,255,0.5); font-size: var(--small-size); }
+
+        .unlock-channels {
+            display: flex;
+            gap: clamp(0.5rem, 1vw, 0.75rem);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .unlock-channel {
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 10px;
+            padding: clamp(0.5rem, 1vw, 0.75rem) clamp(0.75rem, 1.5vw, 1.25rem);
+            text-align: center;
+            min-width: clamp(80px, 12vw, 140px);
+        }
+
+        .unlock-channel .ch-icon { font-size: clamp(1.2rem, 2.5vw, 1.8rem); }
+        .unlock-channel .ch-name {
+            font-size: var(--tiny-size);
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-top: 2px;
+        }
+
+        .unlock-channel .ch-desc {
+            font-size: var(--label-size);
+            color: var(--text-light);
+        }
+
+        .unlock-today {
+            display: flex;
+            align-items: center;
+            gap: clamp(0.5rem, 1vw, 0.75rem);
+            background: var(--light-gray);
+            border-radius: 10px;
+            padding: clamp(0.5rem, 1vw, 0.75rem) clamp(0.75rem, 1.5vw, 1.25rem);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .unlock-today .ut-label {
+            font-size: var(--label-size);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-light);
+            white-space: nowrap;
+        }
+
+        .unlock-today p {
+            font-size: var(--small-size);
+        }
+
+        /* =========================================== AUTONOMY LEVELS SLIDE =========================================== */
+        .autonomy-track {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.4rem, 0.8vw, 0.6rem);
+            margin-top: var(--content-gap);
+        }
+
+        .auto-level {
+            display: grid;
+            grid-template-columns: clamp(60px, 8vw, 90px) 1fr;
+            gap: clamp(0.5rem, 1vw, 0.75rem);
+            align-items: center;
+        }
+
+        .auto-badge {
+            text-align: center;
+            padding: clamp(0.3rem, 0.6vw, 0.5rem);
+            border-radius: 8px;
+            font-size: var(--tiny-size);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .auto-level.l0 .auto-badge { background: var(--light-gray); color: var(--text-light); }
+        .auto-level.l1 .auto-badge { background: rgba(124,92,255,0.1); color: var(--purple); }
+        .auto-level.l2 .auto-badge { background: rgba(42,157,143,0.1); color: var(--teal); }
+
+        .auto-detail {
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 10px;
+            padding: clamp(0.5rem, 1vw, 0.75rem) clamp(0.75rem, 1.5vw, 1.25rem);
+        }
+
+        .auto-level.l1 .auto-detail { border-color: rgba(124,92,255,0.3); border-width: 2px; }
+
+        .auto-detail .ad-title {
+            font-size: var(--body-size);
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .auto-detail .ad-desc {
+            font-size: var(--small-size);
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        .auto-detail .ad-example {
+            font-size: var(--tiny-size);
+            color: var(--text-mid);
+            font-style: italic;
+            background: var(--light-gray);
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-top: 6px;
+            display: inline-block;
+        }
+
+        .autonomy-insight {
+            background: var(--black);
+            color: var(--white);
+            border-radius: 12px;
+            padding: clamp(0.75rem, 1.5vw, 1.25rem) clamp(1rem, 2vw, 1.75rem);
+            margin-top: clamp(0.4rem, 0.8vw, 0.6rem);
+        }
+
+        .autonomy-insight p { color: rgba(255,255,255,0.6); font-size: var(--body-size); }
+        .autonomy-insight strong { color: var(--white); }
+
+        /* =========================================== MIDDLE PATH SLIDE =========================================== */
+        .middle-path-flow {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.4rem, 0.8vw, 0.6rem);
+            margin-top: var(--content-gap);
+        }
+
+        .mp-row {
+            display: grid;
+            grid-template-columns: clamp(80px, 10vw, 120px) 1fr;
+            gap: clamp(0.5rem, 1vw, 0.75rem);
+            align-items: center;
+        }
+
+        .mp-label {
+            font-size: var(--tiny-size);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            text-align: right;
+        }
+
+        .mp-content {
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 10px;
+            padding: clamp(0.5rem, 1vw, 0.75rem) clamp(0.75rem, 1.5vw, 1.25rem);
+        }
+
+        .mp-content p {
+            font-size: var(--small-size);
+        }
+
+        .mp-content strong { color: var(--text-dark); }
+
+        .mp-row.highlight .mp-label { color: var(--purple); }
+        .mp-row.highlight .mp-content {
+            border-color: var(--purple);
+            border-width: 2px;
+        }
+
+        /* =========================================== COMPLETE PICTURE =========================================== */
+        .complete-picture {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(0.75rem, 1.5vw, 1.25rem);
+            margin-top: var(--content-gap);
+        }
+
+        .cp-card {
+            border-radius: 14px;
+            padding: clamp(1.25rem, 2.5vw, 2rem);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.3rem, 0.6vh, 0.5rem);
+        }
+
+        .cp-card.fyc-card {
+            background: rgba(42,157,143,0.06);
+            border: 1px solid rgba(42,157,143,0.2);
+        }
+
+        .cp-card.steward-card {
+            background: rgba(124,92,255,0.06);
+            border: 1px solid rgba(124,92,255,0.2);
+        }
+
+        .cp-card .cp-icon { font-size: clamp(1.5rem, 3vw, 2.2rem); }
+        .cp-card h3 { color: var(--text-dark); }
+
+        .cp-card .cp-tag {
+            font-size: var(--label-size);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .cp-card.fyc-card .cp-tag { color: var(--teal); }
+        .cp-card.steward-card .cp-tag { color: var(--purple); }
+
+        .cp-card ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .cp-card li {
+            font-size: var(--small-size);
+            color: var(--text-mid);
+        }
+
+        .cp-equals {
+            text-align: center;
+            background: var(--black);
+            color: var(--white);
+            border-radius: 14px;
+            padding: clamp(1rem, 2vw, 1.5rem);
+            margin-top: clamp(0.5rem, 1vw, 1rem);
+            grid-column: 1 / -1;
+        }
+
+        .cp-equals h3 { color: var(--white); font-size: clamp(1.1rem, 2.2vw, 1.6rem); }
+        .cp-equals p { color: rgba(255,255,255,0.5); }
+
+        /* =========================================== ROADMAP SLIDE =========================================== */
+        .roadmap-track {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: clamp(0.4rem, 0.8vw, 0.6rem);
+            margin-top: var(--content-gap);
+        }
+
+        .rm-phase {
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 12px;
+            padding: clamp(0.75rem, 1.5vw, 1.25rem);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.2rem, 0.4vh, 0.3rem);
+            position: relative;
+        }
+
+        .rm-phase .rm-num {
+            font-size: var(--label-size);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-light);
+        }
+
+        .rm-phase .rm-weeks {
+            font-size: var(--tiny-size);
+            color: var(--tan);
+            font-weight: 600;
+        }
+
+        .rm-phase h3 {
+            font-size: clamp(0.85rem, 1.6vw, 1.1rem);
+            color: var(--text-dark);
+            margin-top: 4px;
+        }
+
+        .rm-items {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            margin-top: auto;
+            padding-top: 6px;
+        }
+
+        .rm-items li {
+            font-size: var(--tiny-size);
+            color: var(--text-light);
+            padding-left: 10px;
+            position: relative;
+        }
+
+        .rm-items li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--text-light);
+        }
+
+        .rm-phase.p1 { border-top: 3px solid var(--teal); }
+        .rm-phase.p2 { border-top: 3px solid var(--teal); }
+        .rm-phase.p3 { border-top: 3px solid var(--purple); }
+        .rm-phase.p4 { border-top: 3px solid var(--purple); }
+
+        /* =========================================== DISCUSSION SLIDE =========================================== */
+        .discussion-items {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: clamp(0.5rem, 1.2vw, 1rem);
+            margin-top: var(--content-gap);
+        }
+
+        .disc-item {
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 12px;
+            padding: clamp(1rem, 2vw, 1.5rem);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.2rem, 0.4vh, 0.3rem);
+        }
+
+        .disc-item .disc-num {
+            font-size: var(--label-size);
+            font-weight: 700;
+            color: var(--tan);
+            letter-spacing: 0.1em;
+        }
+
+        .disc-item h3 {
+            font-size: clamp(0.9rem, 1.8vw, 1.15rem);
+            color: var(--text-dark);
+        }
+
+        .disc-item p {
+            font-size: var(--small-size);
+            color: var(--text-light);
+        }
+
+        /* =========================================== ACCESS GATE =========================================== */
+        .access-gate {
+            position: fixed;
+            inset: 0;
+            background: var(--black);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(1rem, 2vh, 1.5rem);
+        }
+
+        .access-gate.hidden { display: none; }
+
+        .access-gate .gate-logo {
+            height: clamp(20px, 3vw, 28px);
+            opacity: 0.4;
+            margin-bottom: clamp(0.5rem, 1vh, 1rem);
+        }
+
+        .access-gate label {
+            font-family: var(--font-body);
+            font-size: var(--small-size);
+            font-weight: 500;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .access-gate input {
+            font-family: var(--font-body);
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            text-align: center;
+            letter-spacing: 0.2em;
+            padding: clamp(0.5rem, 1vw, 0.75rem) clamp(1.5rem, 3vw, 2.5rem);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            color: var(--white);
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .access-gate input:focus { border-color: var(--tan); }
+
+        .access-gate input.error {
+            border-color: #D31242;
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        .presentation-wrap { display: none; }
+        .presentation-wrap.unlocked { display: block; }
+    </style>
+</head>
+<body>
+
+    <!-- Access Gate -->
+    <div class="access-gate" id="accessGate">
+        <svg class="gate-logo" viewBox="0 0 985 310" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M556.238 236.195H556.032C556.068 236.195 556.103 236.195 556.139 236.195C556.172 236.195 556.205 236.195 556.238 236.195Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M555.62 112.092C564.058 112.092 571.056 114.562 574.967 116.415L600.075 112.916V132.261H566.94C584.228 132.673 589.579 142.964 589.579 149.962C589.579 166.015 572.908 173.835 555.415 173.835C551.71 173.835 548.417 173.423 545.33 172.806C543.889 173.629 543.066 175.276 543.066 176.923C543.066 180.215 546.565 181.862 550.887 181.862H570.645C589.167 181.862 601.516 191.741 601.516 206.353C601.516 228.546 578.947 236.171 556.139 236.195C531.908 236.173 515.693 228.151 515.693 214.998C515.693 205.942 523.103 198.327 540.802 198.327H543.684C530.1 197.298 522.896 192.976 522.896 185.361C522.896 178.775 529.483 172.806 544.301 172.6C529.277 168.896 520.632 157.37 520.632 142.964C520.633 124.647 535.245 112.092 555.62 112.092ZM546.359 198.944C538.744 198.944 534.216 202.855 534.216 208C534.216 216.232 543.889 218.908 556.238 218.908C570.644 218.908 580.729 215.409 580.729 207.588C580.729 202.649 577.024 198.944 568.586 198.944H546.359ZM555.827 127.528C546.977 127.528 541.213 134.526 541.213 142.758C541.213 152.431 546.977 158.194 555.827 158.194C564.676 158.193 570.439 152.431 570.439 142.758C570.439 134.32 564.676 127.528 555.827 127.528Z" fill="white"/><path d="M160.484 134.925H221.87V156.123H175.527L211.548 192.145L196.524 207.169L160.484 171.129V221.988H139.285V171.385L103.498 207.172L88.474 192.148L88.4797 192.142L88.474 192.136L124.487 156.123H73.6865V134.925H124.279L88.474 99.1192L103.498 84.0948L139.285 119.882V73.8047H160.484V134.925Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M401.52 112.294C427.246 112.294 443.299 132.051 443.299 153.661C443.299 158.189 442.888 162.511 442.27 164.981H377.852C380.734 177.124 390.2 183.916 401.932 183.916C411.193 183.916 419.631 179.182 423.336 173.419L438.36 183.709C431.568 194.206 418.808 202.026 400.903 202.027V201.821C376.617 201.821 357.477 184.533 357.477 156.749C357.477 131.022 375.794 112.294 401.52 112.294ZM401.314 129.582C389.377 129.582 380.734 137.197 377.852 148.31H423.13C422.513 138.637 414.074 129.582 401.314 129.582Z" fill="white"/><path d="M780.229 177.936C786.822 177.936 792.166 183.28 792.166 189.873C792.166 196.465 786.822 201.809 780.229 201.81C773.637 201.81 768.292 196.465 768.292 189.873C768.292 183.28 773.637 177.936 780.229 177.936Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M838.459 113.942C863.568 113.942 874.681 131.024 874.681 147.283V199.558H854.924V174.449C854.924 191.943 844.427 201.617 828.786 201.617C813.35 201.617 801.413 191.326 801.413 175.067C801.413 158.808 812.938 150.37 828.991 148.929L855.129 146.46C855.129 137.816 848.749 131.23 838.459 131.23C828.169 131.23 823.641 138.021 822.406 143.166L804.5 138.227C808.616 122.997 820.965 113.942 838.459 113.942ZM833.108 163.953C825.905 164.776 820.965 168.276 820.965 174.861H821.171C821.171 181.241 826.728 185.357 834.343 185.357C848.543 185.357 854.923 176.096 854.924 165.6V161.895L833.108 163.953Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M346.931 199.349H326.35V167.653C324.498 189.263 313.59 201.407 295.479 201.407C274.486 201.407 258.433 182.06 258.433 156.54C258.433 131.02 274.28 111.673 295.479 111.673C312.561 111.673 324.704 123.405 326.35 143.985V84.0948H346.931V199.349ZM303.505 130.814C290.539 130.814 279.426 141.31 279.426 156.746C279.426 172.593 290.127 182.678 303.711 182.678C317.294 182.678 327.585 171.564 327.585 156.746C327.585 140.693 316.471 130.814 303.505 130.814Z" fill="white"/><path d="M732.211 115.989H755.88V133.689H732.211V172.998C732.211 179.172 735.298 181.436 740.238 181.436H754.027V199.753H738.18L738.386 199.548C723.362 199.548 712.454 193.168 712.454 174.851V133.689H697.224V115.989H712.659V97.2601H732.211V115.989Z" fill="white"/><path d="M508.942 199.554H488.361V114.143H508.942V199.554Z" fill="white"/><path d="M909.95 199.554H889.369V114.143H909.95V199.554Z" fill="white"/><path d="M474.051 199.55H453.47V84.2962H474.051V199.55Z" fill="white"/><path d="M633.554 142.133C633.554 123.199 645.491 111.879 660.515 111.879C679.243 111.879 688.916 126.08 688.916 141.721V199.349H668.335V148.925C668.335 138.84 661.132 131.637 651.253 131.637C640.551 131.637 633.554 139.458 633.554 149.748V199.349H612.973V84.0948H633.554V142.133Z" fill="white"/><path d="M195.339 85.7434C203.296 85.7434 209.746 92.1936 209.746 100.15C209.746 108.107 203.296 114.557 195.339 114.557C187.383 114.557 180.933 108.107 180.932 100.15C180.932 92.1936 187.383 85.7434 195.339 85.7434Z" fill="white"/><path d="M498.687 83.4723C505.28 83.4724 510.624 88.817 510.624 95.4095C510.624 102.002 505.28 107.346 498.687 107.346C492.095 107.346 486.75 102.002 486.75 95.4095C486.75 88.8169 492.095 83.4723 498.687 83.4723Z" fill="white"/><path d="M899.377 83.4723C905.969 83.4724 911.314 88.817 911.314 95.4095C911.313 102.002 905.969 107.346 899.377 107.346C892.784 107.346 887.44 102.002 887.44 95.4095C887.44 88.8169 892.784 83.4723 899.377 83.4723Z" fill="white"/>
+        </svg>
+        <label for="accessCode">Enter access code</label>
+        <input type="text" id="accessCode" autocomplete="off" autofocus spellcheck="false" placeholder="- - -">
+    </div>
+
+    <!-- Presentation -->
+    <div class="presentation-wrap" id="presentationWrap">
+
+    <div class="progress-bar" id="progress"></div>
+    <nav class="nav-dots" id="navDots"></nav>
+    <div class="keyboard-hint"><span class="key">&uarr;</span> <span class="key">&darr;</span> to navigate</div>
+
+    <!-- ============================================
+         SLIDE 0: TITLE
+         ============================================ -->
+    <section class="slide dark title-slide" data-slide="0">
+        <div class="slide-content">
+            <div class="title-badge reveal d1">BJ's &times; Delight AI &mdash; March 2026</div>
+            <h1 class="reveal d2">The Future of<br>Member Experience</h1>
+            <p class="subtitle reveal d3">How proactive personalization and autonomous resolution transform Bev from a shopping assistant into a full AI concierge.</p>
+            <p class="subtitle reveal d4" style="color: rgba(255,255,255,0.3); font-size: var(--tiny-size); margin-top: auto;">For Scott, Adam &amp; Anirudh</p>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 1: AGENDA
+         ============================================ -->
+    <section class="slide light" data-slide="1">
+        <div class="slide-content">
+            <span class="label reveal d1">Today&rsquo;s Conversation</span>
+            <h2 class="reveal d2">Agenda</h2>
+            <div class="agenda-grid">
+                <div class="agenda-item reveal d3">
+                    <span class="agenda-num">01</span>
+                    <h3>AI Market Perspective</h3>
+                    <p>Sendbird&rsquo;s point of view on the evolution toward Agentic AI and autonomous customer engagement.</p>
+                    <span class="time-badge">~10 min</span>
+                </div>
+                <div class="agenda-item reveal d4">
+                    <span class="agenda-num">02</span>
+                    <h3>For You Conversations</h3>
+                    <p>Memory-powered personalization for Bev &mdash; recap of 10 use cases across the member lifecycle.</p>
+                    <span class="time-badge">~10 min</span>
+                </div>
+                <div class="agenda-item reveal d5">
+                    <span class="agenda-num">03</span>
+                    <h3>Agent Steward</h3>
+                    <p>The new capability: autonomous issue resolution for Bev shopping assist and Member Care.</p>
+                    <span class="time-badge">~20 min</span>
+                </div>
+                <div class="agenda-item reveal d6">
+                    <span class="agenda-num">04</span>
+                    <h3>Vision &amp; Next Steps</h3>
+                    <p>The complete AI concierge for BJ&rsquo;s &mdash; implementation roadmap and pilot commitment.</p>
+                    <span class="time-badge">~10 min</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 2: SECTION — AI MARKET PERSPECTIVE
+         ============================================ -->
+    <section class="slide dark section-break" data-slide="2">
+        <div class="slide-content">
+            <span class="section-number reveal d1">Section 01</span>
+            <h2 class="reveal d2">AI Market Perspective</h2>
+            <p class="section-desc reveal d3">The evolution from chatbots to autonomous AI &mdash; and the gap no one has closed yet.</p>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 3: THREE WAVES
+         ============================================ -->
+    <section class="slide light" data-slide="3">
+        <div class="slide-content">
+            <span class="label reveal d1">The Evolution</span>
+            <h2 class="reveal d2">Three waves of AI in customer experience</h2>
+            <div class="waves-grid">
+                <div class="wave-card reveal d3">
+                    <span class="wave-era">2020 &ndash; 2023</span>
+                    <h3>Chatbots</h3>
+                    <p>Rule-based. Scripted decision trees. &ldquo;Press 1 for billing.&rdquo;</p>
+                    <ul class="wave-traits">
+                        <li>Keyword matching</li>
+                        <li>FAQ deflection</li>
+                        <li>No memory between sessions</li>
+                        <li>High containment, low resolution</li>
+                    </ul>
+                </div>
+                <div class="wave-card reveal d4">
+                    <span class="wave-era">2024 &ndash; 2025</span>
+                    <h3>AI Agents</h3>
+                    <p>LLM-powered. Can understand context, converse naturally, resolve issues. But still reactive.</p>
+                    <ul class="wave-traits">
+                        <li>Natural language understanding</li>
+                        <li>Can resolve, not just deflect</li>
+                        <li>Session-based intelligence</li>
+                        <li>Waits for the customer to ask</li>
+                    </ul>
+                </div>
+                <div class="wave-card current reveal d5">
+                    <span class="wave-era">2026+</span>
+                    <h3>Autonomous AI</h3>
+                    <p>Proactive. Memory-powered. Coordinates across parties. Acts on the member&rsquo;s behalf.</p>
+                    <ul class="wave-traits">
+                        <li>Persistent memory across sessions</li>
+                        <li>Reaches out before you ask</li>
+                        <li>Contacts external parties autonomously</li>
+                        <li>Earns more autonomy through data</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 4: THE RACE
+         ============================================ -->
+    <section class="slide light" data-slide="4">
+        <div class="slide-content">
+            <span class="label reveal d1">Competitive Landscape</span>
+            <h2 class="reveal d2">Everyone is building the same pieces</h2>
+            <div class="competitors-row">
+                <div class="competitor-card reveal d3">
+                    <span class="comp-name">Sierra</span>
+                    <span class="comp-detail">$10B valuation &middot; Agent OS 2.0</span>
+                    <p class="comp-building">Building: Memory, multi-step actions, cross-system coordination.</p>
+                </div>
+                <div class="competitor-card reveal d4">
+                    <span class="comp-name">Intercom</span>
+                    <span class="comp-detail">Pioneer 2025 Roadmap</span>
+                    <p class="comp-building">Building: Memory, Goals, Interoperability. &ldquo;Agents that learn.&rdquo;</p>
+                </div>
+                <div class="competitor-card reveal d5">
+                    <span class="comp-name">Salesforce Agentforce</span>
+                    <span class="comp-detail">February 2026 Launch</span>
+                    <p class="comp-building">Building: &ldquo;Long-running tasks&rdquo; as a named use case. Customers: Heathrow, Finnair.</p>
+                </div>
+            </div>
+            <div class="gap-callout reveal d6">
+                <span class="gap-icon">&#x26A0;</span>
+                <p><strong>The gap:</strong> Memory, interoperability, multi-agent frameworks &mdash; they&rsquo;re assembling the same prerequisites. But none of them have shipped a safe, data-driven path from human oversight to full autonomy. That&rsquo;s the missing piece.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 5: TWO CAPABILITIES
+         ============================================ -->
+    <section class="slide light" data-slide="5">
+        <div class="slide-content">
+            <span class="label reveal d1">Our Answer</span>
+            <h2 class="reveal d2">Two capabilities that define the next era</h2>
+            <div class="two-caps">
+                <div class="cap-card fyc-cap reveal d3">
+                    <span class="cap-tag">For You Conversations</span>
+                    <span class="cap-icon">&#x1F4AC;</span>
+                    <h3>Proactive Personalization</h3>
+                    <p>AI that knows your members and reaches out first. Memory-powered greetings, offers, and nudges across the shopping lifecycle.</p>
+                </div>
+                <span class="cap-plus reveal d4">+</span>
+                <div class="cap-card steward-cap reveal d5">
+                    <span class="cap-tag">Agent Steward</span>
+                    <span class="cap-icon">&#x1F6E0;</span>
+                    <h3>Autonomous Resolution</h3>
+                    <p>AI that investigates, coordinates across parties, and resolves complex issues &mdash; earning more autonomy through proven accuracy.</p>
+                </div>
+            </div>
+            <div class="cap-result reveal d6">
+                <h3>Together = The AI Concierge</h3>
+                <p>Bev greets members with personalized offers. When issues arise, Bev resolves them. One agent, two superpowers.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 6: SECTION — FYC
+         ============================================ -->
+    <section class="slide dark section-break" data-slide="6">
+        <div class="slide-content">
+            <span class="section-number reveal d1">Section 02</span>
+            <h2 class="reveal d2">For You Conversations</h2>
+            <p class="section-desc reveal d3">Bev remembers. Members return. A quick recap of memory-powered personalization.</p>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 7: FYC LIFECYCLE
+         ============================================ -->
+    <section class="slide light" data-slide="7">
+        <div class="slide-content">
+            <span class="label reveal d1">10 Use Cases &mdash; Member Lifecycle</span>
+            <h2 class="reveal d2">Personalized greetings across every moment</h2>
+            <div class="lifecycle-compact">
+                <div class="lc-phase reveal d3">
+                    <div class="lc-phase-header">
+                        <span class="lc-phase-num">1</span>
+                        <span class="lc-phase-title">Before They Shop</span>
+                    </div>
+                    <div class="lc-items">
+                        <div class="lc-item">
+                            <div class="lc-name">Replenishment Reminders</div>
+                            <div class="lc-desc">Restock alerts from purchase frequency</div>
+                        </div>
+                        <div class="lc-item">
+                            <div class="lc-name">Seasonal Personalization</div>
+                            <div class="lc-desc">Timely suggestions from memory</div>
+                        </div>
+                        <div class="lc-item">
+                            <div class="lc-name">Back-in-Stock Alerts</div>
+                            <div class="lc-desc">Notify when wished items return</div>
+                        </div>
+                        <div class="lc-item">
+                            <div class="lc-name">Personalized Category Deals</div>
+                            <div class="lc-desc">Deals in most-shopped categories</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lc-phase reveal d4">
+                    <div class="lc-phase-header">
+                        <span class="lc-phase-num">2</span>
+                        <span class="lc-phase-title">While They Shop</span>
+                    </div>
+                    <div class="lc-items">
+                        <div class="lc-item quick-win">
+                            <div class="lc-name">Cart Abandonment Nudge &#x2605;</div>
+                            <div class="lc-desc">Re-engage with waiting items</div>
+                        </div>
+                        <div class="lc-item">
+                            <div class="lc-name">Membership &amp; Coupons</div>
+                            <div class="lc-desc">Surface expiring rewards</div>
+                        </div>
+                        <div class="lc-item">
+                            <div class="lc-name">Club Location &amp; Fulfillment</div>
+                            <div class="lc-desc">Tailored to preferred store</div>
+                        </div>
+                        <div class="lc-item">
+                            <div class="lc-name">Loyalty Program Nudge</div>
+                            <div class="lc-desc">Progress toward next reward</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lc-phase reveal d5">
+                    <div class="lc-phase-header">
+                        <span class="lc-phase-num">3</span>
+                        <span class="lc-phase-title">After They Buy</span>
+                    </div>
+                    <div class="lc-items">
+                        <div class="lc-item quick-win">
+                            <div class="lc-name">Order &amp; Delivery Status &#x2605;</div>
+                            <div class="lc-desc">Proactive shipping updates</div>
+                        </div>
+                        <div class="lc-item">
+                            <div class="lc-name">Post-Purchase Support</div>
+                            <div class="lc-desc">Follow-up on big purchases</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: auto; padding-top: 10px;">
+                        <p style="font-size: var(--tiny-size); color: var(--teal);">&#x2605; = Quick Win &mdash; start here</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 8: PRIORITY MATRIX
+         ============================================ -->
+    <section class="slide light" data-slide="8">
+        <div class="slide-content">
+            <span class="label reveal d1">Implementation Priority</span>
+            <h2 class="reveal d2">Where to start &mdash; and where to build</h2>
+            <div class="priority-grid">
+                <div class="priority-box qw reveal d3">
+                    <div class="pb-label">Quick Wins &mdash; Start Here</div>
+                    <p style="font-size: var(--tiny-size); color: var(--text-light); margin-bottom: 6px;">High Impact / Low Effort</p>
+                    <div class="pb-items">
+                        <span class="pb-chip">Cart Abandonment</span>
+                        <span class="pb-chip">Order &amp; Delivery Status</span>
+                    </div>
+                </div>
+                <div class="priority-box sb reveal d4">
+                    <div class="pb-label">Strategic Bets</div>
+                    <p style="font-size: var(--tiny-size); color: var(--text-light); margin-bottom: 6px;">High Impact / High Effort</p>
+                    <div class="pb-items">
+                        <span class="pb-chip">Replenishment</span>
+                        <span class="pb-chip">Seasonal</span>
+                        <span class="pb-chip">Loyalty Nudge</span>
+                        <span class="pb-chip">Category Deals</span>
+                    </div>
+                </div>
+                <div class="priority-box ea reveal d5">
+                    <div class="pb-label">Easy Adds</div>
+                    <p style="font-size: var(--tiny-size); color: var(--text-light); margin-bottom: 6px;">Lower Impact / Low Effort</p>
+                    <div class="pb-items">
+                        <span class="pb-chip">Club Location</span>
+                        <span class="pb-chip">Post-Purchase Support</span>
+                    </div>
+                </div>
+                <div class="priority-box bt reveal d6">
+                    <div class="pb-label">Build Over Time</div>
+                    <p style="font-size: var(--tiny-size); color: var(--text-light); margin-bottom: 6px;">Lower Impact / High Effort</p>
+                    <div class="pb-items">
+                        <span class="pb-chip">Back-in-Stock Alerts</span>
+                        <span class="pb-chip">Membership Status</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 9: SECTION — AGENT STEWARD
+         ============================================ -->
+    <section class="slide dark section-break" data-slide="9">
+        <div class="slide-content">
+            <span class="section-number reveal d1">Section 03</span>
+            <h2 class="reveal d2">Agent Steward</h2>
+            <p class="section-desc reveal d3">From human bottleneck to AI resolution. The capability that turns Bev into a concierge that acts.</p>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 10: THE DOUBLE WORK PROBLEM
+         ============================================ -->
+    <section class="slide light" data-slide="10">
+        <div class="slide-content">
+            <span class="label reveal d1">The Problem</span>
+            <h2 class="reveal d2">The double work problem</h2>
+            <div class="double-work">
+                <div class="job-card job1 reveal d3">
+                    <div class="job-time">5 min</div>
+                    <div class="job-label">Job 1: Decide</div>
+                    <div class="job-desc">Review evidence. Make a judgment call.</div>
+                </div>
+                <span class="vs-divider reveal d4">vs.</span>
+                <div class="job-card job2 reveal d5">
+                    <div class="job-time">5 hrs</div>
+                    <div class="job-label">Job 2: Communicate</div>
+                    <div class="job-desc">Everything else that follows the decision.</div>
+                    <ul class="job-tasks">
+                        <li>Contact warehouse about the issue</li>
+                        <li>Follow up with the member</li>
+                        <li>Update internal systems</li>
+                        <li>Send confirmation &amp; next steps</li>
+                        <li>Coordinate with delivery partner</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="dw-insight reveal d6">
+                <p><strong>Steward eliminates Job 2.</strong> Humans make decisions. AI owns coordination and communication.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 11: HOW STEWARD WORKS
+         ============================================ -->
+    <section class="slide light" data-slide="11">
+        <div class="slide-content">
+            <span class="label reveal d1">Architecture</span>
+            <h2 class="reveal d2">How Steward works</h2>
+            <div class="arch-flow">
+                <div class="arch-row reveal d3">
+                    <div class="arch-box">
+                        <span class="arch-label">Member</span>
+                        <span class="arch-name">Reports an issue</span>
+                    </div>
+                    <span class="arch-arrow">&rarr;</span>
+                    <div class="arch-box primary">
+                        <span class="arch-label">AI Agent</span>
+                        <span class="arch-name">Bev</span>
+                        <span class="arch-desc">Detects complex issue</span>
+                    </div>
+                    <span class="arch-arrow">&rarr;</span>
+                    <div class="arch-box" style="background: rgba(124,92,255,0.06); border-color: rgba(124,92,255,0.25);">
+                        <span class="arch-label" style="color: var(--purple);">Capability</span>
+                        <span class="arch-name">Steward Activates</span>
+                        <span class="arch-desc">Spins up sub-agents</span>
+                    </div>
+                </div>
+                <span class="arch-arrow down reveal d4">&#x2193;</span>
+                <div class="sub-agents-row reveal d5">
+                    <div class="arch-box sub-agent">
+                        <span class="arch-label">Sub-Agent 1</span>
+                        <span class="arch-name">Investigation</span>
+                        <span class="arch-desc">Checks records, policies, history</span>
+                    </div>
+                    <div class="arch-box sub-agent">
+                        <span class="arch-label">Sub-Agent 2</span>
+                        <span class="arch-name">External Outreach</span>
+                        <span class="arch-desc">Contacts warehouse, vendor, driver</span>
+                    </div>
+                    <div class="arch-box sub-agent">
+                        <span class="arch-label">Sub-Agent 3</span>
+                        <span class="arch-name">Member Updates</span>
+                        <span class="arch-desc">Keeps member informed throughout</span>
+                    </div>
+                </div>
+                <span class="arch-arrow down reveal d6">&#x2193;</span>
+                <div class="arch-row reveal d7">
+                    <div class="arch-box primary" style="max-width: 400px;">
+                        <span class="arch-label">Result</span>
+                        <span class="arch-name">Summary + Recommendation</span>
+                        <span class="arch-desc">Delivered to human agent for approval &mdash; or executed autonomously once earned</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 12: STEWARD FOR BEV
+         ============================================ -->
+    <section class="slide light" data-slide="12">
+        <div class="slide-content">
+            <span class="label reveal d1">Steward for Bev &mdash; Shopping Assist</span>
+            <h2 class="reveal d2">When shopping goes wrong, Bev handles it</h2>
+            <div class="usecase-grid">
+                <div class="usecase-card reveal d3">
+                    <span class="uc-num">01</span>
+                    <h3>Wrong or Damaged Delivery</h3>
+                    <p class="uc-scenario">&ldquo;My Dyson arrived with a cracked base.&rdquo;</p>
+                    <ul class="uc-steps">
+                        <li><span class="step-icon">&rarr;</span> Verifies delivery record &amp; product details</li>
+                        <li><span class="step-icon">&rarr;</span> Contacts warehouse for replacement availability</li>
+                        <li><span class="step-icon">&rarr;</span> Arranges pickup of damaged item</li>
+                        <li><span class="step-icon">&rarr;</span> Proposes resolution: replace or refund</li>
+                    </ul>
+                </div>
+                <div class="usecase-card reveal d4">
+                    <span class="uc-num">02</span>
+                    <h3>Complex Return &amp; Exchange</h3>
+                    <p class="uc-scenario">&ldquo;I want to return this TV but get the 75-inch instead.&rdquo;</p>
+                    <ul class="uc-steps">
+                        <li><span class="step-icon">&rarr;</span> Coordinates return pickup scheduling</li>
+                        <li><span class="step-icon">&rarr;</span> Checks inventory at preferred club</li>
+                        <li><span class="step-icon">&rarr;</span> Calculates price difference &amp; applies credits</li>
+                        <li><span class="step-icon">&rarr;</span> Sends member confirmation with timeline</li>
+                    </ul>
+                </div>
+                <div class="usecase-card reveal d5">
+                    <span class="uc-num">03</span>
+                    <h3>Warranty Claim Processing</h3>
+                    <p class="uc-scenario">&ldquo;My Samsung fridge stopped cooling after 8 months.&rdquo;</p>
+                    <ul class="uc-steps">
+                        <li><span class="step-icon">&rarr;</span> Verifies purchase date &amp; warranty terms</li>
+                        <li><span class="step-icon">&rarr;</span> Contacts manufacturer for claim filing</li>
+                        <li><span class="step-icon">&rarr;</span> Coordinates service appointment options</li>
+                        <li><span class="step-icon">&rarr;</span> Presents member with service &amp; replacement options</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 13: STEWARD FOR MEMBER CARE
+         ============================================ -->
+    <section class="slide light" data-slide="13">
+        <div class="slide-content">
+            <span class="label reveal d1">Steward for Member Care</span>
+            <h2 class="reveal d2">Complex support cases, resolved by AI</h2>
+            <div class="usecase-grid">
+                <div class="usecase-card reveal d3">
+                    <span class="uc-num">01</span>
+                    <h3>Billing Dispute Resolution</h3>
+                    <p class="uc-scenario">&ldquo;I was charged twice for my curbside order.&rdquo;</p>
+                    <ul class="uc-steps">
+                        <li><span class="step-icon">&rarr;</span> Investigates transaction records</li>
+                        <li><span class="step-icon">&rarr;</span> Checks promotion eligibility &amp; member benefits</li>
+                        <li><span class="step-icon">&rarr;</span> Cross-references payment processor data</li>
+                        <li><span class="step-icon">&rarr;</span> Delivers finding + recommended action</li>
+                    </ul>
+                </div>
+                <div class="usecase-card reveal d4">
+                    <span class="uc-num">02</span>
+                    <h3>Membership Renewal Complication</h3>
+                    <p class="uc-scenario">Member at risk of churning at renewal.</p>
+                    <ul class="uc-steps">
+                        <li><span class="step-icon">&rarr;</span> Detects at-risk member signals</li>
+                        <li><span class="step-icon">&rarr;</span> Checks reward balance &amp; usage history</li>
+                        <li><span class="step-icon">&rarr;</span> Prepares personalized retention offer</li>
+                        <li><span class="step-icon">&rarr;</span> Proactively reaches out before expiry</li>
+                    </ul>
+                </div>
+                <div class="usecase-card reveal d5">
+                    <span class="uc-num">03</span>
+                    <h3>Multi-Party Curbside Issue</h3>
+                    <p class="uc-scenario">&ldquo;My curbside order was missing 3 items.&rdquo;</p>
+                    <ul class="uc-steps">
+                        <li><span class="step-icon">&rarr;</span> Checks order manifest vs. delivery record</li>
+                        <li><span class="step-icon">&rarr;</span> Contacts store operations for verification</li>
+                        <li><span class="step-icon">&rarr;</span> Checks inventory for missing items</li>
+                        <li><span class="step-icon">&rarr;</span> Proposes resolution: redelivery or credit</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 14: THE BIG UNLOCK
+         ============================================ -->
+    <section class="slide light" data-slide="14">
+        <div class="slide-content">
+            <span class="label reveal d1">The Differentiator</span>
+            <h2 class="reveal d2">The big unlock: AI contacts external parties</h2>
+            <div class="unlock-visual">
+                <div class="unlock-today reveal d3">
+                    <span class="ut-label">Today</span>
+                    <p>Human agent manually calls warehouse, emails vendor, follows up with delivery partner. <strong>This is the 5-hour bottleneck.</strong></p>
+                </div>
+                <div class="unlock-center reveal d4">
+                    <span class="unlock-icon">&#x1F513;</span>
+                    <h3>With Steward</h3>
+                    <p>AI makes those calls &mdash; via voice, SMS, email &mdash; and coordinates resolution end-to-end.</p>
+                </div>
+                <div class="unlock-channels reveal d5">
+                    <div class="unlock-channel">
+                        <div class="ch-icon">&#x1F4DE;</div>
+                        <div class="ch-name">Voice Call</div>
+                        <div class="ch-desc">Call warehouse &amp; vendors</div>
+                    </div>
+                    <div class="unlock-channel">
+                        <div class="ch-icon">&#x1F4AC;</div>
+                        <div class="ch-name">SMS</div>
+                        <div class="ch-desc">Text delivery partners</div>
+                    </div>
+                    <div class="unlock-channel">
+                        <div class="ch-icon">&#x2709;</div>
+                        <div class="ch-name">Email</div>
+                        <div class="ch-desc">File claims &amp; follow-ups</div>
+                    </div>
+                    <div class="unlock-channel">
+                        <div class="ch-icon">&#x1F310;</div>
+                        <div class="ch-name">WhatsApp</div>
+                        <div class="ch-desc">Reach partners globally</div>
+                    </div>
+                </div>
+                <div class="gap-callout reveal d6" style="margin-top: 0; width: 100%;">
+                    <span class="gap-icon">&#x1F3C6;</span>
+                    <p><strong>This is the capability no one else is shipping yet.</strong> Sierra, Intercom, and Salesforce are building toward it. We&rsquo;re deploying it.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 15: PATH TO AUTONOMY
+         ============================================ -->
+    <section class="slide light" data-slide="15">
+        <div class="slide-content">
+            <span class="label reveal d1">The Path to Autonomy</span>
+            <h2 class="reveal d2">Every level is earned through data</h2>
+            <div class="autonomy-track">
+                <div class="auto-level l0 reveal d3">
+                    <div class="auto-badge">Level 0</div>
+                    <div class="auto-detail">
+                        <div class="ad-title">Today: Human Does Everything</div>
+                        <div class="ad-desc">Human investigates, decides, communicates. Customer waits. Agent juggles browser tabs.</div>
+                    </div>
+                </div>
+                <div class="auto-level l1 reveal d4">
+                    <div class="auto-badge">Level 1</div>
+                    <div class="auto-detail">
+                        <div class="ad-title">Steward Launch: AI Recommends, Human Approves</div>
+                        <div class="ad-desc">Steward investigates across systems, contacts external parties, synthesizes evidence, proposes resolution. Human reviews and approves.</div>
+                        <div class="ad-example">&ldquo;Steward investigated 3 systems, contacted warehouse, found a shipping error. Recommended: full replacement. Approve / Modify / Reject.&rdquo;</div>
+                    </div>
+                </div>
+                <div class="auto-level l2 reveal d5">
+                    <div class="auto-badge">Level 2</div>
+                    <div class="auto-detail">
+                        <div class="ad-title">Graduated Autonomy: Steward Goes End-to-End</div>
+                        <div class="ad-desc">Earned through recommendation accuracy data from Level 1. When data shows 95%+ match with human judgment, Steward resolves end-to-end. Each use case earns autonomy independently.</div>
+                        <div class="ad-example">&ldquo;For curbside missing items under $50, Steward resolves autonomously. Complex returns still go through human approval until they earn it.&rdquo;</div>
+                    </div>
+                </div>
+            </div>
+            <div class="autonomy-insight reveal d6">
+                <p><strong>Everyone wants Level 2.</strong> Steward is how you get there &mdash; with data, not a leap of faith. Every transition is earned through measurable accuracy.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 16: THE MIDDLE PATH
+         ============================================ -->
+    <section class="slide light" data-slide="16">
+        <div class="slide-content">
+            <span class="label reveal d1">The Insight</span>
+            <h2 class="reveal d2">The middle path is the fast path</h2>
+            <div class="middle-path-flow">
+                <div class="mp-row reveal d3">
+                    <span class="mp-label" style="color: var(--teal);">Reality</span>
+                    <div class="mp-content">
+                        <p>For <strong>simple cases</strong> (cancel subscription, check order status), AI can already handle them fully. The technology is there.</p>
+                    </div>
+                </div>
+                <div class="mp-row reveal d4">
+                    <span class="mp-label" style="color: var(--bjs-red);">Hesitancy</span>
+                    <div class="mp-content">
+                        <p>But businesses aren&rsquo;t ready. <strong>They don&rsquo;t want AI touching money yet.</strong> Refunds, credits, billing adjustments &mdash; the stakes feel too high for day one.</p>
+                    </div>
+                </div>
+                <div class="mp-row highlight reveal d5">
+                    <span class="mp-label">Steward</span>
+                    <div class="mp-content">
+                        <p><strong>Steward at L1 proves accuracy across hundreds of cases.</strong> Every recommendation is compared against what the human actually decided. When the data shows 95%+ alignment &mdash; graduate to L2.</p>
+                    </div>
+                </div>
+                <div class="mp-row reveal d6">
+                    <span class="mp-label" style="color: var(--text-light);">Result</span>
+                    <div class="mp-content">
+                        <p><strong>Steward earns its own retirement from human oversight.</strong> Not a compromise. Not &ldquo;you need humans forever.&rdquo; A speedrun to full autonomy with proof at every step.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="autonomy-insight reveal d7">
+                <p style="font-size: var(--small-size);"><strong>What we learned from the market:</strong> Enterprise buyers universally want full automation. They told us directly: &ldquo;We want AI to handle everything autonomously.&rdquo; That&rsquo;s exactly where Steward leads &mdash; but with a data trail that earns trust along the way.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 17: SECTION — VISION & NEXT STEPS
+         ============================================ -->
+    <section class="slide dark section-break" data-slide="17">
+        <div class="slide-content">
+            <span class="section-number reveal d1">Section 04</span>
+            <h2 class="reveal d2">Vision &amp; Next Steps</h2>
+            <p class="section-desc reveal d3">The complete AI concierge for BJ&rsquo;s &mdash; and how we get there together.</p>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 18: THE COMPLETE PICTURE
+         ============================================ -->
+    <section class="slide light" data-slide="18">
+        <div class="slide-content">
+            <span class="label reveal d1">The Complete AI Concierge</span>
+            <h2 class="reveal d2">FYC + Steward = Bev, fully realized</h2>
+            <div class="complete-picture">
+                <div class="cp-card fyc-card reveal d3">
+                    <span class="cp-tag">For You Conversations</span>
+                    <span class="cp-icon">&#x1F4AC;</span>
+                    <h3>Proactive</h3>
+                    <ul>
+                        <li>Greets members with personalized offers</li>
+                        <li>Nudges replenishment before they run out</li>
+                        <li>Surfaces expiring coupons &amp; loyalty progress</li>
+                        <li>Remembers seasonal preferences</li>
+                    </ul>
+                </div>
+                <div class="cp-card steward-card reveal d4">
+                    <span class="cp-tag">Agent Steward</span>
+                    <span class="cp-icon">&#x1F6E0;</span>
+                    <h3>Autonomous</h3>
+                    <ul>
+                        <li>Investigates issues across systems</li>
+                        <li>Contacts warehouse, vendor, delivery partner</li>
+                        <li>Resolves billing disputes &amp; returns</li>
+                        <li>Earns more autonomy through proven accuracy</li>
+                    </ul>
+                </div>
+                <div class="cp-equals reveal d5">
+                    <h3>One Agent. Two Superpowers. Complete Member Experience.</h3>
+                    <p>Bev doesn&rsquo;t just help members shop. Bev anticipates what they need and fixes what goes wrong &mdash; before they have to ask twice.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 19: IMPLEMENTATION ROADMAP
+         ============================================ -->
+    <section class="slide light" data-slide="19">
+        <div class="slide-content">
+            <span class="label reveal d1">Implementation Roadmap</span>
+            <h2 class="reveal d2">Four phases to the full AI concierge</h2>
+            <div class="roadmap-track">
+                <div class="rm-phase p1 reveal d3">
+                    <span class="rm-num">Phase 1</span>
+                    <span class="rm-weeks">Weeks 0 &ndash; 4</span>
+                    <h3>FYC Quick Wins</h3>
+                    <ul class="rm-items">
+                        <li>Cart abandonment nudge</li>
+                        <li>Order &amp; delivery status</li>
+                        <li>Personalized greetings live</li>
+                        <li>Baseline engagement metrics</li>
+                    </ul>
+                </div>
+                <div class="rm-phase p2 reveal d4">
+                    <span class="rm-num">Phase 2</span>
+                    <span class="rm-weeks">Weeks 4 &ndash; 8</span>
+                    <h3>FYC Strategic Bets</h3>
+                    <ul class="rm-items">
+                        <li>Replenishment reminders</li>
+                        <li>Seasonal personalization</li>
+                        <li>Loyalty program nudges</li>
+                        <li>Memory compounding begins</li>
+                    </ul>
+                </div>
+                <div class="rm-phase p3 reveal d5">
+                    <span class="rm-num">Phase 3</span>
+                    <span class="rm-weeks">Weeks 8 &ndash; 12</span>
+                    <h3>Steward: Member Care</h3>
+                    <ul class="rm-items">
+                        <li>L1: AI recommends, human approves</li>
+                        <li>Top 2 highest-pain cases</li>
+                        <li>Track accuracy vs. human decisions</li>
+                        <li>Path to L2 based on data</li>
+                    </ul>
+                </div>
+                <div class="rm-phase p4 reveal d6">
+                    <span class="rm-num">Phase 4</span>
+                    <span class="rm-weeks">Weeks 12 &ndash; 18</span>
+                    <h3>Steward: Bev Shopping</h3>
+                    <ul class="rm-items">
+                        <li>Complex returns &amp; exchanges</li>
+                        <li>Warranty claim processing</li>
+                        <li>External party coordination</li>
+                        <li>Graduated autonomy on proven cases</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 20: DISCUSSION
+         ============================================ -->
+    <section class="slide light" data-slide="20">
+        <div class="slide-content">
+            <span class="label reveal d1">Discussion &amp; Commitment</span>
+            <h2 class="reveal d2">Four questions to close on</h2>
+            <div class="discussion-items">
+                <div class="disc-item reveal d3">
+                    <span class="disc-num">01</span>
+                    <h3>Which FYC use cases do we pilot first?</h3>
+                    <p>We recommend cart abandonment + order status. Are there others that are higher priority for your team?</p>
+                </div>
+                <div class="disc-item reveal d4">
+                    <span class="disc-num">02</span>
+                    <h3>Which Member Care cases have the highest volume &amp; pain?</h3>
+                    <p>Help us prioritize the first Steward pilot &mdash; billing disputes, curbside issues, membership renewal?</p>
+                </div>
+                <div class="disc-item reveal d5">
+                    <span class="disc-num">03</span>
+                    <h3>What are Bev&rsquo;s most complex shopping issues today?</h3>
+                    <p>Where are your human agents spending the most coordination time on shopping-related cases?</p>
+                </div>
+                <div class="disc-item reveal d6">
+                    <span class="disc-num">04</span>
+                    <h3>Can we set dates for Phase 1 kickoff &amp; Phase 3 pilot?</h3>
+                    <p>We&rsquo;d like to walk out today with a timeline commitment for FYC launch and Steward pilot start.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SLIDE 21: CLOSE
+         ============================================ -->
+    <section class="slide dark title-slide" data-slide="21">
+        <div class="slide-content">
+            <div class="title-badge reveal d1">BJ&rsquo;s &times; Delight AI</div>
+            <h1 class="reveal d2" style="font-size: clamp(1.8rem, 4.5vw, 3.5rem);">Bev remembers.<br>Members return.<br>Issues resolve.</h1>
+            <p class="subtitle reveal d3">Let&rsquo;s make Bev the best concierge in wholesale.</p>
+            <p class="subtitle reveal d4" style="color: rgba(255,255,255,0.3); font-size: var(--small-size); margin-top: auto;">delight.ai &times; BJ&rsquo;s Wholesale</p>
+        </div>
+    </section>
+
+    </div><!-- /presentation-wrap -->
+
+    <script>
+        /* =========================================== ACCESS GATE =========================================== */
+        (function() {
+            const gate = document.getElementById('accessGate');
+            const wrap = document.getElementById('presentationWrap');
+            const input = document.getElementById('accessCode');
+            const CODE = 'bjs';
+
+            input.addEventListener('input', function() {
+                this.classList.remove('error');
+                if (this.value.toLowerCase() === CODE) {
+                    gate.classList.add('hidden');
+                    wrap.classList.add('unlocked');
+                    new SlidePresentation();
+                }
+            });
+
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && this.value.toLowerCase() !== CODE) {
+                    this.classList.add('error');
+                    this.value = '';
+                }
+            });
+        })();
+
+        /* =========================================== SLIDE CONTROLLER =========================================== */
+        class SlidePresentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.totalSlides = this.slides.length;
+                this.currentSlide = 0;
+                this.createNavDots();
+                this.setupIntersectionObserver();
+                this.setupKeyboardNav();
+                this.updateProgress();
+            }
+
+            createNavDots() {
+                const nav = document.getElementById('navDots');
+                this.slides.forEach((_, i) => {
+                    const dot = document.createElement('button');
+                    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+                    dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+                    dot.addEventListener('click', () => this.goToSlide(i));
+                    nav.appendChild(dot);
+                });
+                this.dots = nav.querySelectorAll('.nav-dot');
+            }
+
+            setupIntersectionObserver() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            const idx = parseInt(entry.target.dataset.slide);
+                            if (!isNaN(idx)) {
+                                this.currentSlide = idx;
+                                this.updateDots();
+                                this.updateProgress();
+                            }
+                        }
+                    });
+                }, { threshold: 0.35 });
+                this.slides.forEach(slide => observer.observe(slide));
+            }
+
+            setupKeyboardNav() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+                        e.preventDefault();
+                        this.goToSlide(Math.min(this.currentSlide + 1, this.totalSlides - 1));
+                    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        this.goToSlide(Math.max(this.currentSlide - 1, 0));
+                    }
+                });
+            }
+
+            goToSlide(index) {
+                this.slides[index].scrollIntoView({ behavior: 'smooth' });
+                this.currentSlide = index;
+                this.updateDots();
+                this.updateProgress();
+            }
+
+            updateDots() {
+                this.dots.forEach((dot, i) => dot.classList.toggle('active', i === this.currentSlide));
+            }
+
+            updateProgress() {
+                document.getElementById('progress').style.width =
+                    ((this.currentSlide + 1) / this.totalSlides) * 100 + '%';
+            }
+        }
+    </script>
+</body>
+</html>
