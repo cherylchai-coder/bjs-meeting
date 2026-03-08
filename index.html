@@ -4,2163 +4,1060 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BJ's × Delight AI — The Future of Member Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
     <style>
-        /* =========================================== DESIGN TOKENS =========================================== */
         :root {
-            --black: #0D0D0D;
-            --white: #FFFFFF;
-            --offwhite: #F5F5F0;
-            --tan: #a88a5b;
-            --teal: #2a9d8f;
-            --purple: #7c5cff;
-            --bjs-red: #D31242;
-            --light-gray: #f8f9fa;
-            --border-gray: #e9ecef;
-            --text-dark: #0D0D0D;
-            --text-mid: #555555;
-            --text-light: #888888;
-            --font-headline: Georgia, 'Times New Roman', serif;
-            --font-body: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            --title-size: clamp(2.2rem, 5.5vw, 4.5rem);
-            --h2-size: clamp(1.5rem, 3.5vw, 2.8rem);
-            --h3-size: clamp(1.1rem, 2.2vw, 1.6rem);
-            --body-size: clamp(0.78rem, 1.3vw, 1.05rem);
-            --small-size: clamp(0.68rem, 1vw, 0.88rem);
-            --tiny-size: clamp(0.58rem, 0.85vw, 0.75rem);
-            --label-size: clamp(0.55rem, 0.75vw, 0.7rem);
-            --slide-padding: clamp(2rem, 5vw, 5rem);
-            --content-gap: clamp(0.75rem, 2vw, 1.75rem);
-            --element-gap: clamp(0.3rem, 0.8vw, 0.6rem);
-            --ease: cubic-bezier(0.16, 1, 0.3, 1);
-            --dur: 0.7s;
+            --dark: #0D0D0D; --bg: #FAFAF7; --bg2: #F0EFEB;
+            --accent: #1B4D3E; --accent2: #2A7D62; --pop: #E8FF59;
+            --warm: #F4E8D1; --coral: #D94F3B;
+            --text: #1A1A1A; --text2: #666; --text3: #999; --white: #FFFFFF;
+            --font-display: 'Lora', Georgia, serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
+            --title-size: clamp(2.4rem, 5.5vw, 4.5rem);
+            --h2-size: clamp(1.6rem, 3.5vw, 3.2rem);
+            --h3-size: clamp(1.1rem, 2vw, 1.5rem);
+            --body-size: clamp(0.82rem, 1.3vw, 1.15rem);
+            --small-size: clamp(0.72rem, 1vw, 0.92rem);
+            --tiny-size: clamp(0.62rem, 0.85vw, 0.78rem);
+            --label-size: clamp(0.58rem, 0.75vw, 0.72rem);
+            --pad: clamp(48px, 8vw, 100px) clamp(36px, 7vw, 100px);
+            --gap: clamp(16px, 2.5vw, 32px);
+            --ease: cubic-bezier(0.16, 1, 0.3, 1); --dur: 0.7s;
         }
-
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html {
-            height: 100%;
-            scroll-snap-type: y mandatory;
-            scroll-behavior: smooth;
-            overflow-x: hidden;
-        }
-
-        body {
-            font-family: var(--font-body);
-            background: var(--offwhite);
-            color: var(--text-dark);
-            height: 100%;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* =========================================== SLIDES =========================================== */
-        .slide {
-            width: 100vw;
-            height: 100vh;
-            height: 100dvh;
-            overflow: hidden;
-            scroll-snap-align: start;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            padding: var(--slide-padding);
-        }
-
-        .slide-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            max-height: 100%;
-            overflow: hidden;
-        }
-
-        .slide.dark { background: var(--black); color: var(--white); }
-        .slide.light { background: var(--offwhite); color: var(--text-dark); }
-
-        /* =========================================== PROGRESS & NAV =========================================== */
-        .progress-bar {
-            position: fixed;
-            top: 0; left: 0;
-            height: 2px;
-            background: var(--tan);
-            width: 0%;
-            z-index: 100;
-            transition: width 0.3s ease;
-        }
-
-        .nav-dots {
-            position: fixed;
-            right: clamp(0.75rem, 2vw, 1.5rem);
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            z-index: 100;
-        }
-
-        .nav-dot {
-            width: 7px; height: 7px;
-            border-radius: 50%;
-            background: var(--border-gray);
-            border: 1px solid #ccc;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            padding: 0;
-        }
-
-        .nav-dot.active {
-            background: var(--tan);
-            border-color: var(--tan);
-            transform: scale(1.4);
-        }
-
-        .keyboard-hint {
-            position: fixed;
-            bottom: clamp(0.75rem, 2vh, 1.25rem);
-            right: clamp(0.75rem, 2vw, 1.5rem);
-            font-size: var(--tiny-size);
-            color: var(--text-light);
-            opacity: 0.5;
-            z-index: 100;
-        }
-
-        .key {
-            display: inline-block;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            padding: 0 4px;
-            font-size: 0.7em;
-            line-height: 1.6;
-        }
-
-        /* =========================================== TYPOGRAPHY =========================================== */
-        h1 {
-            font-family: var(--font-headline);
-            font-size: var(--title-size);
-            font-weight: 400;
-            line-height: 1.1;
-            letter-spacing: -0.015em;
-        }
-
-        h2 {
-            font-family: var(--font-headline);
-            font-size: var(--h2-size);
-            font-weight: 400;
-            line-height: 1.15;
-            letter-spacing: -0.015em;
-        }
-
-        h3 {
-            font-family: var(--font-headline);
-            font-size: var(--h3-size);
-            font-weight: 400;
-            line-height: 1.2;
-            letter-spacing: -0.01em;
-        }
-
-        p, li {
-            font-size: var(--body-size);
-            line-height: 1.55;
-            color: var(--text-mid);
-        }
-
-        .slide.dark p, .slide.dark li { color: rgba(255,255,255,0.6); }
-
-        .label {
-            font-family: var(--font-body);
-            font-size: var(--label-size);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--tan);
-        }
-
-        .slide.dark .label { color: var(--tan); }
-
-        /* =========================================== ANIMATIONS =========================================== */
-        .reveal {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
-        }
-
-        .slide.visible .reveal { opacity: 1; transform: translateY(0); }
-
-        .d1 { transition-delay: 0.08s; }
-        .d2 { transition-delay: 0.16s; }
-        .d3 { transition-delay: 0.24s; }
-        .d4 { transition-delay: 0.32s; }
-        .d5 { transition-delay: 0.4s; }
-        .d6 { transition-delay: 0.48s; }
-        .d7 { transition-delay: 0.56s; }
-        .d8 { transition-delay: 0.64s; }
-
-        /* =========================================== DARK BOOKEND SLIDES =========================================== */
-        .title-slide .slide-content {
-            align-items: flex-start;
-            gap: clamp(0.5rem, 1.5vh, 1rem);
-        }
-
-        .title-slide .subtitle {
-            font-size: clamp(0.9rem, 1.8vw, 1.2rem);
-            color: rgba(255,255,255,0.5);
-            max-width: 600px;
-            margin-top: var(--element-gap);
-        }
-
-        .title-badge {
-            display: inline-block;
-            font-size: var(--label-size);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--tan);
-            border: 1px solid rgba(168,138,91,0.3);
-            padding: clamp(0.15rem, 0.3vw, 0.25rem) clamp(0.35rem, 0.6vw, 0.5rem);
-            border-radius: 3px;
-            width: fit-content;
-        }
-
-        /* =========================================== SECTION BREAK SLIDES =========================================== */
-        .section-break .slide-content {
-            align-items: flex-start;
-            gap: clamp(0.4rem, 1vh, 0.75rem);
-        }
-
-        .section-break h2 {
-            font-size: clamp(1.8rem, 4.5vw, 3.5rem);
-            max-width: 700px;
-        }
-
-        .section-break .section-desc {
-            font-size: clamp(0.85rem, 1.5vw, 1.1rem);
-            color: rgba(255,255,255,0.45);
-            max-width: 500px;
-        }
-
-        .section-number {
-            font-family: var(--font-body);
-            font-size: var(--tiny-size);
-            font-weight: 700;
-            color: var(--tan);
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-        }
-
-        /* =========================================== AGENDA SLIDE =========================================== */
-        .agenda-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: clamp(0.75rem, 1.5vw, 1.25rem);
-            margin-top: var(--content-gap);
-        }
-
-        .agenda-item {
-            background: var(--white);
-            border: 1px solid var(--border-gray);
-            border-radius: 12px;
-            padding: clamp(1rem, 2vw, 1.75rem);
-            display: flex;
-            flex-direction: column;
-            gap: clamp(0.3rem, 0.6vh, 0.5rem);
-        }
-
-        .agenda-item .agenda-num {
-            font-family: var(--font-body);
-            font-size: var(--tiny-size);
-            font-weight: 700;
-            color: var(--tan);
-            letter-spacing: 0.1em;
-        }
-
-        .agenda-item h3 {
-            font-size: var(--h3-size);
-            color: var(--text-dark);
-        }
-
-        .agenda-item p {
-            font-size: var(--small-size);
-            color: var(--text-light);
-        }
-
-        .agenda-item .time-badge {
-            display: inline-block;
-            font-size: var(--label-size);
-            font-weight: 700;
-            color: var(--text-light);
-            background: var(--light-gray);
-            padding: 2px 8px;
-            border-radius: 4px;
-            width: fit-content;
-            margin-top: auto;
-        }
-
-        /* =========================================== WAVES SLIDE =========================================== */
-        .waves-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: clamp(0.75rem, 1.5vw, 1.25rem);
-            margin-top: var(--content-gap);
-        }
-
-        .wave-card {
-            background: var(--white);
-            border: 1px solid var(--border-gray);
-            border-radius: 12px;
-            padding: clamp(1rem, 2vw, 1.5rem);
-            display: flex;
-            flex-direction: column;
-            gap: clamp(0.3rem, 0.6vh, 0.5rem);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .wave-card.current {
-            border-color: var(--purple);
-            border-width: 2px;
-        }
-
-        .wave-card.current::before {
-            content: 'NOW';
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            font-size: var(--label-size);
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            color: var(--white);
-            background: var(--purple);
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-
-        .wave-card .wave-era {
-            font-size: var(--label-size);
-            font-weight: 700;
-            color: var(--text-light);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        .wave-card h3 {
-            font-size: clamp(1rem, 2vw, 1.4rem);
-            color: var(--text-dark);
-            margin-top: 2px;
-        }
-
-        .wave-card p {
-            font-size: var(--small-size);
-        }
-
-        .wave-traits {
-            list-style: none;
-            margin-top: auto;
-            padding-top: clamp(0.3rem, 0.5vh, 0.5rem);
-            border-top: 1px solid var(--border-gray);
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .wave-traits li {
-            font-size: var(--tiny-size);
-            color: var(--text-light);
-            padding-left: 12px;
-            position: relative;
-        }
-
-        .wave-traits li::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: var(--border-gray);
-            transform: translateY(-50%);
-        }
-
-        .wave-card.current .wave-traits li::before { background: var(--purple); }
-
-        /* =========================================== COMPETITOR SLIDE =========================================== */
-        .competitors-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: clamp(0.75rem, 1.5vw, 1.25rem);
-            margin-top: var(--content-gap);
-        }
-
-        .competitor-card {
-            background: var(--white);
-            border: 1px solid var(--border-gray);
-            border-radius: 12px;
-            padding: clamp(1rem, 2vw, 1.5rem);
-            display: flex;
-            flex-direction: column;
-            gap: clamp(0.3rem, 0.5vh, 0.4rem);
-        }
-
-        .competitor-card .comp-name {
-            font-family: var(--font-body);
-            font-size: var(--body-size);
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-
-        .competitor-card .comp-detail {
-            font-size: var(--tiny-size);
-            color: var(--text-light);
-        }
-
-        .competitor-card .comp-building {
-            font-size: var(--small-size);
-            color: var(--text-mid);
-            margin-top: 4px;
-        }
-
-        .gap-callout {
-            background: var(--black);
-            color: var(--white);
-            border-radius: 12px;
-            padding: clamp(1rem, 2vw, 1.75rem);
-            margin-top: clamp(0.5rem, 1vw, 1rem);
-            display: flex;
-            align-items: center;
-            gap: clamp(0.75rem, 1.5vw, 1.25rem);
-        }
-
-        .gap-callout .gap-icon {
-            font-size: clamp(1.5rem, 3vw, 2.5rem);
-            flex-shrink: 0;
-        }
-
-        .gap-callout p {
-            color: rgba(255,255,255,0.7);
-            font-size: var(--body-size);
-        }
-
-        .gap-callout strong { color: var(--white); }
-
-        /* =========================================== TWO CAPABILITIES SLIDE =========================================== */
-        .two-caps {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            gap: clamp(0.75rem, 2vw, 2rem);
-            margin-top: var(--content-gap);
-            align-items: stretch;
-        }
-
-        .cap-card {
-            background: var(--white);
-            border: 1px solid var(--border-gray);
-            border-radius: 14px;
-            padding: clamp(1.25rem, 2.5vw, 2rem);
-            display: flex;
-            flex-direction: column;
-            gap: clamp(0.4rem, 0.8vh, 0.7rem);
-        }
-
-        .cap-card .cap-icon {
-            font-size: clamp(1.5rem, 3vw, 2.2rem);
-        }
-
-        .cap-card h3 {
-            font-size: clamp(1.1rem, 2.2vw, 1.5rem);
-            color: var(--text-dark);
-        }
-
-        .cap-card p {
-            font-size: var(--small-size);
-        }
-
-        .cap-card .cap-tag {
-            display: inline-block;
-            font-size: var(--label-size);
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            padding: 3px 10px;
-            border-radius: 4px;
-            width: fit-content;
-        }
-
-        .cap-card.fyc-cap .cap-tag { background: rgba(42,157,143,0.1); color: var(--teal); }
-        .cap-card.steward-cap .cap-tag { background: rgba(124,92,255,0.1); color: var(--purple); }
-
-        .cap-plus {
-            font-family: var(--font-headline);
-            font-size: clamp(1.5rem, 3vw, 2.5rem);
-            color: var(--text-light);
-            display: flex;
-            align-items: center;
-        }
-
-        .cap-result {
-            background: var(--black);
-            color: var(--white);
-            border-radius: 14px;
-            padding: clamp(1rem, 2vw, 1.5rem);
-            margin-top: clamp(0.5rem, 1vw, 1rem);
-            text-align: center;
-        }
-
-        .cap-result h3 {
-            font-size: clamp(1rem, 2vw, 1.4rem);
-            color: var(--white);
-        }
-
-        .cap-result p { color: rgba(255,255,255,0.5); font-size: var(--small-size); }
-
-        /* =========================================== FYC LIFECYCLE SLIDE =========================================== */
-        .lifecycle-compact {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: clamp(0.5rem, 1.2vw, 1rem);
-            margin-top: var(--content-gap);
-        }
-
-        .lc-phase {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .lc-phase-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding-bottom: clamp(0.3rem, 0.6vh, 0.5rem);
-            margin-bottom: clamp(0.3rem, 0.6vh, 0.5rem);
-            border-bottom: 2px solid var(--border-gray);
-        }
-
-        .lc-phase-num {
-            font-family: var(--font-body);
-            font-size: var(--tiny-size);
-            font-weight: 700;
-            color: var(--white);
-            background: var(--teal);
-            width: clamp(18px, 2vw, 22px);
-            height: clamp(18px, 2vw, 22px);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .lc-phase-title {
-            font-family: var(--font-body);
-            font-size: var(--small-size);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--text-dark);
-        }
-
-        .lc-items {
-            display: flex;
-            flex-direction: column;
-            gap: clamp(0.25rem, 0.5vh, 0.4rem);
-        }
-
-        .lc-item {
-            background: var(--white);
-            border: 1px solid var(--border-gray);
-            border-radius: 8px;
-            padding: clamp(0.4rem, 0.8vw, 0.6rem) clamp(0.5rem, 1vw, 0.75rem);
-        }
-
-        .lc-item .lc-name {
-            font-size: var(--small-size);
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .lc-item .lc-desc {
-            font-size: var(--tiny-size);
-            color: var(--text-light);
-            margin-top: 1px;
-        }
-
-        .lc-item.quick-win {
-            border-left: 3px solid var(--teal);
-        }
-
-        /* =========================================== PRIORITY MATRIX =========================================== */
-        .priority-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: auto auto;
-            gap: clamp(0.5rem, 1vw, 0.75rem);
-            margin-top: var(--content-gap);
-        }
-
-        .priority-box {
-            background: var(--white);
-            border: 1px solid var(--border-gray);
-            border-radius: 12px;
-            padding: clamp(0.75rem, 1.5vw, 1.25rem);
-        }
-
-        .priority-box .pb-label {
-            font-size: var(--label-size);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 6px;
-        }
-
-        .priority-box.qw .pb-label { color: var(--teal); }
-        .priority-box.sb .pb-label { color: var(--purple); }
-        .priority-box.ea .pb-label { color: var(--tan); }
-        .priority-box.bt .pb-label { color: var(--text-light); }
-
-        .priority-box.qw { border-color: var(--teal); border-width: 2px; }
-
-        .pb-items {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .pb-chip {
-            font-size: var(--tiny-size);
-            font-weight: 500;
-            padding: 3px 10px;
-            border-radius: 20px;
-            background: var(--light-gray);
-            color: var(--text-mid);
-        }
-
-        .priority-box.qw .pb-chip { background: rgba(42,157,143,0.1); color: var(--teal); }
-
-        /* =========================================== DOUBLE WORK SLIDE =========================================== */
-        .double-work {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            gap: clamp(1rem, 2.5vw, 2.5rem);
-            margin-top: var(--content-gap);
-            align-items: center;
-        }
-
-        .job-card {
-            background: var(--white);
-            border: 1px solid var(--border-gray);
-            border-radius: 14px;
-            padding: clamp(1.25rem, 2.5vw, 2rem);
-            text-align: center;
-        }
-
-        .job-card .job-time {
-            font-family: var(--font-headline);
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 400;
-            color: var(--text-dark);
-            line-height: 1;
-        }
-
-        .job-card .job-label {
-            font-size: var(--small-size);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-top: 4px;
-            margin-bottom: 8px;
-        }
-
-        .job-card.job1 .job-label { color: var(--teal); }
-        .job-card.job2 .job-label { color: var(--bjs-red); }
-
-        .job-card .job-desc {
-            font-size: var(--small-size);
-            color: var(--text-light);
-        }
-
-        .job-tasks {
-            list-style: none;
-            margin-top: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            text-align: left;
-        }
-
-        .job-tasks li {
-            font-size: var(--tiny-size);
-            color: var(--text-light);
-            padding: 4px 8px;
-            background: var(--light-gray);
-            border-radius: 6px;
-        }
-
-        .vs-divider {
-            font-family: var(--font-body);
-            font-size: var(--small-size);
-            font-weight: 700;
-            color: var(--text-light);
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-        }
-
-        .dw-insight {
-            background: var(--black);
-            color: var(--white);
-            border-radius: 12px;
-            padding: clamp(0.75rem, 1.5vw, 1.25rem) clamp(1rem, 2vw, 1.75rem);
-            margin-top: clamp(0.5rem, 1vw, 1rem);
-            text-align: center;
-        }
-
-        .dw-insight p { color: rgba(255,255,255,0.6); }
-        .dw-insight strong { color: var(--white); }
-
-        /* =========================================== ARCHITECTURE SLIDE =========================================== */
-        .arch-flow {
-            display: flex;
-            flex-direction: column;
-            gap: clamp(0.5rem, 1vw, 0.75rem);
-            margin-top: var(--content-gap);
-            align-items: center;
-        }
-
-        .arch-row {
-            display: flex;
-            align-items: center;
-            gap: clamp(0.5rem, 1vw, 0.75rem);
-            width: 100%;
-            justify-content: center;
-        }
-
-        .arch-box {
-            background: var(--white);
-            border: 1px solid var(--border-gray);
-            border-radius: 10px;
-            padding: clamp(0.6rem, 1.2vw, 1rem) clamp(0.8rem, 1.5vw, 1.25rem);
-            text-align: center;
-            flex: 0 1 auto;
-            min-width: clamp(100px, 15vw, 180px);
-        }
-
-        .arch-box.primary {
-            background: var(--black);
-            color: var(--white);
-            border-color: var(--black);
-        }
-
-        .arch-box.primary p { color: rgba(255,255,255,0.6); }
-
-        .arch-box.sub-agent {
-            background: rgba(124,92,255,0.06);
-            border-color: rgba(124,92,255,0.25);
-        }
-
-        .arch-box .arch-label {
-            font-size: var(--tiny-size);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--text-light);
-        }
-
-        .arch-box.primary .arch-label { color: var(--tan); }
-        .arch-box.sub-agent .arch-label { color: var(--purple); }
-
-        .arch-box .arch-name {
-            font-size: var(--body-size);
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-top: 2px;
-        }
-
-        .arch-box.primary .arch-name { color: var(--white); }
-
-        .arch-box .arch-desc {
-            font-size: var(--tiny-size);
-            color: var(--text-light);
-            margin-top: 2px;
-        }
-
-        .arch-arrow {
-            font-size: clamp(1rem, 2vw, 1.5rem);
-            color: var(--text-light);
-        }
-
-        .arch-arrow.down {
-            transform: rotate(90deg);
-        }
-
-        .sub-agents-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: clamp(0.4rem, 0.8vw, 0.6rem);
-            width: 100%;
-            max-width: 700px;
-        }
-
-        /* =========================================== USE CASE CARDS =========================================== */
-        .usecase-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: clamp(0.5rem, 1.2vw, 1rem);
-            margin-top: var(--content-gap);
-        }
-
-        .usecase-card {
-            background: var(--white);
-            border: 1px solid var(--border-gray);
-            border-radius: 12px;
-            padding: clamp(0.75rem, 1.5vw, 1.25rem);
-            display: flex;
-            flex-direction: column;
-            gap: clamp(0.25rem, 0.5vh, 0.4rem);
-        }
-
-        .usecase-card .uc-num {
-            font-size: var(--label-size);
-            font-weight: 700;
-            color: var(--purple);
-            letter-spacing: 0.1em;
-        }
-
-        .usecase-card h3 {
-            font-size: clamp(0.9rem, 1.8vw, 1.2rem);
-            color: var(--text-dark);
-        }
-
-        .usecase-card .uc-scenario {
-            font-size: var(--small-size);
-            color: var(--text-mid);
-            font-style: italic;
-        }
-
-        .usecase-card .uc-steps {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            margin-top: auto;
-            padding-top: 6px;
-            border-top: 1px solid var(--border-gray);
-        }
-
-        .usecase-card .uc-steps li {
-            font-size: var(--tiny-size);
-            color: var(--text-light);
-            display: flex;
-            align-items: flex-start;
-            gap: 6px;
-        }
-
-        .uc-steps .step-icon {
-            flex-shrink: 0;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: rgba(124,92,255,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 8px;
-            color: var(--purple);
-            margin-top: 1px;
-        }
-
-        /* =========================================== BIG UNLOCK SLIDE =========================================== */
-        .unlock-visual {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: clamp(0.75rem, 1.5vw, 1.25rem);
-            margin-top: var(--content-gap);
-        }
-
-        .unlock-center {
-            background: var(--black);
-            color: var(--white);
-            border-radius: 14px;
-            padding: clamp(1rem, 2vw, 1.5rem) clamp(1.5rem, 3vw, 2.5rem);
-            text-align: center;
-        }
-
-        .unlock-center .unlock-icon { font-size: clamp(1.5rem, 3vw, 2.5rem); }
-        .unlock-center h3 { color: var(--white); font-size: clamp(1rem, 2vw, 1.4rem); }
-        .unlock-center p { color: rgba(255,255,255,0.5); font-size: var(--small-size); }
-
-        .unlock-channels {
-            display: flex;
-            gap: clamp(0.5rem, 1vw, 0.75rem);
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .unlock-channel {
-            background: var(--white);
-            border: 1px solid var(--border-gray);
-            border-radius: 10px;
-            padding: clamp(0.5rem, 1vw, 0.75rem) clamp(0.75rem, 1.5vw, 1.25rem);
-            text-align: center;
-            min-width: clamp(80px, 12vw, 140px);
-        }
-
-        .unlock-channel .ch-icon { font-size: clamp(1.2rem, 2.5vw, 1.8rem); }
-        .unlock-channel .ch-name {
-            font-size: var(--tiny-size);
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-top: 2px;
-        }
-
-        .unlock-channel .ch-desc {
-            font-size: var(--label-size);
-            color: var(--text-light);
-        }
-
-        .unlock-today {
-            display: flex;
-            align-items: center;
-            gap: clamp(0.5rem, 1vw, 0.75rem);
-            background: var(--light-gray);
-            border-radius: 10px;
-            padding: clamp(0.5rem, 1vw, 0.75rem) clamp(0.75rem, 1.5vw, 1.25rem);
-            width: 100%;
-            max-width: 600px;
-        }
-
-        .unlock-today .ut-label {
-            font-size: var(--label-size);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-light);
-            white-space: nowrap;
-        }
-
-        .unlock-today p {
-            font-size: var(--small-size);
-        }
-
-        /* =========================================== AUTONOMY LEVELS SLIDE =========================================== */
-        .autonomy-track {
-            display: flex;
-            flex-direction: column;
-            gap: clamp(0.4rem, 0.8vw, 0.6rem);
-            margin-top: var(--content-gap);
-        }
-
-        .auto-level {
-            display: grid;
-            grid-template-columns: clamp(60px, 8vw, 90px) 1fr;
-            gap: clamp(0.5rem, 1vw, 0.75rem);
-            align-items: center;
-        }
-
-        .auto-badge {
-            text-align: center;
-            padding: clamp(0.3rem, 0.6vw, 0.5rem);
-            border-radius: 8px;
-            font-size: var(--tiny-size);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        .auto-level.l0 .auto-badge { background: var(--light-gray); color: var(--text-light); }
-        .auto-level.l1 .auto-badge { background: rgba(124,92,255,0.1); color: var(--purple); }
-        .auto-level.l2 .auto-badge { background: rgba(42,157,143,0.1); color: var(--teal); }
-
-        .auto-detail {
-            background: var(--white);
-            border: 1px solid var(--border-gray);
-            border-radius: 10px;
-            padding: clamp(0.5rem, 1vw, 0.75rem) clamp(0.75rem, 1.5vw, 1.25rem);
-        }
-
-        .auto-level.l1 .auto-detail { border-color: rgba(124,92,255,0.3); border-width: 2px; }
-
-        .auto-detail .ad-title {
-            font-size: var(--body-size);
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .auto-detail .ad-desc {
-            font-size: var(--small-size);
-            color: var(--text-light);
-            margin-top: 2px;
-        }
-
-        .auto-detail .ad-example {
-            font-size: var(--tiny-size);
-            color: var(--text-mid);
-            font-style: italic;
-            background: var(--light-gray);
-            padding: 4px 8px;
-            border-radius: 6px;
-            margin-top: 6px;
-            display: inline-block;
-        }
-
-        .autonomy-insight {
-            background: var(--black);
-            color: var(--white);
-            border-radius: 12px;
-            padding: clamp(0.75rem, 1.5vw, 1.25rem) clamp(1rem, 2vw, 1.75rem);
-            margin-top: clamp(0.4rem, 0.8vw, 0.6rem);
-        }
-
-        .autonomy-insight p { color: rgba(255,255,255,0.6); font-size: var(--body-size); }
-        .autonomy-insight strong { color: var(--white); }
-
-        /* =========================================== MIDDLE PATH SLIDE =========================================== */
-        .middle-path-flow {
-            display: flex;
-            flex-direction: column;
-            gap: clamp(0.4rem, 0.8vw, 0.6rem);
-            margin-top: var(--content-gap);
-        }
-
-        .mp-row {
-            display: grid;
-            grid-template-columns: clamp(80px, 10vw, 120px) 1fr;
-            gap: clamp(0.5rem, 1vw, 0.75rem);
-            align-items: center;
-        }
-
-        .mp-label {
-            font-size: var(--tiny-size);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            text-align: right;
-        }
-
-        .mp-content {
-            background: var(--white);
-            border: 1px solid var(--border-gray);
-            border-radius: 10px;
-            padding: clamp(0.5rem, 1vw, 0.75rem) clamp(0.75rem, 1.5vw, 1.25rem);
-        }
-
-        .mp-content p {
-            font-size: var(--small-size);
-        }
-
-        .mp-content strong { color: var(--text-dark); }
-
-        .mp-row.highlight .mp-label { color: var(--purple); }
-        .mp-row.highlight .mp-content {
-            border-color: var(--purple);
-            border-width: 2px;
-        }
-
-        /* =========================================== COMPLETE PICTURE =========================================== */
-        .complete-picture {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: clamp(0.75rem, 1.5vw, 1.25rem);
-            margin-top: var(--content-gap);
-        }
-
-        .cp-card {
-            border-radius: 14px;
-            padding: clamp(1.25rem, 2.5vw, 2rem);
-            display: flex;
-            flex-direction: column;
-            gap: clamp(0.3rem, 0.6vh, 0.5rem);
-        }
-
-        .cp-card.fyc-card {
-            background: rgba(42,157,143,0.06);
-            border: 1px solid rgba(42,157,143,0.2);
-        }
-
-        .cp-card.steward-card {
-            background: rgba(124,92,255,0.06);
-            border: 1px solid rgba(124,92,255,0.2);
-        }
-
-        .cp-card .cp-icon { font-size: clamp(1.5rem, 3vw, 2.2rem); }
-        .cp-card h3 { color: var(--text-dark); }
-
-        .cp-card .cp-tag {
-            font-size: var(--label-size);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        .cp-card.fyc-card .cp-tag { color: var(--teal); }
-        .cp-card.steward-card .cp-tag { color: var(--purple); }
-
-        .cp-card ul {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .cp-card li {
-            font-size: var(--small-size);
-            color: var(--text-mid);
-        }
-
-        .cp-equals {
-            text-align: center;
-            background: var(--black);
-            color: var(--white);
-            border-radius: 14px;
-            padding: clamp(1rem, 2vw, 1.5rem);
-            margin-top: clamp(0.5rem, 1vw, 1rem);
-            grid-column: 1 / -1;
-        }
-
-        .cp-equals h3 { color: var(--white); font-size: clamp(1.1rem, 2.2vw, 1.6rem); }
-        .cp-equals p { color: rgba(255,255,255,0.5); }
-
-        /* =========================================== ROADMAP SLIDE =========================================== */
-        .roadmap-track {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: clamp(0.4rem, 0.8vw, 0.6rem);
-            margin-top: var(--content-gap);
-        }
-
-        .rm-phase {
-            background: var(--white);
-            border: 1px solid var(--border-gray);
-            border-radius: 12px;
-            padding: clamp(0.75rem, 1.5vw, 1.25rem);
-            display: flex;
-            flex-direction: column;
-            gap: clamp(0.2rem, 0.4vh, 0.3rem);
-            position: relative;
-        }
-
-        .rm-phase .rm-num {
-            font-size: var(--label-size);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-light);
-        }
-
-        .rm-phase .rm-weeks {
-            font-size: var(--tiny-size);
-            color: var(--tan);
-            font-weight: 600;
-        }
-
-        .rm-phase h3 {
-            font-size: clamp(0.85rem, 1.6vw, 1.1rem);
-            color: var(--text-dark);
-            margin-top: 4px;
-        }
-
-        .rm-items {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            margin-top: auto;
-            padding-top: 6px;
-        }
-
-        .rm-items li {
-            font-size: var(--tiny-size);
-            color: var(--text-light);
-            padding-left: 10px;
-            position: relative;
-        }
-
-        .rm-items li::before {
-            content: '→';
-            position: absolute;
-            left: 0;
-            color: var(--text-light);
-        }
-
-        .rm-phase.p1 { border-top: 3px solid var(--teal); }
-        .rm-phase.p2 { border-top: 3px solid var(--teal); }
-        .rm-phase.p3 { border-top: 3px solid var(--purple); }
-        .rm-phase.p4 { border-top: 3px solid var(--purple); }
-
-        /* =========================================== DISCUSSION SLIDE =========================================== */
-        .discussion-items {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: clamp(0.5rem, 1.2vw, 1rem);
-            margin-top: var(--content-gap);
-        }
-
-        .disc-item {
-            background: var(--white);
-            border: 1px solid var(--border-gray);
-            border-radius: 12px;
-            padding: clamp(1rem, 2vw, 1.5rem);
-            display: flex;
-            flex-direction: column;
-            gap: clamp(0.2rem, 0.4vh, 0.3rem);
-        }
-
-        .disc-item .disc-num {
-            font-size: var(--label-size);
-            font-weight: 700;
-            color: var(--tan);
-            letter-spacing: 0.1em;
-        }
-
-        .disc-item h3 {
-            font-size: clamp(0.9rem, 1.8vw, 1.15rem);
-            color: var(--text-dark);
-        }
-
-        .disc-item p {
-            font-size: var(--small-size);
-            color: var(--text-light);
-        }
-
-        /* =========================================== ACCESS GATE =========================================== */
-        .access-gate {
-            position: fixed;
-            inset: 0;
-            background: var(--black);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: clamp(1rem, 2vh, 1.5rem);
-        }
-
+        html { height: 100%; scroll-snap-type: y mandatory; scroll-behavior: smooth; overflow-x: hidden; }
+        body { font-family: var(--font-body); background: var(--dark); color: var(--text); height: 100%; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        .slide { width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; scroll-snap-align: start; display: flex; flex-direction: column; justify-content: center; position: relative; padding: var(--pad); }
+        .slide-content { flex: 1; display: flex; flex-direction: column; justify-content: center; max-height: 100%; overflow: hidden; }
+        .s-dark { background: var(--dark); color: var(--white); }
+        .s-light { background: var(--bg); color: var(--text); }
+        .s-accent { background: var(--accent); color: var(--white); }
+        .s-warm { background: var(--warm); color: var(--text); }
+        .s-pop { background: var(--pop); color: var(--text); }
+        .s-coral { background: var(--coral); color: var(--white); }
+        .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--pop); width: 0%; z-index: 100; transition: width 0.3s ease; }
+        .nav-dots { position: fixed; right: clamp(12px, 2vw, 24px); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 100; mix-blend-mode: difference; }
+        .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.3); border: none; cursor: pointer; transition: all 0.3s ease; padding: 0; }
+        .nav-dot.active { background: var(--pop); transform: scale(1.6); }
+        .keyboard-hint { position: fixed; bottom: clamp(12px, 2vh, 20px); right: clamp(12px, 2vw, 24px); font-size: var(--tiny-size); color: rgba(255,255,255,0.3); z-index: 100; mix-blend-mode: difference; }
+        .key { display: inline-block; border: 1px solid rgba(255,255,255,0.2); border-radius: 3px; padding: 0 4px; font-size: 0.7em; line-height: 1.6; }
+        h1 { font-family: var(--font-display); font-size: var(--title-size); font-weight: 700; line-height: 1.08; letter-spacing: -0.03em; }
+        h2 { font-family: var(--font-display); font-size: var(--h2-size); font-weight: 600; line-height: 1.12; letter-spacing: -0.02em; }
+        h3 { font-family: var(--font-display); font-size: var(--h3-size); font-weight: 500; line-height: 1.25; }
+        p, li { font-family: var(--font-body); font-size: var(--body-size); line-height: 1.7; color: var(--text2); }
+        .s-dark p, .s-dark li, .s-accent p, .s-accent li, .s-coral p, .s-coral li { color: rgba(255,255,255,0.55); }
+        .label { font-family: var(--font-body); font-size: var(--label-size); font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; }
+        .s-dark .label { color: var(--pop); } .s-accent .label { color: var(--pop); } .s-warm .label { color: var(--accent); } .s-light .label { color: var(--accent2); } .s-pop .label { color: var(--accent); } .s-coral .label { color: var(--pop); }
+        .line { width: 48px; height: 3px; border-radius: 2px; margin-bottom: 12px; }
+        .s-dark .line { background: var(--pop); } .s-accent .line { background: var(--pop); } .s-warm .line { background: var(--accent); } .s-light .line { background: var(--accent2); } .s-pop .line { background: var(--accent); }
+        .fi { opacity: 0; transform: translateY(24px); transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
+        .slide.visible .fi { opacity: 1; transform: translateY(0); }
+        .d1{transition-delay:.05s}.d2{transition-delay:.15s}.d3{transition-delay:.25s}.d4{transition-delay:.35s}.d5{transition-delay:.45s}.d6{transition-delay:.55s}.d7{transition-delay:.65s}.d8{transition-delay:.75s}
+        .logo { position: absolute; bottom: clamp(16px, 2.5vh, 24px); left: clamp(36px, 7vw, 100px); height: clamp(14px, 1.8vw, 20px); opacity: 0.35; }
+        .card { background: rgba(0,0,0,0.04); border-radius: 16px; padding: clamp(16px, 2.5vw, 28px) clamp(16px, 2.5vw, 24px); }
+        .s-dark .card { background: rgba(255,255,255,0.06); } .s-accent .card { background: rgba(255,255,255,0.1); } .s-warm .card { background: rgba(0,0,0,0.04); } .s-pop .card { background: rgba(0,0,0,0.06); }
+        .card-accent { background: var(--accent); color: var(--white); border-radius: 16px; padding: clamp(16px, 2.5vw, 28px) clamp(16px, 2.5vw, 24px); }
+        .card-accent p { color: rgba(255,255,255,0.6); } .card-accent strong,.card-accent h3 { color: var(--white); }
+        .card-dark { background: var(--dark); color: var(--white); border-radius: 16px; padding: clamp(16px, 2.5vw, 28px) clamp(16px, 2.5vw, 24px); }
+        .card-dark p { color: rgba(255,255,255,0.55); } .card-dark strong,.card-dark h3 { color: var(--white); }
+        .card-pop { background: var(--pop); color: var(--text); border-radius: 16px; padding: clamp(12px, 2vw, 20px) clamp(16px, 2.5vw, 24px); }
+        .card-pop p { color: var(--text); }
+        .title-slide .slide-content { align-items: flex-start; gap: clamp(8px, 1.5vh, 16px); }
+        .title-badge { display: inline-block; font-family: var(--font-body); font-size: var(--label-size); font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--pop); border: 1px solid rgba(232,255,89,0.3); padding: 4px 12px; border-radius: 4px; }
+        .subtitle { font-family: var(--font-body); font-size: clamp(0.9rem, 1.6vw, 1.2rem); color: rgba(255,255,255,0.4); max-width: 600px; }
+        .g { display: grid; gap: var(--gap); } .g2 { grid-template-columns: repeat(2, 1fr); } .g3 { grid-template-columns: repeat(3, 1fr); } .g4 { grid-template-columns: repeat(4, 1fr); }
+        .narrative { font-family: var(--font-display); font-size: clamp(1.2rem, 2.5vw, 2rem); font-weight: 500; line-height: 1.35; letter-spacing: -0.01em; max-width: 700px; }
+        .s-dark .narrative { color: rgba(255,255,255,0.7); } .s-dark .narrative strong { color: var(--white); }
+        .s-accent .narrative { color: rgba(255,255,255,0.8); } .s-accent .narrative strong { color: var(--white); }
+        .s-warm .narrative { color: var(--text); } .s-coral .narrative { color: rgba(255,255,255,0.85); } .s-coral .narrative strong { color: var(--white); }
+        .bubble { font-family: var(--font-display); font-size: clamp(0.88rem, 1.4vw, 1.1rem); font-style: italic; color: var(--white); background: var(--accent); border-radius: 20px 20px 20px 4px; padding: clamp(12px, 2vw, 18px) clamp(16px, 2.5vw, 24px); max-width: 550px; line-height: 1.55; }
+        .bubble.b2 { background: #2D6B5A; } .bubble.b3 { background: var(--accent2); }
+        .bubble-name { font-family: var(--font-body); font-size: var(--label-size); font-weight: 600; font-style: normal; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+        .bubbles-col { display: flex; flex-direction: column; gap: clamp(10px, 1.5vw, 16px); align-items: flex-start; }
+        .section-break .slide-content { align-items: flex-start; gap: clamp(6px, 1vh, 12px); }
+        .section-break h2 { font-size: clamp(2rem, 5vw, 4rem); max-width: 700px; }
+        .section-desc { font-size: clamp(0.88rem, 1.5vw, 1.15rem); color: rgba(255,255,255,0.4); max-width: 500px; }
+        .s-accent .section-desc { color: rgba(255,255,255,0.5); }
+        .section-number { font-family: var(--font-body); font-size: var(--label-size); font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
+        .s-dark .section-number { color: var(--pop); } .s-accent .section-number { color: var(--pop); }
+        .lc-phase-header { display: flex; align-items: center; gap: 8px; padding-bottom: 8px; margin-bottom: 8px; border-bottom: 2px solid rgba(0,0,0,0.06); }
+        .lc-phase-num { font-family: var(--font-body); font-size: var(--tiny-size); font-weight: 700; color: var(--white); background: var(--accent); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .lc-phase-title { font-family: var(--font-body); font-size: var(--small-size); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text); }
+        .lc-item { padding: 6px 10px; border-radius: 8px; } .lc-item + .lc-item { margin-top: 4px; }
+        .lc-name { font-size: var(--small-size); font-weight: 600; color: var(--text); }
+        .lc-desc { font-size: var(--tiny-size); color: var(--text3); }
+        .lc-item.quick-win { background: rgba(27,77,62,0.08); border-left: 3px solid var(--accent); }
+        .uc-num { font-size: var(--label-size); font-weight: 700; letter-spacing: 0.1em; }
+        .s-dark .uc-num { color: var(--pop); } .s-light .uc-num { color: var(--accent); }
+        .uc-scenario { font-family: var(--font-display); font-size: var(--small-size); font-style: italic; } .s-dark .uc-scenario { color: rgba(255,255,255,0.5); }
+        .uc-steps { list-style: none; display: flex; flex-direction: column; gap: 4px; margin-top: auto; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08); }
+        .uc-steps li { font-size: var(--tiny-size); display: flex; align-items: flex-start; gap: 6px; }
+        .step-icon { flex-shrink: 0; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; margin-top: 1px; }
+        .s-dark .step-icon { background: rgba(232,255,89,0.15); color: var(--pop); } .s-light .step-icon { background: rgba(27,77,62,0.1); color: var(--accent); }
+        .double-work { display: grid; grid-template-columns: 1fr auto 1fr; gap: var(--gap); align-items: center; }
+        .job-time { font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700; line-height: 1; letter-spacing: -0.03em; } .s-dark .job-time { color: var(--white); }
+        .job-label { font-family: var(--font-body); font-size: var(--small-size); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; margin-bottom: 8px; }
+        .s-dark .job1 .job-label { color: var(--pop); } .job2 .job-label { color: var(--coral); }
+        .job-desc { font-size: var(--small-size); } .s-dark .job-desc { color: rgba(255,255,255,0.4); }
+        .job-tasks { list-style: none; margin-top: 12px; display: flex; flex-direction: column; gap: 4px; text-align: left; }
+        .job-tasks li { font-size: var(--tiny-size); color: rgba(255,255,255,0.35); padding: 5px 10px; background: rgba(255,255,255,0.06); border-radius: 6px; }
+        .vs-divider { font-family: var(--font-body); font-size: var(--small-size); font-weight: 700; color: rgba(255,255,255,0.2); text-transform: uppercase; letter-spacing: 0.15em; }
+        .auto-level { display: grid; grid-template-columns: clamp(60px, 8vw, 85px) 1fr; gap: clamp(8px, 1.5vw, 12px); align-items: center; }
+        .auto-badge { text-align: center; padding: 6px; border-radius: 8px; font-size: var(--tiny-size); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .l0 .auto-badge { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); }
+        .l1 .auto-badge { background: rgba(232,255,89,0.15); color: var(--pop); }
+        .l2 .auto-badge { background: rgba(42,125,98,0.3); color: #5CC9A7; }
+        .ad-title { font-size: var(--body-size); font-weight: 600; } .s-dark .ad-title { color: var(--white); }
+        .ad-desc { font-size: var(--small-size); margin-top: 2px; }
+        .ad-example { font-family: var(--font-display); font-size: var(--tiny-size); font-style: italic; padding: 6px 10px; border-radius: 8px; margin-top: 6px; display: inline-block; }
+        .s-dark .ad-example { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); }
+        .platform-flow { display: grid; grid-template-columns: 1fr auto 1fr; gap: var(--gap); align-items: stretch; }
+        .platform-arrow { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: rgba(255,255,255,0.3); }
+        .platform-arrow span { font-size: clamp(1rem, 2vw, 1.5rem); }
+        .arrow-label { font-family: var(--font-body) !important; font-size: var(--label-size) !important; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; writing-mode: vertical-lr; text-orientation: mixed; transform: rotate(180deg); color: rgba(255,255,255,0.25) !important; }
+        .rm-phase { display: flex; flex-direction: column; gap: 4px; padding-top: 12px; border-top: 3px solid transparent; }
+        .rm-phase.p1,.rm-phase.p2 { border-top-color: var(--accent2); } .rm-phase.p3,.rm-phase.p4 { border-top-color: var(--pop); }
+        .rm-num { font-size: var(--label-size); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); }
+        .rm-weeks { font-size: var(--tiny-size); font-weight: 600; color: var(--accent); }
+        .rm-items { list-style: none; display: flex; flex-direction: column; gap: 4px; margin-top: auto; padding-top: 8px; }
+        .rm-items li { font-size: var(--tiny-size); padding-left: 12px; position: relative; } .rm-items li::before { content: '\2192'; position: absolute; left: 0; }
+        .disc-num { font-size: var(--label-size); font-weight: 700; letter-spacing: 0.1em; color: var(--accent); }
+        .access-gate { position: fixed; inset: 0; background: var(--dark); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(16px, 2.5vh, 24px); }
         .access-gate.hidden { display: none; }
+        .access-gate .gate-logo { height: clamp(20px, 3vw, 28px); opacity: 0.3; margin-bottom: 8px; }
+        .access-gate label { font-family: var(--font-body); font-size: var(--small-size); font-weight: 500; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.12em; }
+        .access-gate input { font-family: var(--font-body); font-size: clamp(1rem, 2vw, 1.25rem); text-align: center; letter-spacing: 0.2em; padding: clamp(8px, 1.5vw, 12px) clamp(24px, 4vw, 40px); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; background: rgba(255,255,255,0.04); color: var(--white); outline: none; transition: border-color 0.3s ease; }
+        .access-gate input:focus { border-color: var(--accent2); }
+        .access-gate input.error { border-color: var(--coral); animation: shake 0.4s ease; }
+        @keyframes shake { 0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)} }
+        /* ═══ ORCHESTRATION ANIMATION (3-column) ═══ */
+        .orch-animation { display:grid; grid-template-columns:220px 1fr 240px; gap:clamp(12px,2vw,24px); align-items:center; max-height:60vh; position:relative; width:100%; max-width:900px; margin:0 auto; }
+        .orch-customer { background:var(--white); border:1px solid #e0ddd8; border-radius:12px; overflow:hidden; height:clamp(260px,40vh,340px); display:flex; flex-direction:column; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+        .orch-customer-header { padding:8px 12px; border-bottom:1px solid #e0ddd8; display:flex; align-items:center; gap:6px; font-family:var(--font-body); font-size:var(--label-size); font-weight:600; }
+        .orch-customer-body { flex:1; padding:10px; display:flex; flex-direction:column; gap:6px; overflow-y:auto; background:#fafaf8; }
+        .orch-msg { max-width:92%; padding:7px 10px; border-radius:10px; font-family:var(--font-body); font-size:var(--label-size); line-height:1.4; }
+        .orch-msg.ai { background:rgba(27,77,62,0.08); border:1px solid rgba(27,77,62,0.1); color:var(--accent); align-self:flex-start; border-bottom-left-radius:3px; }
+        .orch-msg.user { background:var(--white); border:1px solid #e0ddd8; color:var(--text2); align-self:flex-end; border-bottom-right-radius:3px; }
+        .orch-msg.steward { background:rgba(13,13,13,0.05); border:1px solid rgba(13,13,13,0.1); color:var(--text); align-self:flex-start; border-bottom-left-radius:3px; font-weight:500; }
+        .orch-calm-label { text-align:center; font-family:var(--font-body); font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--text3); padding:8px; border-top:1px solid #e0ddd8; margin-top:auto; }
+        .orch-task-list { background:rgba(13,13,13,0.03); border:1px solid rgba(13,13,13,0.06); border-radius:8px; padding:7px 9px; margin:3px 0; align-self:flex-start; max-width:92%; }
+        .orch-task-list-title { font-family:var(--font-body); font-size:7px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--text3); margin-bottom:5px; }
+        .orch-task { display:flex; align-items:center; gap:5px; padding:3px 0; font-family:var(--font-body); font-size:9px; color:var(--text3); transition:all 0.3s; }
+        .orch-task.active { color:var(--text); font-weight:500; }
+        .orch-task.done { color:var(--accent2); }
+        .orch-task-icon { width:13px; height:13px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:7px; flex-shrink:0; border:1.5px solid #e0ddd8; background:var(--white); transition:all 0.3s; }
+        .orch-task.active .orch-task-icon { border-color:#b06000; background:rgba(176,96,0,0.07); }
+        .orch-task.done .orch-task-icon { border-color:var(--accent2); background:rgba(42,125,98,0.07); border-width:0; font-size:8px; }
+        .orch-task-spinner { width:6px; height:6px; border:1.5px solid rgba(176,96,0,0.2); border-top-color:#b06000; border-radius:50%; animation:orch-spin 0.7s linear infinite; }
+        .orch-hub-wrap { display:flex; align-items:center; justify-content:center; position:relative; min-height:clamp(180px,28vh,240px); }
+        .orch-hub-core { width:clamp(64px,9vw,80px); height:clamp(64px,9vw,80px); border-radius:50%; background:var(--accent); display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:var(--font-body); font-size:9px; font-weight:800; color:var(--pop); text-align:center; line-height:1.2; position:relative; z-index:2; box-shadow:0 4px 24px rgba(27,77,62,0.25); }
+        .orch-hub-core .hub-name { font-family:var(--font-display); font-size:var(--small-size); font-weight:600; color:var(--white); }
+        .orch-hub-core .hub-mode { font-size:7px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--pop); margin-top:2px; }
+        .orch-ring { position:absolute; border-radius:50%; border:1px solid rgba(27,77,62,0.12); animation:ring-pulse 4s ease infinite; }
+        .orch-ring-1 { width:clamp(90px,13vw,115px); height:clamp(90px,13vw,115px); }
+        .orch-ring-2 { width:clamp(120px,17vw,150px); height:clamp(120px,17vw,150px); animation-delay:1.3s; }
+        .orch-ring-3 { width:clamp(150px,21vw,185px); height:clamp(150px,21vw,185px); animation-delay:2.6s; }
+        @keyframes ring-pulse { 0%,100%{opacity:0.3;transform:scale(1)} 50%{opacity:0.8;transform:scale(1.03)} }
+        .data-particle { position:absolute; width:4px; height:4px; background:var(--accent); border-radius:50%; opacity:0; box-shadow:0 0 6px rgba(27,77,62,0.5); }
+        .data-particle.left { animation:p-left 2.5s ease infinite; }
+        .data-particle.left-2 { animation:p-left 2.5s ease infinite 1.2s; }
+        @keyframes p-left { 0%{left:0%;top:50%;opacity:0} 10%{opacity:1} 50%{left:45%;top:50%;opacity:1} 60%{opacity:0} 100%{opacity:0} }
+        .data-particle.cl { animation:p-cl 2.5s ease infinite 0.6s; }
+        .data-particle.cl-2 { animation:p-cl 2.5s ease infinite 1.8s; }
+        @keyframes p-cl { 0%{left:45%;top:50%;opacity:0} 10%{opacity:1} 50%{left:0%;top:50%;opacity:1} 60%{opacity:0} 100%{opacity:0} }
+        .data-particle.right-1 { animation:p-r1 2.8s ease infinite 0.3s; }
+        .data-particle.right-2 { animation:p-r2 2.8s ease infinite 0.9s; }
+        .data-particle.right-3 { animation:p-r3 2.8s ease infinite 1.5s; }
+        .data-particle.right-4 { animation:p-r4 2.8s ease infinite 2.1s; }
+        @keyframes p-r1 { 0%{left:55%;top:50%;opacity:0} 10%{opacity:1} 50%{left:100%;top:10%;opacity:1} 60%{opacity:0} 100%{opacity:0} }
+        @keyframes p-r2 { 0%{left:55%;top:50%;opacity:0} 10%{opacity:1} 50%{left:100%;top:37%;opacity:1} 60%{opacity:0} 100%{opacity:0} }
+        @keyframes p-r3 { 0%{left:55%;top:50%;opacity:0} 10%{opacity:1} 50%{left:100%;top:63%;opacity:1} 60%{opacity:0} 100%{opacity:0} }
+        @keyframes p-r4 { 0%{left:55%;top:50%;opacity:0} 10%{opacity:1} 50%{left:100%;top:90%;opacity:1} 60%{opacity:0} 100%{opacity:0} }
+        .data-particle.rl-1 { animation:p-rl1 2.8s ease infinite 0.5s; }
+        .data-particle.rl-2 { animation:p-rl2 2.8s ease infinite 1.3s; }
+        .data-particle.rl-3 { animation:p-rl3 2.8s ease infinite 2.0s; }
+        @keyframes p-rl1 { 0%{left:100%;top:15%;opacity:0} 10%{opacity:1} 50%{left:55%;top:50%;opacity:1} 60%{opacity:0} 100%{opacity:0} }
+        @keyframes p-rl2 { 0%{left:100%;top:50%;opacity:0} 10%{opacity:1} 50%{left:55%;top:50%;opacity:1} 60%{opacity:0} 100%{opacity:0} }
+        @keyframes p-rl3 { 0%{left:100%;top:80%;opacity:0} 10%{opacity:1} 50%{left:55%;top:50%;opacity:1} 60%{opacity:0} 100%{opacity:0} }
+        .orch-hub-core.relay { animation:hub-relay 0.6s ease; }
+        @keyframes hub-relay { 0%{box-shadow:0 4px 24px rgba(27,77,62,0.25)} 50%{box-shadow:0 0 40px rgba(27,77,62,0.45);transform:scale(1.06)} 100%{box-shadow:0 4px 24px rgba(27,77,62,0.25)} }
+        .orch-channels { display:flex; flex-direction:column; gap:7px; }
+        .orch-channel { background:var(--white); border:1px solid #e0ddd8; border-radius:10px; padding:0; opacity:0; transform:translateX(20px); transition:all 0.6s cubic-bezier(0.16,1,0.3,1); box-shadow:0 1px 3px rgba(0,0,0,0.04); overflow:hidden; }
+        .orch-channel.visible { opacity:1; transform:translateX(0); }
+        .orch-channel-header { display:flex; align-items:center; gap:5px; padding:6px 10px; border-bottom:1px solid #e0ddd8; }
+        .orch-channel-badge { font-family:var(--font-body); font-size:7px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:2px 5px; border-radius:3px; white-space:nowrap; }
+        .orch-channel-badge.system { background:rgba(26,115,232,0.07); color:#1a73e8; }
+        .orch-channel-badge.chat { background:rgba(27,77,62,0.08); color:var(--accent); }
+        .orch-channel-badge.voice { background:rgba(217,48,37,0.07); color:#d93025; }
+        .orch-channel-badge.desk { background:rgba(176,96,0,0.07); color:#b06000; }
+        .orch-channel-who { font-family:var(--font-body); font-size:var(--label-size); font-weight:600; flex:1; }
+        .orch-channel-who span { font-weight:400; color:var(--text3); }
+        .orch-channel-status { font-family:var(--font-body); font-size:8px; font-weight:600; padding:2px 6px; border-radius:3px; white-space:nowrap; flex-shrink:0; }
+        .orch-channel-status.active { background:rgba(176,96,0,0.07); color:#b06000; }
+        .orch-channel-status.done { background:rgba(42,125,98,0.07); color:var(--accent2); }
+        .orch-channel-status.pending { background:var(--bg2); color:var(--text3); }
+        .orch-channel-preview { padding:5px 10px 7px; font-family:var(--font-body); font-size:9px; line-height:1.35; min-height:24px; }
+        .orch-channel-preview .preview-line { color:var(--text3); padding:1px 0; opacity:0; transform:translateY(3px); transition:all 0.3s ease; }
+        .orch-channel-preview .preview-line.visible { opacity:1; transform:translateY(0); }
+        .orch-channel-preview .preview-line.out { color:var(--text2); }
+        .orch-channel-preview .preview-line.out::before { content:'\2192 '; color:var(--text3); font-size:8px; }
+        .orch-channel-preview .preview-line.in { color:var(--text); font-weight:500; }
+        .orch-channel-preview .preview-line.in::before { content:'\2190 '; color:var(--accent2); font-size:8px; }
+        .orch-channel-preview .preview-call-ring { display:flex; align-items:center; gap:4px; color:var(--text3); }
+        .orch-channel-preview .preview-call-ring .ring-dot { width:5px; height:5px; border-radius:50%; background:#d93025; animation:pulse-dot-orch 1s ease infinite; }
+        .orch-channel-preview .preview-call-ring.connected .ring-dot { background:var(--accent2); }
+        .orch-channel-preview .preview-call-ring.connected { color:var(--accent2); font-weight:500; }
+        @keyframes pulse-dot-orch { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        .spinner { display:inline-block; width:8px; height:8px; border:1.5px solid rgba(176,96,0,0.2); border-top-color:#b06000; border-radius:50%; animation:orch-spin 0.7s linear infinite; margin-right:3px; vertical-align:middle; }
+        @keyframes orch-spin { to{transform:rotate(360deg)} }
+        .dri-callout { margin-top:12px; text-align:center; font-family:var(--font-body); font-size:var(--small-size); font-weight:600; color:var(--text); opacity:0; transition:all 0.8s ease; }
+        .dri-callout.visible { opacity:1; }
+        .dri-callout .stat { font-family:var(--font-body); font-size:var(--tiny-size); color:var(--text3); margin-top:4px; font-weight:400; }
+        @keyframes pulse-arrow { 0%,100%{opacity:0.3} 50%{opacity:1} }
+        @keyframes node-pulse { 0%,100%{opacity:0.7;transform:scale(1)} 50%{opacity:1;transform:scale(1.03)} }
+        .presentation-wrap { display: none; } .presentation-wrap.unlocked { display: block; }
 
-        .access-gate .gate-logo {
-            height: clamp(20px, 3vw, 28px);
-            opacity: 0.4;
-            margin-bottom: clamp(0.5rem, 1vh, 1rem);
-        }
-
-        .access-gate label {
-            font-family: var(--font-body);
-            font-size: var(--small-size);
-            font-weight: 500;
-            color: rgba(255,255,255,0.4);
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-        }
-
-        .access-gate input {
-            font-family: var(--font-body);
-            font-size: clamp(1rem, 2vw, 1.25rem);
-            text-align: center;
-            letter-spacing: 0.2em;
-            padding: clamp(0.5rem, 1vw, 0.75rem) clamp(1.5rem, 3vw, 2.5rem);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 8px;
-            background: rgba(255,255,255,0.05);
-            color: var(--white);
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        .access-gate input:focus { border-color: var(--tan); }
-
-        .access-gate input.error {
-            border-color: #D31242;
-            animation: shake 0.4s ease;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-6px); }
-            75% { transform: translateX(6px); }
-        }
-
-        .presentation-wrap { display: none; }
-        .presentation-wrap.unlocked { display: block; }
+        /* Gap Diagram for slide 8 */
+        .gap-diagram { display: flex; flex-direction: column; gap: clamp(12px, 2vw, 20px); width: 100%; max-width: 960px; }
+        .gap-panel { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: clamp(16px, 2.5vw, 28px) clamp(20px, 3vw, 32px); }
+        .gap-panel-label { font-family: var(--font-body); font-size: var(--label-size); font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: clamp(10px, 1.5vw, 16px); }
+        .gap-flow { display: flex; align-items: center; gap: 0; width: 100%; justify-content: center; flex-wrap: nowrap; }
+        .gap-node { font-family: var(--font-body); font-size: var(--tiny-size); font-weight: 600; padding: clamp(6px, 1vw, 10px) clamp(8px, 1.2vw, 14px); border-radius: 10px; background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.75); text-align: center; white-space: nowrap; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1); }
+        .gap-node-dim { font-family: var(--font-body); font-size: 9px; color: rgba(255,255,255,0.3); font-weight: 400; display: block; margin-top: 2px; }
+        .gap-arrow { font-family: var(--font-body); font-size: var(--tiny-size); color: rgba(255,255,255,0.25); padding: 0 clamp(4px, 0.6vw, 8px); flex-shrink: 0; }
+        .gap-arrow-bidir { font-family: var(--font-body); font-size: var(--tiny-size); color: rgba(255,255,255,0.25); padding: 0 clamp(4px, 0.6vw, 8px); flex-shrink: 0; }
+        .gap-barrier { font-family: var(--font-body); font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: var(--white); background: var(--coral); padding: clamp(12px, 2vw, 20px) clamp(6px, 1vw, 10px); border-radius: 6px; writing-mode: vertical-lr; text-orientation: mixed; text-align: center; flex-shrink: 0; line-height: 1; box-shadow: 0 0 16px rgba(217,79,59,0.35); }
+        .gap-hub { width: clamp(56px, 7vw, 72px); height: clamp(56px, 7vw, 72px); border-radius: 50%; background: var(--accent); color: var(--white); font-family: var(--font-body); font-size: var(--small-size); font-weight: 700; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 20px rgba(42,125,98,0.4), 0 0 0 3px rgba(42,125,98,0.2); position: relative; }
+        .gap-hub-label { font-family: var(--font-body); font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--pop); margin-top: 1px; }
+        .gap-dri-label { font-family: var(--font-body); font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent2); position: absolute; bottom: -16px; white-space: nowrap; }
+        .gap-caption { font-family: var(--font-body); font-size: var(--tiny-size); color: rgba(255,255,255,0.3); margin-top: clamp(6px, 1vw, 10px); }
+        .gap-panel.steward { border-color: rgba(42,125,98,0.2); }
+        .gap-panel.steward .gap-node { border-color: rgba(42,125,98,0.2); }
+        .gap-node-green { color: var(--accent2); font-weight: 600; }
     </style>
 </head>
 <body>
-
-    <!-- Access Gate -->
     <div class="access-gate" id="accessGate">
-        <svg class="gate-logo" viewBox="0 0 985 310" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M556.238 236.195H556.032C556.068 236.195 556.103 236.195 556.139 236.195C556.172 236.195 556.205 236.195 556.238 236.195Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M555.62 112.092C564.058 112.092 571.056 114.562 574.967 116.415L600.075 112.916V132.261H566.94C584.228 132.673 589.579 142.964 589.579 149.962C589.579 166.015 572.908 173.835 555.415 173.835C551.71 173.835 548.417 173.423 545.33 172.806C543.889 173.629 543.066 175.276 543.066 176.923C543.066 180.215 546.565 181.862 550.887 181.862H570.645C589.167 181.862 601.516 191.741 601.516 206.353C601.516 228.546 578.947 236.171 556.139 236.195C531.908 236.173 515.693 228.151 515.693 214.998C515.693 205.942 523.103 198.327 540.802 198.327H543.684C530.1 197.298 522.896 192.976 522.896 185.361C522.896 178.775 529.483 172.806 544.301 172.6C529.277 168.896 520.632 157.37 520.632 142.964C520.633 124.647 535.245 112.092 555.62 112.092ZM546.359 198.944C538.744 198.944 534.216 202.855 534.216 208C534.216 216.232 543.889 218.908 556.238 218.908C570.644 218.908 580.729 215.409 580.729 207.588C580.729 202.649 577.024 198.944 568.586 198.944H546.359ZM555.827 127.528C546.977 127.528 541.213 134.526 541.213 142.758C541.213 152.431 546.977 158.194 555.827 158.194C564.676 158.193 570.439 152.431 570.439 142.758C570.439 134.32 564.676 127.528 555.827 127.528Z" fill="white"/><path d="M160.484 134.925H221.87V156.123H175.527L211.548 192.145L196.524 207.169L160.484 171.129V221.988H139.285V171.385L103.498 207.172L88.474 192.148L88.4797 192.142L88.474 192.136L124.487 156.123H73.6865V134.925H124.279L88.474 99.1192L103.498 84.0948L139.285 119.882V73.8047H160.484V134.925Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M401.52 112.294C427.246 112.294 443.299 132.051 443.299 153.661C443.299 158.189 442.888 162.511 442.27 164.981H377.852C380.734 177.124 390.2 183.916 401.932 183.916C411.193 183.916 419.631 179.182 423.336 173.419L438.36 183.709C431.568 194.206 418.808 202.026 400.903 202.027V201.821C376.617 201.821 357.477 184.533 357.477 156.749C357.477 131.022 375.794 112.294 401.52 112.294ZM401.314 129.582C389.377 129.582 380.734 137.197 377.852 148.31H423.13C422.513 138.637 414.074 129.582 401.314 129.582Z" fill="white"/><path d="M780.229 177.936C786.822 177.936 792.166 183.28 792.166 189.873C792.166 196.465 786.822 201.809 780.229 201.81C773.637 201.81 768.292 196.465 768.292 189.873C768.292 183.28 773.637 177.936 780.229 177.936Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M838.459 113.942C863.568 113.942 874.681 131.024 874.681 147.283V199.558H854.924V174.449C854.924 191.943 844.427 201.617 828.786 201.617C813.35 201.617 801.413 191.326 801.413 175.067C801.413 158.808 812.938 150.37 828.991 148.929L855.129 146.46C855.129 137.816 848.749 131.23 838.459 131.23C828.169 131.23 823.641 138.021 822.406 143.166L804.5 138.227C808.616 122.997 820.965 113.942 838.459 113.942ZM833.108 163.953C825.905 164.776 820.965 168.276 820.965 174.861H821.171C821.171 181.241 826.728 185.357 834.343 185.357C848.543 185.357 854.923 176.096 854.924 165.6V161.895L833.108 163.953Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M346.931 199.349H326.35V167.653C324.498 189.263 313.59 201.407 295.479 201.407C274.486 201.407 258.433 182.06 258.433 156.54C258.433 131.02 274.28 111.673 295.479 111.673C312.561 111.673 324.704 123.405 326.35 143.985V84.0948H346.931V199.349ZM303.505 130.814C290.539 130.814 279.426 141.31 279.426 156.746C279.426 172.593 290.127 182.678 303.711 182.678C317.294 182.678 327.585 171.564 327.585 156.746C327.585 140.693 316.471 130.814 303.505 130.814Z" fill="white"/><path d="M732.211 115.989H755.88V133.689H732.211V172.998C732.211 179.172 735.298 181.436 740.238 181.436H754.027V199.753H738.18L738.386 199.548C723.362 199.548 712.454 193.168 712.454 174.851V133.689H697.224V115.989H712.659V97.2601H732.211V115.989Z" fill="white"/><path d="M508.942 199.554H488.361V114.143H508.942V199.554Z" fill="white"/><path d="M909.95 199.554H889.369V114.143H909.95V199.554Z" fill="white"/><path d="M474.051 199.55H453.47V84.2962H474.051V199.55Z" fill="white"/><path d="M633.554 142.133C633.554 123.199 645.491 111.879 660.515 111.879C679.243 111.879 688.916 126.08 688.916 141.721V199.349H668.335V148.925C668.335 138.84 661.132 131.637 651.253 131.637C640.551 131.637 633.554 139.458 633.554 149.748V199.349H612.973V84.0948H633.554V142.133Z" fill="white"/><path d="M195.339 85.7434C203.296 85.7434 209.746 92.1936 209.746 100.15C209.746 108.107 203.296 114.557 195.339 114.557C187.383 114.557 180.933 108.107 180.932 100.15C180.932 92.1936 187.383 85.7434 195.339 85.7434Z" fill="white"/><path d="M498.687 83.4723C505.28 83.4724 510.624 88.817 510.624 95.4095C510.624 102.002 505.28 107.346 498.687 107.346C492.095 107.346 486.75 102.002 486.75 95.4095C486.75 88.8169 492.095 83.4723 498.687 83.4723Z" fill="white"/><path d="M899.377 83.4723C905.969 83.4724 911.314 88.817 911.314 95.4095C911.313 102.002 905.969 107.346 899.377 107.346C892.784 107.346 887.44 102.002 887.44 95.4095C887.44 88.8169 892.784 83.4723 899.377 83.4723Z" fill="white"/>
-        </svg>
+        <svg class="gate-logo" viewBox="0 0 985 310" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M556.238 236.195H556.032C556.068 236.195 556.103 236.195 556.139 236.195C556.172 236.195 556.205 236.195 556.238 236.195Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M555.62 112.092C564.058 112.092 571.056 114.562 574.967 116.415L600.075 112.916V132.261H566.94C584.228 132.673 589.579 142.964 589.579 149.962C589.579 166.015 572.908 173.835 555.415 173.835C551.71 173.835 548.417 173.423 545.33 172.806C543.889 173.629 543.066 175.276 543.066 176.923C543.066 180.215 546.565 181.862 550.887 181.862H570.645C589.167 181.862 601.516 191.741 601.516 206.353C601.516 228.546 578.947 236.171 556.139 236.195C531.908 236.173 515.693 228.151 515.693 214.998C515.693 205.942 523.103 198.327 540.802 198.327H543.684C530.1 197.298 522.896 192.976 522.896 185.361C522.896 178.775 529.483 172.806 544.301 172.6C529.277 168.896 520.632 157.37 520.632 142.964C520.633 124.647 535.245 112.092 555.62 112.092ZM546.359 198.944C538.744 198.944 534.216 202.855 534.216 208C534.216 216.232 543.889 218.908 556.238 218.908C570.644 218.908 580.729 215.409 580.729 207.588C580.729 202.649 577.024 198.944 568.586 198.944H546.359ZM555.827 127.528C546.977 127.528 541.213 134.526 541.213 142.758C541.213 152.431 546.977 158.194 555.827 158.194C564.676 158.193 570.439 152.431 570.439 142.758C570.439 134.32 564.676 127.528 555.827 127.528Z" fill="white"/><path d="M160.484 134.925H221.87V156.123H175.527L211.548 192.145L196.524 207.169L160.484 171.129V221.988H139.285V171.385L103.498 207.172L88.474 192.148L88.4797 192.142L88.474 192.136L124.487 156.123H73.6865V134.925H124.279L88.474 99.1192L103.498 84.0948L139.285 119.882V73.8047H160.484V134.925Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M401.52 112.294C427.246 112.294 443.299 132.051 443.299 153.661C443.299 158.189 442.888 162.511 442.27 164.981H377.852C380.734 177.124 390.2 183.916 401.932 183.916C411.193 183.916 419.631 179.182 423.336 173.419L438.36 183.709C431.568 194.206 418.808 202.026 400.903 202.027V201.821C376.617 201.821 357.477 184.533 357.477 156.749C357.477 131.022 375.794 112.294 401.52 112.294ZM401.314 129.582C389.377 129.582 380.734 137.197 377.852 148.31H423.13C422.513 138.637 414.074 129.582 401.314 129.582Z" fill="white"/><path d="M780.229 177.936C786.822 177.936 792.166 183.28 792.166 189.873C792.166 196.465 786.822 201.809 780.229 201.81C773.637 201.81 768.292 196.465 768.292 189.873C768.292 183.28 773.637 177.936 780.229 177.936Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M838.459 113.942C863.568 113.942 874.681 131.024 874.681 147.283V199.558H854.924V174.449C854.924 191.943 844.427 201.617 828.786 201.617C813.35 201.617 801.413 191.326 801.413 175.067C801.413 158.808 812.938 150.37 828.991 148.929L855.129 146.46C855.129 137.816 848.749 131.23 838.459 131.23C828.169 131.23 823.641 138.021 822.406 143.166L804.5 138.227C808.616 122.997 820.965 113.942 838.459 113.942ZM833.108 163.953C825.905 164.776 820.965 168.276 820.965 174.861H821.171C821.171 181.241 826.728 185.357 834.343 185.357C848.543 185.357 854.923 176.096 854.924 165.6V161.895L833.108 163.953Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M346.931 199.349H326.35V167.653C324.498 189.263 313.59 201.407 295.479 201.407C274.486 201.407 258.433 182.06 258.433 156.54C258.433 131.02 274.28 111.673 295.479 111.673C312.561 111.673 324.704 123.405 326.35 143.985V84.0948H346.931V199.349ZM303.505 130.814C290.539 130.814 279.426 141.31 279.426 156.746C279.426 172.593 290.127 182.678 303.711 182.678C317.294 182.678 327.585 171.564 327.585 156.746C327.585 140.693 316.471 130.814 303.505 130.814Z" fill="white"/><path d="M732.211 115.989H755.88V133.689H732.211V172.998C732.211 179.172 735.298 181.436 740.238 181.436H754.027V199.753H738.18L738.386 199.548C723.362 199.548 712.454 193.168 712.454 174.851V133.689H697.224V115.989H712.659V97.2601H732.211V115.989Z" fill="white"/><path d="M508.942 199.554H488.361V114.143H508.942V199.554Z" fill="white"/><path d="M909.95 199.554H889.369V114.143H909.95V199.554Z" fill="white"/><path d="M474.051 199.55H453.47V84.2962H474.051V199.55Z" fill="white"/><path d="M633.554 142.133C633.554 123.199 645.491 111.879 660.515 111.879C679.243 111.879 688.916 126.08 688.916 141.721V199.349H668.335V148.925C668.335 138.84 661.132 131.637 651.253 131.637C640.551 131.637 633.554 139.458 633.554 149.748V199.349H612.973V84.0948H633.554V142.133Z" fill="white"/><path d="M195.339 85.7434C203.296 85.7434 209.746 92.1936 209.746 100.15C209.746 108.107 203.296 114.557 195.339 114.557C187.383 114.557 180.933 108.107 180.932 100.15C180.932 92.1936 187.383 85.7434 195.339 85.7434Z" fill="white"/><path d="M498.687 83.4723C505.28 83.4724 510.624 88.817 510.624 95.4095C510.624 102.002 505.28 107.346 498.687 107.346C492.095 107.346 486.75 102.002 486.75 95.4095C486.75 88.8169 492.095 83.4723 498.687 83.4723Z" fill="white"/><path d="M899.377 83.4723C905.969 83.4724 911.314 88.817 911.314 95.4095C911.313 102.002 905.969 107.346 899.377 107.346C892.784 107.346 887.44 102.002 887.44 95.4095C887.44 88.8169 892.784 83.4723 899.377 83.4723Z" fill="white"/></svg>
         <label for="accessCode">Enter access code</label>
         <input type="text" id="accessCode" autocomplete="off" autofocus spellcheck="false" placeholder="- - -">
     </div>
-
-    <!-- Presentation -->
     <div class="presentation-wrap" id="presentationWrap">
-
     <div class="progress-bar" id="progress"></div>
     <nav class="nav-dots" id="navDots"></nav>
     <div class="keyboard-hint"><span class="key">&uarr;</span> <span class="key">&darr;</span> to navigate</div>
 
-    <!-- ============================================
-         SLIDE 0: TITLE
-         ============================================ -->
-    <section class="slide dark title-slide" data-slide="0">
+    <!-- ═══════════════════════════════════════════
+         THE PROMISE (Opening Narrative)
+         ═══════════════════════════════════════════ -->
+
+    <!-- 0: TITLE -->
+    <section class="slide s-dark title-slide" data-slide="0">
         <div class="slide-content">
-            <div class="title-badge reveal d1">BJ's &times; Delight AI &mdash; March 2026</div>
-            <h1 class="reveal d2">The Future of<br>Member Experience</h1>
-            <p class="subtitle reveal d3">How proactive personalization and autonomous resolution transform Bev from a shopping assistant into a full AI concierge.</p>
-            <p class="subtitle reveal d4" style="color: rgba(255,255,255,0.3); font-size: var(--tiny-size); margin-top: auto;">For Scott, Adam &amp; Anirudh</p>
+            <div class="title-badge fi d1">March 10, 2026</div>
+            <h1 class="fi d2">The Vision for<br>AI Concierge</h1>
+            <p class="subtitle fi d3">BJ&rsquo;s Wholesale &times; Delight AI</p>
         </div>
     </section>
 
-    <!-- ============================================
-         SLIDE 1: AGENDA
-         ============================================ -->
-    <section class="slide light" data-slide="1">
+    <!-- 1: CONVICTION — MEMORY DRIVES REVENUE -->
+    <section class="slide s-dark" data-slide="1">
         <div class="slide-content">
-            <span class="label reveal d1">Today&rsquo;s Conversation</span>
-            <h2 class="reveal d2">Agenda</h2>
-            <div class="agenda-grid">
-                <div class="agenda-item reveal d3">
-                    <span class="agenda-num">01</span>
-                    <h3>AI Market Perspective</h3>
-                    <p>Sendbird&rsquo;s point of view on the evolution toward Agentic AI and autonomous customer engagement.</p>
-                    <span class="time-badge">~10 min</span>
-                </div>
-                <div class="agenda-item reveal d4">
-                    <span class="agenda-num">02</span>
-                    <h3>For You Conversations</h3>
-                    <p>Memory-powered personalization for Bev &mdash; recap of 10 use cases across the member lifecycle.</p>
-                    <span class="time-badge">~10 min</span>
-                </div>
-                <div class="agenda-item reveal d5">
-                    <span class="agenda-num">03</span>
-                    <h3>Agent Steward</h3>
-                    <p>The new capability: autonomous issue resolution for Bev shopping assist and Member Care.</p>
-                    <span class="time-badge">~20 min</span>
-                </div>
-                <div class="agenda-item reveal d6">
-                    <span class="agenda-num">04</span>
-                    <h3>Vision &amp; Next Steps</h3>
-                    <p>The complete AI concierge for BJ&rsquo;s &mdash; implementation roadmap and pilot commitment.</p>
-                    <span class="time-badge">~10 min</span>
-                </div>
-            </div>
+            <div class="line fi d1"></div>
+            <span class="label fi d1">What We Believe</span>
+            <p class="narrative fi d2" style="margin-top:16px;"><strong>An AI that remembers your members is an AI that drives revenue.</strong></p>
+            <p class="fi d3" style="font-family:var(--font-display);font-size:clamp(0.9rem,1.4vw,1.1rem);color:rgba(255,255,255,0.35);margin-top:20px;max-width:580px;">8 million people chose BJ&rsquo;s over Costco. Over Sam&rsquo;s Club. They&rsquo;re not just buying bulk &mdash; they&rsquo;re buying into a brand. An AI that remembers their preferences, knows their Club+ rewards, and catches their expiring coupons isn&rsquo;t a chatbot. It&rsquo;s Bev &mdash; your brand, in every conversation.</p>
         </div>
     </section>
 
-    <!-- ============================================
-         SLIDE 2: SECTION — AI MARKET PERSPECTIVE
-         ============================================ -->
-    <section class="slide dark section-break" data-slide="2">
+    <!-- 2: CONVICTION — MEMBERSHIP IS A RELATIONSHIP -->
+    <section class="slide s-coral" data-slide="2">
         <div class="slide-content">
-            <span class="section-number reveal d1">Section 01</span>
-            <h2 class="reveal d2">AI Market Perspective</h2>
-            <p class="section-desc reveal d3">The evolution from chatbots to autonomous AI &mdash; and the gap no one has closed yet.</p>
+            <div class="line fi d1" style="background:var(--pop);"></div>
+            <span class="label fi d1">What We Believe</span>
+            <p class="narrative fi d2" style="margin-top:16px;"><strong>Membership is a relationship.</strong></p>
+            <p class="fi d3" style="font-family:var(--font-display);font-size:clamp(0.9rem,1.4vw,1.1rem);color:rgba(255,255,255,0.35);margin-top:20px;max-width:580px;">The member who&rsquo;s been with you 5 years. The one who shops every Saturday. The one whose kid just went to college and her cart changed completely. Bev should notice. That&rsquo;s what makes someone renew &mdash; not the 2% back, but feeling known.</p>
         </div>
     </section>
 
-    <!-- ============================================
-         SLIDE 3: THREE WAVES
-         ============================================ -->
-    <section class="slide light" data-slide="3">
+    <!-- 3: CONVICTION — AI THAT FIGHTS FOR THEM -->
+    <section class="slide s-dark" data-slide="3">
         <div class="slide-content">
-            <span class="label reveal d1">The Evolution</span>
-            <h2 class="reveal d2">Three waves of AI in customer experience</h2>
-            <div class="waves-grid">
-                <div class="wave-card reveal d3">
-                    <span class="wave-era">2020 &ndash; 2023</span>
-                    <h3>Chatbots</h3>
-                    <p>Rule-based. Scripted decision trees. &ldquo;Press 1 for billing.&rdquo;</p>
-                    <ul class="wave-traits">
-                        <li>Keyword matching</li>
-                        <li>FAQ deflection</li>
-                        <li>No memory between sessions</li>
-                        <li>High containment, low resolution</li>
+            <div class="line fi d1"></div>
+            <span class="label fi d1">What We Believe</span>
+            <p class="narrative fi d2" style="margin-top:16px;"><strong>Your members also need an AI that fights for them.</strong></p>
+            <p class="fi d3" style="font-family:var(--font-display);font-size:clamp(0.9rem,1.4vw,1.1rem);color:rgba(255,255,255,0.35);margin-top:20px;max-width:580px;">Today, the industry average is 50% human handoff. We think that&rsquo;s 50% giving up. The moment a case gets hard &mdash; a missing delivery, a billing dispute, a return that needs the warehouse &mdash; AI quits and hands it to a human.</p>
+        </div>
+    </section>
+
+    <!-- 4: CONVICTION — THEY DESERVE BETTER -->
+    <section class="slide s-coral" data-slide="4">
+        <div class="slide-content">
+            <div class="line fi d1" style="background:var(--pop);"></div>
+            <span class="label fi d1">What We Believe</span>
+            <p class="narrative fi d2" style="margin-top:16px;"><strong>Support shouldn&rsquo;t be the worst part of membership.</strong></p>
+            <p class="fi d3" style="font-family:var(--font-display);font-size:clamp(0.9rem,1.4vw,1.1rem);color:rgba(255,255,255,0.35);margin-top:20px;max-width:580px;">Instead, it&rsquo;s hold music. Transfers. &ldquo;Let me look into that and get back to you.&rdquo; They&rsquo;re paying $60&ndash;$120 a year to belong. They deserve better.</p>
+        </div>
+    </section>
+
+    <!-- 5: THE TWO CAPABILITIES -->
+    <section class="slide s-dark" data-slide="5">
+        <div class="slide-content" style="align-items:center;text-align:center;">
+            <div class="line fi d1" style="margin-left:auto;margin-right:auto;"></div>
+            <p class="fi d2" style="font-family:var(--font-display);font-size:clamp(1.3rem,2.8vw,2.2rem);color:var(--pop);font-weight:700;">AI that remembers + AI that acts</p>
+            <p class="fi d3" style="font-family:var(--font-display);font-size:clamp(1rem,1.8vw,1.4rem);color:rgba(255,255,255,0.4);margin-top:12px;">The only two capabilities that matter.</p>
+        </div>
+    </section>
+
+    <!-- 6: THE WAVE TRANSITION -->
+    <section class="slide s-dark" data-slide="6">
+        <div class="slide-content">
+            <div class="line fi d1"></div>
+            <span class="label fi d1">AI in Customer Experience</span>
+            <h2 class="fi d2">We&rsquo;re entering the third wave</h2>
+            <div class="g g3" style="margin-top:20px;">
+                <div class="fi d3" style="padding-left:16px;border-left:2px solid rgba(255,255,255,0.1);">
+                    <span style="font-size:var(--label-size);font-weight:600;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;">Wave 1 &middot; 2020&ndash;2023</span>
+                    <h3 style="color:rgba(255,255,255,0.4);margin-top:6px;">Chatbots</h3>
+                    <ul style="list-style:none;margin-top:10px;display:flex;flex-direction:column;gap:6px;">
+                        <li style="font-size:var(--small-size);color:rgba(255,255,255,0.25);padding-left:12px;position:relative;"><span style="position:absolute;left:0;">&#x2022;</span> Rule-based &amp; scripted</li>
+                        <li style="font-size:var(--small-size);color:rgba(255,255,255,0.25);padding-left:12px;position:relative;"><span style="position:absolute;left:0;">&#x2022;</span> Keyword matching</li>
+                        <li style="font-size:var(--small-size);color:rgba(255,255,255,0.25);padding-left:12px;position:relative;"><span style="position:absolute;left:0;">&#x2022;</span> No memory between sessions</li>
+                        <li style="font-size:var(--small-size);color:rgba(255,255,255,0.25);padding-left:12px;position:relative;"><span style="position:absolute;left:0;">&#x2022;</span> High containment, low resolution</li>
                     </ul>
                 </div>
-                <div class="wave-card reveal d4">
-                    <span class="wave-era">2024 &ndash; 2025</span>
-                    <h3>AI Agents</h3>
-                    <p>LLM-powered. Can understand context, converse naturally, resolve issues. But still reactive.</p>
-                    <ul class="wave-traits">
-                        <li>Natural language understanding</li>
-                        <li>Can resolve, not just deflect</li>
-                        <li>Session-based intelligence</li>
-                        <li>Waits for the customer to ask</li>
+                <div class="fi d4" style="padding-left:16px;border-left:2px solid rgba(255,255,255,0.15);">
+                    <span style="font-size:var(--label-size);font-weight:600;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;">Wave 2 &middot; 2024&ndash;2025</span>
+                    <h3 style="color:rgba(255,255,255,0.6);margin-top:6px;">AI Agents</h3>
+                    <ul style="list-style:none;margin-top:10px;display:flex;flex-direction:column;gap:6px;">
+                        <li style="font-size:var(--small-size);color:rgba(255,255,255,0.3);padding-left:12px;position:relative;"><span style="position:absolute;left:0;">&#x2022;</span> LLM-powered</li>
+                        <li style="font-size:var(--small-size);color:rgba(255,255,255,0.3);padding-left:12px;position:relative;"><span style="position:absolute;left:0;">&#x2022;</span> Can understand &amp; resolve</li>
+                        <li style="font-size:var(--small-size);color:rgba(255,255,255,0.3);padding-left:12px;position:relative;"><span style="position:absolute;left:0;">&#x2022;</span> Still reactive &mdash; waits for the ask</li>
+                        <li style="font-size:var(--small-size);color:rgba(255,255,255,0.3);padding-left:12px;position:relative;"><span style="position:absolute;left:0;">&#x2022;</span> Session-based, no persistence</li>
                     </ul>
                 </div>
-                <div class="wave-card current reveal d5">
-                    <span class="wave-era">2026+</span>
-                    <h3>Autonomous AI</h3>
-                    <p>Proactive. Memory-powered. Coordinates across parties. Acts on the member&rsquo;s behalf.</p>
-                    <ul class="wave-traits">
-                        <li>Persistent memory across sessions</li>
-                        <li>Reaches out before you ask</li>
-                        <li>Contacts external parties autonomously</li>
-                        <li>Earns more autonomy through data</li>
+                <div class="fi d5" style="padding-left:16px;border-left:3px solid var(--pop);">
+                    <span style="font-size:var(--label-size);font-weight:600;color:var(--pop);letter-spacing:0.08em;text-transform:uppercase;">Wave 3 &middot; 2026+</span>
+                    <h3 style="color:var(--white);margin-top:6px;">Autonomous AI</h3>
+                    <ul style="list-style:none;margin-top:10px;display:flex;flex-direction:column;gap:6px;">
+                        <li style="font-size:var(--small-size);color:rgba(255,255,255,0.5);padding-left:12px;position:relative;"><span style="position:absolute;left:0;color:var(--pop);">&#x2022;</span> Memory-powered &amp; proactive</li>
+                        <li style="font-size:var(--small-size);color:rgba(255,255,255,0.5);padding-left:12px;position:relative;"><span style="position:absolute;left:0;color:var(--pop);">&#x2022;</span> Reaches out before you ask</li>
+                        <li style="font-size:var(--small-size);color:rgba(255,255,255,0.5);padding-left:12px;position:relative;"><span style="position:absolute;left:0;color:var(--pop);">&#x2022;</span> Contacts external parties</li>
+                        <li style="font-size:var(--small-size);color:rgba(255,255,255,0.5);padding-left:12px;position:relative;"><span style="position:absolute;left:0;color:var(--pop);">&#x2022;</span> Earns autonomy through data</li>
                     </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ============================================
-         SLIDE 4: THE RACE
-         ============================================ -->
-    <section class="slide light" data-slide="4">
+    <!-- 7: WHAT WAVE 3 REQUIRES — FOUR PILLARS DIAGRAM -->
+    <section class="slide s-dark" data-slide="7">
         <div class="slide-content">
-            <span class="label reveal d1">Competitive Landscape</span>
-            <h2 class="reveal d2">Everyone is building the same pieces</h2>
-            <div class="competitors-row">
-                <div class="competitor-card reveal d3">
-                    <span class="comp-name">Sierra</span>
-                    <span class="comp-detail">$10B valuation &middot; Agent OS 2.0</span>
-                    <p class="comp-building">Building: Memory, multi-step actions, cross-system coordination.</p>
+            <div class="line fi d1"></div>
+            <span class="label fi d1">What Wave 3 Requires</span>
+            <h2 class="fi d2">What autonomous AI actually requires</h2>
+            <div class="g g4" style="margin-top:20px;">
+                <div class="fi d3" style="background:rgba(255,255,255,0.95);border-radius:12px;padding:clamp(14px,2vw,22px);display:flex;flex-direction:column;gap:8px;">
+                    <h3 style="color:var(--text);font-size:var(--body-size);">Memory</h3>
+                    <ul style="list-style:none;display:flex;flex-direction:column;gap:4px;">
+                        <li style="font-size:var(--tiny-size);color:var(--text2);">Knows purchase history</li>
+                        <li style="font-size:var(--tiny-size);color:var(--text2);">Preferences persist across sessions</li>
+                        <li style="font-size:var(--tiny-size);color:var(--text2);">Builds a living customer profile</li>
+                    </ul>
+                    <span style="font-size:var(--label-size);font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:0.1em;margin-top:auto;">FYC</span>
                 </div>
-                <div class="competitor-card reveal d4">
-                    <span class="comp-name">Intercom</span>
-                    <span class="comp-detail">Pioneer 2025 Roadmap</span>
-                    <p class="comp-building">Building: Memory, Goals, Interoperability. &ldquo;Agents that learn.&rdquo;</p>
+                <div class="fi d4" style="background:rgba(255,255,255,0.95);border-radius:12px;padding:clamp(14px,2vw,22px);display:flex;flex-direction:column;gap:8px;">
+                    <h3 style="color:var(--text);font-size:var(--body-size);">Proactive</h3>
+                    <ul style="list-style:none;display:flex;flex-direction:column;gap:4px;">
+                        <li style="font-size:var(--tiny-size);color:var(--text2);">Reaches out before you ask</li>
+                        <li style="font-size:var(--tiny-size);color:var(--text2);">Surfaces coupons, restocks, alerts</li>
+                        <li style="font-size:var(--tiny-size);color:var(--text2);">Initiates the conversation</li>
+                    </ul>
+                    <span style="font-size:var(--label-size);font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:0.1em;margin-top:auto;">FYC</span>
                 </div>
-                <div class="competitor-card reveal d5">
-                    <span class="comp-name">Salesforce Agentforce</span>
-                    <span class="comp-detail">February 2026 Launch</span>
-                    <p class="comp-building">Building: &ldquo;Long-running tasks&rdquo; as a named use case. Customers: Heathrow, Finnair.</p>
+                <div class="fi d5" style="background:rgba(255,255,255,0.95);border-radius:12px;padding:clamp(14px,2vw,22px);display:flex;flex-direction:column;gap:8px;">
+                    <h3 style="color:var(--text);font-size:var(--body-size);">Async Action</h3>
+                    <ul style="list-style:none;display:flex;flex-direction:column;gap:4px;">
+                        <li style="font-size:var(--tiny-size);color:var(--text2);">Calls warehouse, emails vendor</li>
+                        <li style="font-size:var(--tiny-size);color:var(--text2);">Coordinates across parties</li>
+                        <li style="font-size:var(--tiny-size);color:var(--text2);">Does what humans do &mdash; automatically</li>
+                    </ul>
+                    <span style="font-size:var(--label-size);font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;margin-top:auto;">Steward</span>
                 </div>
-            </div>
-            <div class="gap-callout reveal d6">
-                <span class="gap-icon">&#x26A0;</span>
-                <p><strong>The gap:</strong> Memory, interoperability, multi-agent frameworks &mdash; they&rsquo;re assembling the same prerequisites. But none of them have shipped a safe, data-driven path from human oversight to full autonomy. That&rsquo;s the missing piece.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================
-         SLIDE 5: TWO CAPABILITIES
-         ============================================ -->
-    <section class="slide light" data-slide="5">
-        <div class="slide-content">
-            <span class="label reveal d1">Our Answer</span>
-            <h2 class="reveal d2">Two capabilities that define the next era</h2>
-            <div class="two-caps">
-                <div class="cap-card fyc-cap reveal d3">
-                    <span class="cap-tag">For You Conversations</span>
-                    <span class="cap-icon">&#x1F4AC;</span>
-                    <h3>Proactive Personalization</h3>
-                    <p>AI that knows your members and reaches out first. Memory-powered greetings, offers, and nudges across the shopping lifecycle.</p>
+                <div class="fi d6" style="background:rgba(255,255,255,0.95);border-radius:12px;padding:clamp(14px,2vw,22px);display:flex;flex-direction:column;gap:8px;">
+                    <h3 style="color:var(--text);font-size:var(--body-size);">Earned Autonomy</h3>
+                    <ul style="list-style:none;display:flex;flex-direction:column;gap:4px;">
+                        <li style="font-size:var(--tiny-size);color:var(--text2);">Starts with human approval</li>
+                        <li style="font-size:var(--tiny-size);color:var(--text2);">Proves accuracy across cases</li>
+                        <li style="font-size:var(--tiny-size);color:var(--text2);">Graduates to full autonomy with data</li>
+                    </ul>
+                    <span style="font-size:var(--label-size);font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;margin-top:auto;">Steward</span>
                 </div>
-                <span class="cap-plus reveal d4">+</span>
-                <div class="cap-card steward-cap reveal d5">
-                    <span class="cap-tag">Agent Steward</span>
-                    <span class="cap-icon">&#x1F6E0;</span>
-                    <h3>Autonomous Resolution</h3>
-                    <p>AI that investigates, coordinates across parties, and resolves complex issues &mdash; earning more autonomy through proven accuracy.</p>
-                </div>
-            </div>
-            <div class="cap-result reveal d6">
-                <h3>Together = The AI Concierge</h3>
-                <p>Bev greets members with personalized offers. When issues arise, Bev resolves them. One agent, two superpowers.</p>
             </div>
         </div>
     </section>
 
-    <!-- ============================================
-         SLIDE 6: SECTION — FYC
-         ============================================ -->
-    <section class="slide dark section-break" data-slide="6">
+    <!-- ═══════════════════════════════════════════
+         SECTION 1: FOR YOU CONVERSATIONS
+         ═══════════════════════════════════════════ -->
+
+    <!-- SECTION BREAK — FYC -->
+    <section class="slide s-accent section-break" data-slide="8">
         <div class="slide-content">
-            <span class="section-number reveal d1">Section 02</span>
-            <h2 class="reveal d2">For You Conversations</h2>
-            <p class="section-desc reveal d3">Bev remembers. Members return. A quick recap of memory-powered personalization.</p>
+            <span class="section-number fi d1">Section 01</span>
+            <h2 class="fi d2">For You Conversations</h2>
+            <p class="section-desc fi d3">The concierge that knows you.</p>
         </div>
     </section>
 
-    <!-- ============================================
-         SLIDE 7: FYC LIFECYCLE
-         ============================================ -->
-    <section class="slide light" data-slide="7">
+    <!-- 5: BEV SHOPPING — CHAT UI WITH MEMORY LABELS -->
+    <section class="slide s-dark" data-slide="9">
         <div class="slide-content">
-            <span class="label reveal d1">10 Use Cases &mdash; Member Lifecycle</span>
-            <h2 class="reveal d2">Personalized greetings across every moment</h2>
-            <div class="lifecycle-compact">
-                <div class="lc-phase reveal d3">
-                    <div class="lc-phase-header">
-                        <span class="lc-phase-num">1</span>
-                        <span class="lc-phase-title">Before They Shop</span>
+            <div class="line fi d1"></div>
+            <span class="label fi d1">Meet Bev &mdash; Your Shopping Concierge</span>
+            <h2 class="fi d2" style="margin-bottom:16px;">Every greeting is powered by memory</h2>
+            <!-- 3 separate chat cards for 3 different members -->
+            <div class="g g3" style="align-items:start;">
+                <!-- Chat 1: Sarah — replenishment + coupon -->
+                <div class="fi d3" style="background:var(--white);border-radius:14px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.12);">
+                    <div style="padding:8px 14px;border-bottom:1px solid #e5e3df;display:flex;align-items:center;gap:6px;">
+                        <div style="width:6px;height:6px;border-radius:50%;background:var(--accent2);"></div>
+                        <span style="font-size:11px;font-weight:600;color:var(--text);">Sarah M.</span>
+                        <span style="font-size:9px;color:var(--text3);margin-left:auto;">Club+ Member</span>
                     </div>
-                    <div class="lc-items">
-                        <div class="lc-item">
-                            <div class="lc-name">Replenishment Reminders</div>
-                            <div class="lc-desc">Restock alerts from purchase frequency</div>
-                        </div>
-                        <div class="lc-item">
-                            <div class="lc-name">Seasonal Personalization</div>
-                            <div class="lc-desc">Timely suggestions from memory</div>
-                        </div>
-                        <div class="lc-item">
-                            <div class="lc-name">Back-in-Stock Alerts</div>
-                            <div class="lc-desc">Notify when wished items return</div>
-                        </div>
-                        <div class="lc-item">
-                            <div class="lc-name">Personalized Category Deals</div>
-                            <div class="lc-desc">Deals in most-shopped categories</div>
+                    <div style="padding:12px 14px;background:#fafaf8;">
+                        <div style="display:flex;align-items:center;gap:5px;margin-bottom:6px;"><div style="width:5px;height:5px;border-radius:50%;background:var(--accent2);"></div><span style="font-size:10px;font-weight:600;color:var(--text3);">Bev</span></div>
+                        <div style="background:#f0eeea;border-radius:12px 12px 12px 4px;padding:10px 12px;font-size:clamp(11px,1.1vw,13px);line-height:1.5;color:var(--text);">You bought <strong style="color:var(--accent);">Bounty</strong> last month. Running low? There&rsquo;s a <strong style="color:var(--accent);">$4 off coupon</strong> expiring Friday.</div>
+                        <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+                            <div style="background:var(--dark);color:var(--white);border-radius:12px 12px 4px 12px;padding:6px 12px;font-size:11px;font-weight:500;">Add to cart!</div>
                         </div>
                     </div>
-                </div>
-                <div class="lc-phase reveal d4">
-                    <div class="lc-phase-header">
-                        <span class="lc-phase-num">2</span>
-                        <span class="lc-phase-title">While They Shop</span>
+                    <div style="padding:6px 14px 8px;display:flex;flex-wrap:wrap;gap:4px;">
+                        <span style="font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent2);padding:2px 7px;background:rgba(42,125,98,0.08);border-radius:3px;">Past Purchase</span>
+                        <span style="font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent2);padding:2px 7px;background:rgba(42,125,98,0.08);border-radius:3px;">Buy Frequency</span>
+                        <span style="font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent2);padding:2px 7px;background:rgba(42,125,98,0.08);border-radius:3px;">Active Coupon</span>
                     </div>
-                    <div class="lc-items">
-                        <div class="lc-item quick-win">
-                            <div class="lc-name">Cart Abandonment Nudge &#x2605;</div>
-                            <div class="lc-desc">Re-engage with waiting items</div>
-                        </div>
-                        <div class="lc-item">
-                            <div class="lc-name">Membership &amp; Coupons</div>
-                            <div class="lc-desc">Surface expiring rewards</div>
-                        </div>
-                        <div class="lc-item">
-                            <div class="lc-name">Club Location &amp; Fulfillment</div>
-                            <div class="lc-desc">Tailored to preferred store</div>
-                        </div>
-                        <div class="lc-item">
-                            <div class="lc-name">Loyalty Program Nudge</div>
-                            <div class="lc-desc">Progress toward next reward</div>
+                </div>
+                <!-- Chat 2: Marcus — seasonal -->
+                <div class="fi d4" style="background:var(--white);border-radius:14px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.12);">
+                    <div style="padding:8px 14px;border-bottom:1px solid #e5e3df;display:flex;align-items:center;gap:6px;">
+                        <div style="width:6px;height:6px;border-radius:50%;background:var(--accent2);"></div>
+                        <span style="font-size:11px;font-weight:600;color:var(--text);">Marcus T.</span>
+                        <span style="font-size:9px;color:var(--text3);margin-left:auto;">Member since 2021</span>
+                    </div>
+                    <div style="padding:12px 14px;background:#fafaf8;">
+                        <div style="display:flex;align-items:center;gap:5px;margin-bottom:6px;"><div style="width:5px;height:5px;border-radius:50%;background:var(--accent2);"></div><span style="font-size:10px;font-weight:600;color:var(--text3);">Bev</span></div>
+                        <div style="background:#f0eeea;border-radius:12px 12px 12px 4px;padding:10px 12px;font-size:clamp(11px,1.1vw,13px);line-height:1.5;color:var(--text);"><strong style="color:var(--accent);">Last year</strong> you bought Super Bowl supplies around now. Planning a watch party? I can pull up <strong style="color:var(--accent);">what you ordered</strong>.</div>
+                        <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+                            <div style="background:var(--dark);color:var(--white);border-radius:12px 12px 4px 12px;padding:6px 12px;font-size:11px;font-weight:500;">Yes! Show me</div>
                         </div>
                     </div>
-                </div>
-                <div class="lc-phase reveal d5">
-                    <div class="lc-phase-header">
-                        <span class="lc-phase-num">3</span>
-                        <span class="lc-phase-title">After They Buy</span>
+                    <div style="padding:6px 14px 8px;display:flex;flex-wrap:wrap;gap:4px;">
+                        <span style="font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent2);padding:2px 7px;background:rgba(42,125,98,0.08);border-radius:3px;">Seasonal Pattern</span>
+                        <span style="font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent2);padding:2px 7px;background:rgba(42,125,98,0.08);border-radius:3px;">Order History</span>
                     </div>
-                    <div class="lc-items">
-                        <div class="lc-item quick-win">
-                            <div class="lc-name">Order &amp; Delivery Status &#x2605;</div>
-                            <div class="lc-desc">Proactive shipping updates</div>
+                </div>
+                <!-- Chat 3: Priya — back in stock -->
+                <div class="fi d5" style="background:var(--white);border-radius:14px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.12);">
+                    <div style="padding:8px 14px;border-bottom:1px solid #e5e3df;display:flex;align-items:center;gap:6px;">
+                        <div style="width:6px;height:6px;border-radius:50%;background:var(--accent2);"></div>
+                        <span style="font-size:11px;font-weight:600;color:var(--text);">Priya K.</span>
+                        <span style="font-size:9px;color:var(--text3);margin-left:auto;">Framingham Club</span>
+                    </div>
+                    <div style="padding:12px 14px;background:#fafaf8;">
+                        <div style="display:flex;align-items:center;gap:5px;margin-bottom:6px;"><div style="width:5px;height:5px;border-radius:50%;background:var(--accent2);"></div><span style="font-size:10px;font-weight:600;color:var(--text3);">Bev</span></div>
+                        <div style="background:#f0eeea;border-radius:12px 12px 12px 4px;padding:10px 12px;font-size:clamp(11px,1.1vw,13px);line-height:1.5;color:var(--text);">The <strong style="color:var(--accent);">Ninja Creami</strong> you asked about is back at your <strong style="color:var(--accent);">Framingham club</strong> &mdash; and it&rsquo;s <strong style="color:var(--accent);">$20 off</strong> this week.</div>
+                        <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+                            <div style="background:var(--dark);color:var(--white);border-radius:12px 12px 4px 12px;padding:6px 12px;font-size:11px;font-weight:500;">Add to cart!</div>
                         </div>
-                        <div class="lc-item">
-                            <div class="lc-name">Post-Purchase Support</div>
-                            <div class="lc-desc">Follow-up on big purchases</div>
+                    </div>
+                    <div style="padding:6px 14px 8px;display:flex;flex-wrap:wrap;gap:4px;">
+                        <span style="font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent2);padding:2px 7px;background:rgba(42,125,98,0.08);border-radius:3px;">Wishlist Item</span>
+                        <span style="font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent2);padding:2px 7px;background:rgba(42,125,98,0.08);border-radius:3px;">Preferred Club</span>
+                        <span style="font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent2);padding:2px 7px;background:rgba(42,125,98,0.08);border-radius:3px;">Price Drop</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6: FYC — MEMBER LIFECYCLE (CONNECTED FLOW) -->
+    <section class="slide s-dark" data-slide="10">
+        <div class="slide-content">
+            <div class="line fi d1"></div>
+            <span class="label fi d1">Bev Across the Member Lifecycle</span>
+            <h2 class="fi d2">One concierge. Every moment.</h2>
+            <!-- Dark lifecycle panel -->
+            <div class="fi d3" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:clamp(20px,3vw,32px);margin-top:16px;">
+                <!-- Connected phase boxes with loop arrow -->
+                <div style="display:flex;align-items:center;justify-content:center;gap:clamp(8px,1.5vw,16px);margin-bottom:clamp(16px,2.5vw,28px);position:relative;">
+                    <!-- Loop arrow top -->
+                    <div style="position:absolute;top:clamp(-16px,-2.5vw,-24px);left:50%;transform:translateX(-50%);width:80%;height:clamp(12px,2vw,20px);border:2px solid var(--pop);border-bottom:none;border-radius:12px 12px 0 0;opacity:0.3;"></div>
+                    <div style="position:absolute;top:clamp(-4px,-0.5vw,-6px);left:calc(10% + 2px);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--pop);opacity:0.4;"></div>
+                    <div style="flex:1;background:var(--dark);border:2px solid var(--pop);border-radius:12px;padding:clamp(10px,1.5vw,16px) clamp(12px,2vw,20px);text-align:center;">
+                        <span style="font-family:var(--font-display);font-size:clamp(0.9rem,1.5vw,1.2rem);font-weight:600;color:var(--pop);">BEFORE THEY SHOP</span>
+                    </div>
+                    <span style="color:var(--pop);font-size:clamp(0.9rem,1.5vw,1.2rem);opacity:0.5;">&rarr;</span>
+                    <div style="flex:1;background:var(--dark);border:2px solid var(--pop);border-radius:12px;padding:clamp(10px,1.5vw,16px) clamp(12px,2vw,20px);text-align:center;">
+                        <span style="font-family:var(--font-display);font-size:clamp(0.9rem,1.5vw,1.2rem);font-weight:600;color:var(--pop);">WHILE THEY SHOP</span>
+                    </div>
+                    <span style="color:var(--pop);font-size:clamp(0.9rem,1.5vw,1.2rem);opacity:0.5;">&rarr;</span>
+                    <div style="flex:1;background:var(--dark);border:2px solid var(--pop);border-radius:12px;padding:clamp(10px,1.5vw,16px) clamp(12px,2vw,20px);text-align:center;">
+                        <span style="font-family:var(--font-display);font-size:clamp(0.9rem,1.5vw,1.2rem);font-weight:600;color:var(--pop);">AFTER THEY BUY</span>
+                    </div>
+                </div>
+                <!-- Bullet lists under each phase -->
+                <div class="g g3">
+                    <div class="fi d4">
+                        <h3 style="color:var(--white);font-size:var(--small-size);margin-bottom:8px;">Anticipation &amp; Engagement</h3>
+                        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+                            <li style="font-size:var(--small-size);color:rgba(255,255,255,0.5);display:flex;align-items:flex-start;gap:6px;"><span style="color:var(--pop);">&#x2022;</span> Replenishment reminders</li>
+                            <li style="font-size:var(--small-size);color:rgba(255,255,255,0.5);display:flex;align-items:flex-start;gap:6px;"><span style="color:var(--pop);">&#x2022;</span> Seasonal personalization</li>
+                            <li style="font-size:var(--small-size);color:rgba(255,255,255,0.5);display:flex;align-items:flex-start;gap:6px;"><span style="color:var(--pop);">&#x2022;</span> Back-in-stock alerts</li>
+                            <li style="font-size:var(--small-size);color:rgba(255,255,255,0.5);display:flex;align-items:flex-start;gap:6px;"><span style="color:var(--pop);">&#x2022;</span> Personalized category deals</li>
+                        </ul>
+                    </div>
+                    <div class="fi d5">
+                        <h3 style="color:var(--white);font-size:var(--small-size);margin-bottom:8px;">Conversion &amp; Rewards</h3>
+                        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+                            <li style="font-size:var(--small-size);color:rgba(255,255,255,0.5);display:flex;align-items:flex-start;gap:6px;"><span style="color:var(--pop);">&#x2022;</span> Cart abandonment recovery</li>
+                            <li style="font-size:var(--small-size);color:rgba(255,255,255,0.5);display:flex;align-items:flex-start;gap:6px;"><span style="color:var(--pop);">&#x2022;</span> Membership &amp; expiring coupons</li>
+                            <li style="font-size:var(--small-size);color:rgba(255,255,255,0.5);display:flex;align-items:flex-start;gap:6px;"><span style="color:var(--pop);">&#x2022;</span> Club location &amp; fulfillment</li>
+                            <li style="font-size:var(--small-size);color:rgba(255,255,255,0.5);display:flex;align-items:flex-start;gap:6px;"><span style="color:var(--pop);">&#x2022;</span> Loyalty program nudge</li>
+                        </ul>
+                    </div>
+                    <div class="fi d6">
+                        <h3 style="color:var(--white);font-size:var(--small-size);margin-bottom:8px;">Retention &amp; Loyalty</h3>
+                        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+                            <li style="font-size:var(--small-size);color:rgba(255,255,255,0.5);display:flex;align-items:flex-start;gap:6px;"><span style="color:var(--pop);">&#x2022;</span> Order &amp; delivery status</li>
+                            <li style="font-size:var(--small-size);color:rgba(255,255,255,0.5);display:flex;align-items:flex-start;gap:6px;"><span style="color:var(--pop);">&#x2022;</span> Post-purchase follow-up</li>
+                            <li style="font-size:var(--small-size);color:rgba(255,255,255,0.5);display:flex;align-items:flex-start;gap:6px;"><span style="color:var(--pop);">&#x2022;</span> Review &amp; feedback prompts</li>
+                            <li style="font-size:var(--small-size);color:rgba(255,255,255,0.5);display:flex;align-items:flex-start;gap:6px;"><span style="color:var(--pop);">&#x2022;</span> Membership renewal support</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         SECTION 2: AGENT STEWARD
+         ═══════════════════════════════════════════ -->
+
+    <!-- 7: PIVOT → SECTION BREAK — STEWARD -->
+    <section class="slide s-dark section-break" data-slide="11">
+        <div class="slide-content">
+            <p class="narrative fi d1" style="font-size:clamp(1.1rem,2vw,1.5rem);color:rgba(255,255,255,0.45);max-width:600px;">Bev remembers what you love. But who fights for you when the delivery is wrong, the charge doesn&rsquo;t look right, or you&rsquo;re thinking about cancelling?</p>
+            <span class="section-number fi d2" style="margin-top:32px;">Section 02</span>
+            <h2 class="fi d3">Agent Steward</h2>
+            <p class="section-desc fi d4">One owner. Start to finish.</p>
+        </div>
+    </section>
+
+    <!-- 8: THE GAP — BEFORE/AFTER ANIMATED DIAGRAM -->
+    <section class="slide s-dark" data-slide="12">
+        <div class="slide-content">
+            <div class="line fi d1"></div>
+            <span class="label fi d1">The Resolution Gap</span>
+            <h2 class="fi d2" style="margin-bottom:16px;">Same issue. Two worlds.</h2>
+            <div class="gap-diagram">
+                <!-- TOP PANEL: TODAY -->
+                <div class="gap-panel fi d3">
+                    <div class="gap-panel-label" style="color:var(--coral);">Today</div>
+                    <div class="gap-flow">
+                        <div class="gap-node">AI</div>
+                        <div class="gap-arrow-bidir">&harr;</div>
+                        <div class="gap-node">Customer</div>
+                        <div class="gap-arrow">&rarr;</div>
+                        <div class="gap-barrier">The Gap</div>
+                        <div class="gap-arrow">&rarr;</div>
+                        <div class="gap-node">Human<br>Agent</div>
+                        <div class="gap-arrow">&rarr;</div>
+                        <div style="display:flex;flex-direction:column;gap:6px;">
+                            <div class="gap-node" style="font-size:var(--tiny-size);padding:6px 12px;">Supervisor</div>
+                            <div class="gap-node" style="font-size:var(--tiny-size);padding:6px 12px;">Warehouse</div>
+                            <div class="gap-node" style="font-size:var(--tiny-size);padding:6px 12px;">Delivery</div>
                         </div>
+                        <div class="gap-arrow" style="align-self:center;">&rarr;</div>
+                        <div class="gap-node">Customer<span class="gap-node-dim">finally gets answer</span></div>
                     </div>
-                    <div style="margin-top: auto; padding-top: 10px;">
-                        <p style="font-size: var(--tiny-size); color: var(--teal);">&#x2605; = Quick Win &mdash; start here</p>
+                    <div class="gap-caption">When other parties need to be involved, AI can&rsquo;t coordinate &mdash; so it hands off to a human who does the work manually.</div>
+                </div>
+                <!-- BOTTOM PANEL: WITH STEWARD (ANIMATED) -->
+                <div class="gap-panel steward fi d4">
+                    <div class="gap-panel-label" style="color:var(--accent2);">With Agent Steward</div>
+                    <div class="gap-flow">
+                        <div class="gap-node">AI</div>
+                        <div class="gap-arrow-bidir" style="color:var(--accent2);">&harr;</div>
+                        <div class="gap-node">Customer</div>
+                        <div style="color:var(--accent2);align-self:center;animation:pulse-arrow 2s ease infinite;">&rarr;</div>
+                        <div class="gap-hub" style="animation:hub-glow 3s ease infinite;">
+                            Bev
+                            <span class="gap-hub-label">Steward</span>
+                            <span class="gap-dri-label">The DRI</span>
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:4px;align-self:center;">
+                            <span style="color:var(--accent2);font-size:var(--small-size);animation:pulse-arrow 2s ease infinite 0.2s;">&rarr;</span>
+                            <span style="color:var(--accent2);font-size:var(--small-size);animation:pulse-arrow 2s ease infinite 0.6s;">&rarr;</span>
+                            <span style="color:var(--accent2);font-size:var(--small-size);animation:pulse-arrow 2s ease infinite 1.0s;">&rarr;</span>
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:6px;">
+                            <div class="gap-node" style="border-color:rgba(42,125,98,0.25);font-size:var(--tiny-size);padding:6px 12px;animation:node-pulse 3s ease infinite 0.3s;">Supervisor</div>
+                            <div class="gap-node" style="border-color:rgba(42,125,98,0.25);font-size:var(--tiny-size);padding:6px 12px;animation:node-pulse 3s ease infinite 0.8s;">Warehouse</div>
+                            <div class="gap-node" style="border-color:rgba(42,125,98,0.25);font-size:var(--tiny-size);padding:6px 12px;animation:node-pulse 3s ease infinite 1.3s;">Delivery</div>
+                        </div>
+                        <div style="color:var(--accent2);align-self:center;animation:pulse-arrow 2s ease infinite 1.5s;">&rarr;</div>
+                        <div class="gap-node gap-node-green" style="animation:node-pulse 3s ease infinite 2s;">Customer<span class="gap-node-dim" style="color:var(--accent2);">resolved, first ask</span></div>
+                    </div>
+                    <div class="gap-caption">Agent Steward sits in the middle &mdash; coordinating teams, driving follow-ups, keeping the customer informed. One owner, start to finish.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9: ORCHESTRATION ANIMATION — ONE OWNER, START TO FINISH -->
+    <section class="slide s-light" data-slide="13">
+        <div class="slide-content">
+            <div class="line fi d1"></div>
+            <span class="label fi d1">One Owner. Start to Finish.</span>
+            <h2 class="fi d2" style="margin-bottom:8px;">Steward in action &mdash; missing curbside items</h2>
+            <!-- Three-column orchestration animation -->
+            <div class="orch-animation fi d3" id="orchAnimation">
+                <!-- LEFT: Customer chat -->
+                <div class="orch-customer">
+                    <div class="orch-customer-header">
+                        <div style="width:6px;height:6px;border-radius:50%;background:var(--accent2)"></div>
+                        Sarah&rsquo;s Chat
+                    </div>
+                    <div class="orch-customer-body" id="orchChat"></div>
+                    <div class="orch-calm-label">One conversation. Full resolution.</div>
+                </div>
+                <!-- CENTER: Hub with pulsing rings -->
+                <div class="orch-hub-wrap">
+                    <div class="orch-ring orch-ring-1"></div>
+                    <div class="orch-ring orch-ring-2"></div>
+                    <div class="orch-ring orch-ring-3"></div>
+                    <div class="orch-hub-core" id="orchHub">
+                        <span class="hub-name">Bev</span>
+                        <span class="hub-mode">Steward</span>
+                    </div>
+                    <!-- Customer <-> Hub particles -->
+                    <div class="data-particle left"></div>
+                    <div class="data-particle left-2"></div>
+                    <div class="data-particle cl"></div>
+                    <div class="data-particle cl-2"></div>
+                    <!-- Hub <-> Channels particles -->
+                    <div class="data-particle right-1"></div>
+                    <div class="data-particle right-2"></div>
+                    <div class="data-particle right-3"></div>
+                    <div class="data-particle right-4"></div>
+                    <div class="data-particle rl-1"></div>
+                    <div class="data-particle rl-2"></div>
+                    <div class="data-particle rl-3"></div>
+                </div>
+                <!-- RIGHT: Channel cards -->
+                <div class="orch-channels" id="orchChannels">
+                    <div class="orch-channel" data-delay="0">
+                        <div class="orch-channel-header">
+                            <div class="orch-channel-badge system">&#x1F517; System</div>
+                            <div class="orch-channel-who">Order API</div>
+                            <div class="orch-channel-status pending">&mdash;</div>
+                        </div>
+                        <div class="orch-channel-preview" id="ch-preview-0"></div>
+                    </div>
+                    <div class="orch-channel" data-delay="200">
+                        <div class="orch-channel-header">
+                            <div class="orch-channel-badge voice">&#x1F4DE; Call</div>
+                            <div class="orch-channel-who">BJ&rsquo;s Warehouse</div>
+                            <div class="orch-channel-status pending">&mdash;</div>
+                        </div>
+                        <div class="orch-channel-preview" id="ch-preview-1"></div>
+                    </div>
+                    <div class="orch-channel" data-delay="400">
+                        <div class="orch-channel-header">
+                            <div class="orch-channel-badge chat">&#x1F4AC; Chat</div>
+                            <div class="orch-channel-who">Member Updates</div>
+                            <div class="orch-channel-status pending">&mdash;</div>
+                        </div>
+                        <div class="orch-channel-preview" id="ch-preview-2"></div>
+                    </div>
+                    <div class="orch-channel" data-delay="600">
+                        <div class="orch-channel-header">
+                            <div class="orch-channel-badge desk">&#x1F3AB; Desk</div>
+                            <div class="orch-channel-who">CS Agent</div>
+                            <div class="orch-channel-status pending">&mdash;</div>
+                        </div>
+                        <div class="orch-channel-preview" id="ch-preview-3"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Callout -->
+            <div class="dri-callout" id="driCallout">
+                1 member asked. 3 teams coordinated. 0 handoffs. Resolved same day.
+            </div>
+            <!-- Impact stats -->
+            <div class="fi d7" style="display:flex;gap:var(--gap);justify-content:center;margin-top:8px;max-width:800px;margin-left:auto;margin-right:auto;">
+                <div class="card-accent" style="flex:1;text-align:center;padding:clamp(8px,1.2vw,12px);">
+                    <div style="font-family:var(--font-display);font-size:var(--h3-size);font-weight:700;color:var(--white);">1</div>
+                    <div style="font-size:var(--tiny-size);color:rgba(255,255,255,0.5);">member asked</div>
+                </div>
+                <div class="card-accent" style="flex:1;text-align:center;padding:clamp(8px,1.2vw,12px);">
+                    <div style="font-family:var(--font-display);font-size:var(--h3-size);font-weight:700;color:var(--white);">3</div>
+                    <div style="font-size:var(--tiny-size);color:rgba(255,255,255,0.5);">teams coordinated</div>
+                </div>
+                <div class="card-accent" style="flex:1;text-align:center;padding:clamp(8px,1.2vw,12px);">
+                    <div style="font-family:var(--font-display);font-size:var(--h3-size);font-weight:700;color:var(--white);">0</div>
+                    <div style="font-size:var(--tiny-size);color:rgba(255,255,255,0.5);">handoffs</div>
+                </div>
+                <div class="card-accent" style="flex:1;text-align:center;padding:clamp(8px,1.2vw,12px);">
+                    <div style="font-family:var(--font-display);font-size:var(--h3-size);font-weight:700;color:var(--pop);">Same day</div>
+                    <div style="font-size:var(--tiny-size);color:rgba(255,255,255,0.5);">resolved</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 11: BRIDGE — WHAT YOU JUST SAW -->
+    <section class="slide s-dark" data-slide="14">
+        <div class="slide-content">
+            <p class="narrative fi d1">What you just saw is <strong>Level 1.</strong></p>
+            <p class="narrative fi d2" style="margin-top:16px;color:rgba(255,255,255,0.45);">AI investigates, coordinates, and recommends. Human approves. But that&rsquo;s not where it ends.</p>
+            <p class="narrative fi d3" style="margin-top:24px;"><strong>How does Steward earn its way to full autonomy?</strong></p>
+        </div>
+    </section>
+
+    <!-- 12: PATH TO AUTONOMY — CLEAN STAIRCASE -->
+    <section class="slide s-light" data-slide="15">
+        <div class="slide-content">
+            <div class="line fi d1"></div>
+            <span class="label fi d1">The Path to Autonomy</span>
+            <h2 class="fi d2">AI that earns its own autonomy</h2>
+            <!-- Three columns, bottom-aligned, ascending height -->
+            <div style="display:flex;align-items:flex-end;gap:clamp(16px,2.5vw,24px);margin-top:clamp(24px,4vw,40px);height:clamp(260px,42vh,380px);">
+                <!-- Lv.0 — shortest bar, lightest -->
+                <div class="fi d3" style="flex:1;height:40%;display:flex;flex-direction:column;">
+                    <div style="flex:1;background:rgba(27,77,62,0.08);border-radius:12px 12px 0 0;"></div>
+                    <div style="padding:clamp(12px,2vw,20px) 0 0;">
+                        <span style="font-family:var(--font-display);font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;color:rgba(27,77,62,0.15);line-height:1;">Lv.0</span>
+                        <div style="font-size:var(--body-size);font-weight:600;color:var(--text);margin-top:4px;">AI Handles Simple Tasks</div>
+                        <div style="font-size:var(--tiny-size);color:var(--text3);margin-top:2px;">FAQ, order status, basic questions<br>Complex cases &rarr; human handoff</div>
+                    </div>
+                </div>
+                <!-- Lv.1 — medium bar, medium color -->
+                <div class="fi d4" style="flex:1;height:68%;display:flex;flex-direction:column;">
+                    <div style="flex:1;background:rgba(27,77,62,0.2);border-radius:12px 12px 0 0;"></div>
+                    <div style="padding:clamp(12px,2vw,20px) 0 0;">
+                        <span style="font-family:var(--font-display);font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;color:rgba(27,77,62,0.35);line-height:1;">Lv.1</span>
+                        <div style="font-size:var(--body-size);font-weight:600;color:var(--text);margin-top:4px;">AI Recommends, Human Approves</div>
+                        <div style="font-size:var(--tiny-size);color:var(--text3);margin-top:2px;">Steward investigates &amp; proposes<br>Human reviews every decision</div>
+                    </div>
+                </div>
+                <!-- Lv.2 — tallest bar, most saturated -->
+                <div class="fi d5" style="flex:1;height:100%;display:flex;flex-direction:column;">
+                    <div style="flex:1;background:var(--accent);border-radius:12px 12px 0 0;"></div>
+                    <div style="padding:clamp(12px,2vw,20px) 0 0;">
+                        <span style="font-family:var(--font-display);font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;color:var(--accent);line-height:1;">Lv.2</span>
+                        <div style="font-size:var(--body-size);font-weight:600;color:var(--text);margin-top:4px;">Fully Autonomous</div>
+                        <div style="font-size:var(--tiny-size);color:var(--text3);margin-top:2px;">Earned through 95%+ accuracy<br>Each use case earns it independently</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ============================================
-         SLIDE 8: PRIORITY MATRIX
-         ============================================ -->
-    <section class="slide light" data-slide="8">
+    <!-- ═══════════════════════════════════════════
+         SECTION 3: PLATFORM + CLOSE
+         ═══════════════════════════════════════════ -->
+
+    <!-- 12: ONE PLATFORM — FLYWHEEL DIAGRAM -->
+    <section class="slide s-dark" data-slide="16">
         <div class="slide-content">
-            <span class="label reveal d1">Implementation Priority</span>
-            <h2 class="reveal d2">Where to start &mdash; and where to build</h2>
-            <div class="priority-grid">
-                <div class="priority-box qw reveal d3">
-                    <div class="pb-label">Quick Wins &mdash; Start Here</div>
-                    <p style="font-size: var(--tiny-size); color: var(--text-light); margin-bottom: 6px;">High Impact / Low Effort</p>
-                    <div class="pb-items">
-                        <span class="pb-chip">Cart Abandonment</span>
-                        <span class="pb-chip">Order &amp; Delivery Status</span>
+            <div class="line fi d1"></div>
+            <span class="label fi d1">One Platform</span>
+            <h2 class="fi d2">One agent. Shared memory. Continuous loop.</h2>
+            <!-- Flywheel diagram -->
+            <div class="fi d3" style="position:relative;width:100%;max-width:700px;margin:clamp(20px,3vw,36px) auto 0;height:clamp(280px,42vh,380px);">
+                <!-- Center: Bev hub -->
+                <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10;text-align:center;">
+                    <div style="width:clamp(80px,12vw,100px);height:clamp(80px,12vw,100px);border-radius:50%;background:var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;box-shadow:0 0 0 4px rgba(27,77,62,0.2),0 0 0 16px rgba(27,77,62,0.06);">
+                        <span style="font-family:var(--font-display);font-size:clamp(1rem,1.8vw,1.3rem);font-weight:600;color:var(--white);">Bev</span>
+                        <span style="font-size:var(--label-size);color:rgba(255,255,255,0.5);">One Agent</span>
+                    </div>
+                    <div style="font-size:var(--tiny-size);color:rgba(255,255,255,0.3);margin-top:8px;">Shared Memory</div>
+                </div>
+                <!-- Circular loop: 4 nodes around the hub -->
+                <!-- Top: Shopping -->
+                <div class="fi d3" style="position:absolute;left:50%;top:0;transform:translateX(-50%);text-align:center;">
+                    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px 20px;">
+                        <div style="font-size:var(--small-size);font-weight:600;color:var(--white);">Shopping</div>
+                        <div style="font-size:var(--tiny-size);color:rgba(255,255,255,0.35);">Builds memory</div>
                     </div>
                 </div>
-                <div class="priority-box sb reveal d4">
-                    <div class="pb-label">Strategic Bets</div>
-                    <p style="font-size: var(--tiny-size); color: var(--text-light); margin-bottom: 6px;">High Impact / High Effort</p>
-                    <div class="pb-items">
-                        <span class="pb-chip">Replenishment</span>
-                        <span class="pb-chip">Seasonal</span>
-                        <span class="pb-chip">Loyalty Nudge</span>
-                        <span class="pb-chip">Category Deals</span>
+                <!-- Right: Personalization -->
+                <div class="fi d4" style="position:absolute;right:0;top:50%;transform:translateY(-50%);text-align:center;">
+                    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px 20px;">
+                        <div style="font-size:var(--small-size);font-weight:600;color:var(--white);">Personalization</div>
+                        <div style="font-size:var(--tiny-size);color:rgba(255,255,255,0.35);">Drives revenue</div>
                     </div>
                 </div>
-                <div class="priority-box ea reveal d5">
-                    <div class="pb-label">Easy Adds</div>
-                    <p style="font-size: var(--tiny-size); color: var(--text-light); margin-bottom: 6px;">Lower Impact / Low Effort</p>
-                    <div class="pb-items">
-                        <span class="pb-chip">Club Location</span>
-                        <span class="pb-chip">Post-Purchase Support</span>
+                <!-- Bottom: Resolution -->
+                <div class="fi d5" style="position:absolute;left:50%;bottom:0;transform:translateX(-50%);text-align:center;">
+                    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px 20px;">
+                        <div style="font-size:var(--small-size);font-weight:600;color:var(--white);">Resolution</div>
+                        <div style="font-size:var(--tiny-size);color:rgba(255,255,255,0.35);">Builds trust</div>
                     </div>
                 </div>
-                <div class="priority-box bt reveal d6">
-                    <div class="pb-label">Build Over Time</div>
-                    <p style="font-size: var(--tiny-size); color: var(--text-light); margin-bottom: 6px;">Lower Impact / High Effort</p>
-                    <div class="pb-items">
-                        <span class="pb-chip">Back-in-Stock Alerts</span>
-                        <span class="pb-chip">Membership Status</span>
+                <!-- Left: Renewal -->
+                <div class="fi d6" style="position:absolute;left:0;top:50%;transform:translateY(-50%);text-align:center;">
+                    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px 20px;">
+                        <div style="font-size:var(--small-size);font-weight:600;color:var(--white);">Renewal</div>
+                        <div style="font-size:var(--tiny-size);color:rgba(255,255,255,0.35);">Drives loyalty</div>
                     </div>
                 </div>
+                <!-- Circular arrows connecting nodes -->
+                <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;" viewBox="0 0 700 380">
+                    <!-- Clockwise arc arrows -->
+                    <path d="M 400 30 Q 560 30, 580 150" fill="none" stroke="rgba(232,255,89,0.2)" stroke-width="1.5" stroke-dasharray="6,4"/>
+                    <path d="M 580 230 Q 560 350, 400 355" fill="none" stroke="rgba(232,255,89,0.2)" stroke-width="1.5" stroke-dasharray="6,4"/>
+                    <path d="M 300 355 Q 140 350, 120 230" fill="none" stroke="rgba(232,255,89,0.2)" stroke-width="1.5" stroke-dasharray="6,4"/>
+                    <path d="M 120 150 Q 140 30, 300 30" fill="none" stroke="rgba(232,255,89,0.2)" stroke-width="1.5" stroke-dasharray="6,4"/>
+                    <!-- Arrow tips -->
+                    <polygon points="578,150 572,140 585,145" fill="rgba(232,255,89,0.3)"/>
+                    <polygon points="400,353 410,348 405,360" fill="rgba(232,255,89,0.3)"/>
+                    <polygon points="122,230 128,240 115,235" fill="rgba(232,255,89,0.3)"/>
+                    <polygon points="300,32 290,38 295,25" fill="rgba(232,255,89,0.3)"/>
+                </svg>
             </div>
+            <p class="fi d7" style="font-size:var(--small-size);color:rgba(255,255,255,0.35);text-align:center;margin-top:8px;">Shopping builds memory. Memory powers personalization. When issues arise, the same memory powers resolution. Resolution builds trust. Trust drives renewal. The flywheel compounds.</p>
         </div>
     </section>
 
-    <!-- ============================================
-         SLIDE 9: SECTION — AGENT STEWARD
-         ============================================ -->
-    <section class="slide dark section-break" data-slide="9">
+    <!-- 13: ROADMAP — ASCENDING STAIRCASE -->
+    <section class="slide s-dark" data-slide="17">
         <div class="slide-content">
-            <span class="section-number reveal d1">Section 03</span>
-            <h2 class="reveal d2">Agent Steward</h2>
-            <p class="section-desc reveal d3">From human bottleneck to AI resolution. The capability that turns Bev into a concierge that acts.</p>
-        </div>
-    </section>
-
-    <!-- ============================================
-         SLIDE 10: THE DOUBLE WORK PROBLEM
-         ============================================ -->
-    <section class="slide light" data-slide="10">
-        <div class="slide-content">
-            <span class="label reveal d1">The Problem</span>
-            <h2 class="reveal d2">The double work problem</h2>
-            <div class="double-work">
-                <div class="job-card job1 reveal d3">
-                    <div class="job-time">5 min</div>
-                    <div class="job-label">Job 1: Decide</div>
-                    <div class="job-desc">Review evidence. Make a judgment call.</div>
-                </div>
-                <span class="vs-divider reveal d4">vs.</span>
-                <div class="job-card job2 reveal d5">
-                    <div class="job-time">5 hrs</div>
-                    <div class="job-label">Job 2: Communicate</div>
-                    <div class="job-desc">Everything else that follows the decision.</div>
-                    <ul class="job-tasks">
-                        <li>Contact warehouse about the issue</li>
-                        <li>Follow up with the member</li>
-                        <li>Update internal systems</li>
-                        <li>Send confirmation &amp; next steps</li>
-                        <li>Coordinate with delivery partner</li>
+            <div class="line fi d1"></div>
+            <span class="label fi d1">Implementation Roadmap</span>
+            <h2 class="fi d2">Four phases to the full concierge</h2>
+            <!-- Ascending staircase steps -->
+            <div style="display:flex;align-items:flex-end;gap:2px;margin-top:clamp(20px,3vw,32px);height:clamp(280px,45vh,400px);">
+                <!-- Phase 1 — shortest -->
+                <div class="fi d3" style="flex:1;height:40%;background:var(--dark);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:clamp(12px,2vw,20px);display:flex;flex-direction:column;justify-content:flex-end;">
+                    <span style="font-size:var(--label-size);font-weight:700;color:var(--pop);text-transform:uppercase;letter-spacing:0.1em;">Phase 01</span>
+                    <h3 style="color:var(--white);margin-top:8px;">FYC Quick Wins</h3>
+                    <div style="width:32px;height:2px;background:var(--white);margin:8px 0;"></div>
+                    <ul style="list-style:none;display:flex;flex-direction:column;gap:3px;">
+                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Cart abandonment nudge</li>
+                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Order &amp; delivery status</li>
+                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Personalized greetings</li>
                     </ul>
                 </div>
-            </div>
-            <div class="dw-insight reveal d6">
-                <p><strong>Steward eliminates Job 2.</strong> Humans make decisions. AI owns coordination and communication.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================
-         SLIDE 11: HOW STEWARD WORKS
-         ============================================ -->
-    <section class="slide light" data-slide="11">
-        <div class="slide-content">
-            <span class="label reveal d1">Architecture</span>
-            <h2 class="reveal d2">How Steward works</h2>
-            <div class="arch-flow">
-                <div class="arch-row reveal d3">
-                    <div class="arch-box">
-                        <span class="arch-label">Member</span>
-                        <span class="arch-name">Reports an issue</span>
-                    </div>
-                    <span class="arch-arrow">&rarr;</span>
-                    <div class="arch-box primary">
-                        <span class="arch-label">AI Agent</span>
-                        <span class="arch-name">Bev</span>
-                        <span class="arch-desc">Detects complex issue</span>
-                    </div>
-                    <span class="arch-arrow">&rarr;</span>
-                    <div class="arch-box" style="background: rgba(124,92,255,0.06); border-color: rgba(124,92,255,0.25);">
-                        <span class="arch-label" style="color: var(--purple);">Capability</span>
-                        <span class="arch-name">Steward Activates</span>
-                        <span class="arch-desc">Spins up sub-agents</span>
-                    </div>
-                </div>
-                <span class="arch-arrow down reveal d4">&#x2193;</span>
-                <div class="sub-agents-row reveal d5">
-                    <div class="arch-box sub-agent">
-                        <span class="arch-label">Sub-Agent 1</span>
-                        <span class="arch-name">Investigation</span>
-                        <span class="arch-desc">Checks records, policies, history</span>
-                    </div>
-                    <div class="arch-box sub-agent">
-                        <span class="arch-label">Sub-Agent 2</span>
-                        <span class="arch-name">External Outreach</span>
-                        <span class="arch-desc">Contacts warehouse, vendor, driver</span>
-                    </div>
-                    <div class="arch-box sub-agent">
-                        <span class="arch-label">Sub-Agent 3</span>
-                        <span class="arch-name">Member Updates</span>
-                        <span class="arch-desc">Keeps member informed throughout</span>
-                    </div>
-                </div>
-                <span class="arch-arrow down reveal d6">&#x2193;</span>
-                <div class="arch-row reveal d7">
-                    <div class="arch-box primary" style="max-width: 400px;">
-                        <span class="arch-label">Result</span>
-                        <span class="arch-name">Summary + Recommendation</span>
-                        <span class="arch-desc">Delivered to human agent for approval &mdash; or executed autonomously once earned</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================
-         SLIDE 12: STEWARD FOR BEV
-         ============================================ -->
-    <section class="slide light" data-slide="12">
-        <div class="slide-content">
-            <span class="label reveal d1">Steward for Bev &mdash; Shopping Assist</span>
-            <h2 class="reveal d2">When shopping goes wrong, Bev handles it</h2>
-            <div class="usecase-grid">
-                <div class="usecase-card reveal d3">
-                    <span class="uc-num">01</span>
-                    <h3>Wrong or Damaged Delivery</h3>
-                    <p class="uc-scenario">&ldquo;My Dyson arrived with a cracked base.&rdquo;</p>
-                    <ul class="uc-steps">
-                        <li><span class="step-icon">&rarr;</span> Verifies delivery record &amp; product details</li>
-                        <li><span class="step-icon">&rarr;</span> Contacts warehouse for replacement availability</li>
-                        <li><span class="step-icon">&rarr;</span> Arranges pickup of damaged item</li>
-                        <li><span class="step-icon">&rarr;</span> Proposes resolution: replace or refund</li>
+                <!-- Phase 2 -->
+                <div class="fi d4" style="flex:1;height:60%;background:var(--dark);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:clamp(12px,2vw,20px);display:flex;flex-direction:column;justify-content:flex-end;">
+                    <span style="font-size:var(--label-size);font-weight:700;color:var(--pop);text-transform:uppercase;letter-spacing:0.1em;">Phase 02</span>
+                    <h3 style="color:var(--white);margin-top:8px;">FYC Strategic Bets</h3>
+                    <div style="width:32px;height:2px;background:var(--white);margin:8px 0;"></div>
+                    <ul style="list-style:none;display:flex;flex-direction:column;gap:3px;">
+                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Replenishment reminders</li>
+                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Seasonal personalization</li>
+                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Loyalty program nudges</li>
                     </ul>
                 </div>
-                <div class="usecase-card reveal d4">
-                    <span class="uc-num">02</span>
-                    <h3>Complex Return &amp; Exchange</h3>
-                    <p class="uc-scenario">&ldquo;I want to return this TV but get the 75-inch instead.&rdquo;</p>
-                    <ul class="uc-steps">
-                        <li><span class="step-icon">&rarr;</span> Coordinates return pickup scheduling</li>
-                        <li><span class="step-icon">&rarr;</span> Checks inventory at preferred club</li>
-                        <li><span class="step-icon">&rarr;</span> Calculates price difference &amp; applies credits</li>
-                        <li><span class="step-icon">&rarr;</span> Sends member confirmation with timeline</li>
+                <!-- Phase 3 -->
+                <div class="fi d5" style="flex:1;height:80%;background:var(--dark);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:clamp(12px,2vw,20px);display:flex;flex-direction:column;justify-content:flex-end;">
+                    <span style="font-size:var(--label-size);font-weight:700;color:var(--pop);text-transform:uppercase;letter-spacing:0.1em;">Phase 03</span>
+                    <h3 style="color:var(--white);margin-top:8px;">Steward: Member Care</h3>
+                    <div style="width:32px;height:2px;background:var(--white);margin:8px 0;"></div>
+                    <ul style="list-style:none;display:flex;flex-direction:column;gap:3px;">
+                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- AI recommends, human approves</li>
+                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Top 2 highest-pain cases</li>
+                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Track accuracy &rarr; path to L2</li>
                     </ul>
                 </div>
-                <div class="usecase-card reveal d5">
-                    <span class="uc-num">03</span>
-                    <h3>Warranty Claim Processing</h3>
-                    <p class="uc-scenario">&ldquo;My Samsung fridge stopped cooling after 8 months.&rdquo;</p>
-                    <ul class="uc-steps">
-                        <li><span class="step-icon">&rarr;</span> Verifies purchase date &amp; warranty terms</li>
-                        <li><span class="step-icon">&rarr;</span> Contacts manufacturer for claim filing</li>
-                        <li><span class="step-icon">&rarr;</span> Coordinates service appointment options</li>
-                        <li><span class="step-icon">&rarr;</span> Presents member with service &amp; replacement options</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================
-         SLIDE 13: STEWARD FOR MEMBER CARE
-         ============================================ -->
-    <section class="slide light" data-slide="13">
-        <div class="slide-content">
-            <span class="label reveal d1">Steward for Member Care</span>
-            <h2 class="reveal d2">Complex support cases, resolved by AI</h2>
-            <div class="usecase-grid">
-                <div class="usecase-card reveal d3">
-                    <span class="uc-num">01</span>
-                    <h3>Billing Dispute Resolution</h3>
-                    <p class="uc-scenario">&ldquo;I was charged twice for my curbside order.&rdquo;</p>
-                    <ul class="uc-steps">
-                        <li><span class="step-icon">&rarr;</span> Investigates transaction records</li>
-                        <li><span class="step-icon">&rarr;</span> Checks promotion eligibility &amp; member benefits</li>
-                        <li><span class="step-icon">&rarr;</span> Cross-references payment processor data</li>
-                        <li><span class="step-icon">&rarr;</span> Delivers finding + recommended action</li>
-                    </ul>
-                </div>
-                <div class="usecase-card reveal d4">
-                    <span class="uc-num">02</span>
-                    <h3>Membership Renewal Complication</h3>
-                    <p class="uc-scenario">Member at risk of churning at renewal.</p>
-                    <ul class="uc-steps">
-                        <li><span class="step-icon">&rarr;</span> Detects at-risk member signals</li>
-                        <li><span class="step-icon">&rarr;</span> Checks reward balance &amp; usage history</li>
-                        <li><span class="step-icon">&rarr;</span> Prepares personalized retention offer</li>
-                        <li><span class="step-icon">&rarr;</span> Proactively reaches out before expiry</li>
-                    </ul>
-                </div>
-                <div class="usecase-card reveal d5">
-                    <span class="uc-num">03</span>
-                    <h3>Multi-Party Curbside Issue</h3>
-                    <p class="uc-scenario">&ldquo;My curbside order was missing 3 items.&rdquo;</p>
-                    <ul class="uc-steps">
-                        <li><span class="step-icon">&rarr;</span> Checks order manifest vs. delivery record</li>
-                        <li><span class="step-icon">&rarr;</span> Contacts store operations for verification</li>
-                        <li><span class="step-icon">&rarr;</span> Checks inventory for missing items</li>
-                        <li><span class="step-icon">&rarr;</span> Proposes resolution: redelivery or credit</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================
-         SLIDE 14: THE BIG UNLOCK
-         ============================================ -->
-    <section class="slide light" data-slide="14">
-        <div class="slide-content">
-            <span class="label reveal d1">The Differentiator</span>
-            <h2 class="reveal d2">The big unlock: AI contacts external parties</h2>
-            <div class="unlock-visual">
-                <div class="unlock-today reveal d3">
-                    <span class="ut-label">Today</span>
-                    <p>Human agent manually calls warehouse, emails vendor, follows up with delivery partner. <strong>This is the 5-hour bottleneck.</strong></p>
-                </div>
-                <div class="unlock-center reveal d4">
-                    <span class="unlock-icon">&#x1F513;</span>
-                    <h3>With Steward</h3>
-                    <p>AI makes those calls &mdash; via voice, SMS, email &mdash; and coordinates resolution end-to-end.</p>
-                </div>
-                <div class="unlock-channels reveal d5">
-                    <div class="unlock-channel">
-                        <div class="ch-icon">&#x1F4DE;</div>
-                        <div class="ch-name">Voice Call</div>
-                        <div class="ch-desc">Call warehouse &amp; vendors</div>
-                    </div>
-                    <div class="unlock-channel">
-                        <div class="ch-icon">&#x1F4AC;</div>
-                        <div class="ch-name">SMS</div>
-                        <div class="ch-desc">Text delivery partners</div>
-                    </div>
-                    <div class="unlock-channel">
-                        <div class="ch-icon">&#x2709;</div>
-                        <div class="ch-name">Email</div>
-                        <div class="ch-desc">File claims &amp; follow-ups</div>
-                    </div>
-                    <div class="unlock-channel">
-                        <div class="ch-icon">&#x1F310;</div>
-                        <div class="ch-name">WhatsApp</div>
-                        <div class="ch-desc">Reach partners globally</div>
-                    </div>
-                </div>
-                <div class="gap-callout reveal d6" style="margin-top: 0; width: 100%;">
-                    <span class="gap-icon">&#x1F3C6;</span>
-                    <p><strong>This is the capability no one else is shipping yet.</strong> Sierra, Intercom, and Salesforce are building toward it. We&rsquo;re deploying it.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================
-         SLIDE 15: PATH TO AUTONOMY
-         ============================================ -->
-    <section class="slide light" data-slide="15">
-        <div class="slide-content">
-            <span class="label reveal d1">The Path to Autonomy</span>
-            <h2 class="reveal d2">Every level is earned through data</h2>
-            <div class="autonomy-track">
-                <div class="auto-level l0 reveal d3">
-                    <div class="auto-badge">Level 0</div>
-                    <div class="auto-detail">
-                        <div class="ad-title">Today: Human Does Everything</div>
-                        <div class="ad-desc">Human investigates, decides, communicates. Customer waits. Agent juggles browser tabs.</div>
-                    </div>
-                </div>
-                <div class="auto-level l1 reveal d4">
-                    <div class="auto-badge">Level 1</div>
-                    <div class="auto-detail">
-                        <div class="ad-title">Steward Launch: AI Recommends, Human Approves</div>
-                        <div class="ad-desc">Steward investigates across systems, contacts external parties, synthesizes evidence, proposes resolution. Human reviews and approves.</div>
-                        <div class="ad-example">&ldquo;Steward investigated 3 systems, contacted warehouse, found a shipping error. Recommended: full replacement. Approve / Modify / Reject.&rdquo;</div>
-                    </div>
-                </div>
-                <div class="auto-level l2 reveal d5">
-                    <div class="auto-badge">Level 2</div>
-                    <div class="auto-detail">
-                        <div class="ad-title">Graduated Autonomy: Steward Goes End-to-End</div>
-                        <div class="ad-desc">Earned through recommendation accuracy data from Level 1. When data shows 95%+ match with human judgment, Steward resolves end-to-end. Each use case earns autonomy independently.</div>
-                        <div class="ad-example">&ldquo;For curbside missing items under $50, Steward resolves autonomously. Complex returns still go through human approval until they earn it.&rdquo;</div>
-                    </div>
-                </div>
-            </div>
-            <div class="autonomy-insight reveal d6">
-                <p><strong>Everyone wants Level 2.</strong> Steward is how you get there &mdash; with data, not a leap of faith. Every transition is earned through measurable accuracy.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================
-         SLIDE 16: THE MIDDLE PATH
-         ============================================ -->
-    <section class="slide light" data-slide="16">
-        <div class="slide-content">
-            <span class="label reveal d1">The Insight</span>
-            <h2 class="reveal d2">The middle path is the fast path</h2>
-            <div class="middle-path-flow">
-                <div class="mp-row reveal d3">
-                    <span class="mp-label" style="color: var(--teal);">Reality</span>
-                    <div class="mp-content">
-                        <p>For <strong>simple cases</strong> (cancel subscription, check order status), AI can already handle them fully. The technology is there.</p>
-                    </div>
-                </div>
-                <div class="mp-row reveal d4">
-                    <span class="mp-label" style="color: var(--bjs-red);">Hesitancy</span>
-                    <div class="mp-content">
-                        <p>But businesses aren&rsquo;t ready. <strong>They don&rsquo;t want AI touching money yet.</strong> Refunds, credits, billing adjustments &mdash; the stakes feel too high for day one.</p>
-                    </div>
-                </div>
-                <div class="mp-row highlight reveal d5">
-                    <span class="mp-label">Steward</span>
-                    <div class="mp-content">
-                        <p><strong>Steward at L1 proves accuracy across hundreds of cases.</strong> Every recommendation is compared against what the human actually decided. When the data shows 95%+ alignment &mdash; graduate to L2.</p>
-                    </div>
-                </div>
-                <div class="mp-row reveal d6">
-                    <span class="mp-label" style="color: var(--text-light);">Result</span>
-                    <div class="mp-content">
-                        <p><strong>Steward earns its own retirement from human oversight.</strong> Not a compromise. Not &ldquo;you need humans forever.&rdquo; A speedrun to full autonomy with proof at every step.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="autonomy-insight reveal d7">
-                <p style="font-size: var(--small-size);"><strong>What we learned from the market:</strong> Enterprise buyers universally want full automation. They told us directly: &ldquo;We want AI to handle everything autonomously.&rdquo; That&rsquo;s exactly where Steward leads &mdash; but with a data trail that earns trust along the way.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================
-         SLIDE 17: SECTION — VISION & NEXT STEPS
-         ============================================ -->
-    <section class="slide dark section-break" data-slide="17">
-        <div class="slide-content">
-            <span class="section-number reveal d1">Section 04</span>
-            <h2 class="reveal d2">Vision &amp; Next Steps</h2>
-            <p class="section-desc reveal d3">The complete AI concierge for BJ&rsquo;s &mdash; and how we get there together.</p>
-        </div>
-    </section>
-
-    <!-- ============================================
-         SLIDE 18: THE COMPLETE PICTURE
-         ============================================ -->
-    <section class="slide light" data-slide="18">
-        <div class="slide-content">
-            <span class="label reveal d1">The Complete AI Concierge</span>
-            <h2 class="reveal d2">FYC + Steward = Bev, fully realized</h2>
-            <div class="complete-picture">
-                <div class="cp-card fyc-card reveal d3">
-                    <span class="cp-tag">For You Conversations</span>
-                    <span class="cp-icon">&#x1F4AC;</span>
-                    <h3>Proactive</h3>
-                    <ul>
-                        <li>Greets members with personalized offers</li>
-                        <li>Nudges replenishment before they run out</li>
-                        <li>Surfaces expiring coupons &amp; loyalty progress</li>
-                        <li>Remembers seasonal preferences</li>
-                    </ul>
-                </div>
-                <div class="cp-card steward-card reveal d4">
-                    <span class="cp-tag">Agent Steward</span>
-                    <span class="cp-icon">&#x1F6E0;</span>
-                    <h3>Autonomous</h3>
-                    <ul>
-                        <li>Investigates issues across systems</li>
-                        <li>Contacts warehouse, vendor, delivery partner</li>
-                        <li>Resolves billing disputes &amp; returns</li>
-                        <li>Earns more autonomy through proven accuracy</li>
-                    </ul>
-                </div>
-                <div class="cp-equals reveal d5">
-                    <h3>One Agent. Two Superpowers. Complete Member Experience.</h3>
-                    <p>Bev doesn&rsquo;t just help members shop. Bev anticipates what they need and fixes what goes wrong &mdash; before they have to ask twice.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================
-         SLIDE 19: IMPLEMENTATION ROADMAP
-         ============================================ -->
-    <section class="slide light" data-slide="19">
-        <div class="slide-content">
-            <span class="label reveal d1">Implementation Roadmap</span>
-            <h2 class="reveal d2">Four phases to the full AI concierge</h2>
-            <div class="roadmap-track">
-                <div class="rm-phase p1 reveal d3">
-                    <span class="rm-num">Phase 1</span>
-                    <span class="rm-weeks">Weeks 0 &ndash; 4</span>
-                    <h3>FYC Quick Wins</h3>
-                    <ul class="rm-items">
-                        <li>Cart abandonment nudge</li>
-                        <li>Order &amp; delivery status</li>
-                        <li>Personalized greetings live</li>
-                        <li>Baseline engagement metrics</li>
-                    </ul>
-                </div>
-                <div class="rm-phase p2 reveal d4">
-                    <span class="rm-num">Phase 2</span>
-                    <span class="rm-weeks">Weeks 4 &ndash; 8</span>
-                    <h3>FYC Strategic Bets</h3>
-                    <ul class="rm-items">
-                        <li>Replenishment reminders</li>
-                        <li>Seasonal personalization</li>
-                        <li>Loyalty program nudges</li>
-                        <li>Memory compounding begins</li>
-                    </ul>
-                </div>
-                <div class="rm-phase p3 reveal d5">
-                    <span class="rm-num">Phase 3</span>
-                    <span class="rm-weeks">Weeks 8 &ndash; 12</span>
-                    <h3>Steward: Member Care</h3>
-                    <ul class="rm-items">
-                        <li>L1: AI recommends, human approves</li>
-                        <li>Top 2 highest-pain cases</li>
-                        <li>Track accuracy vs. human decisions</li>
-                        <li>Path to L2 based on data</li>
-                    </ul>
-                </div>
-                <div class="rm-phase p4 reveal d6">
-                    <span class="rm-num">Phase 4</span>
-                    <span class="rm-weeks">Weeks 12 &ndash; 18</span>
-                    <h3>Steward: Bev Shopping</h3>
-                    <ul class="rm-items">
-                        <li>Complex returns &amp; exchanges</li>
-                        <li>Warranty claim processing</li>
-                        <li>External party coordination</li>
-                        <li>Graduated autonomy on proven cases</li>
+                <!-- Phase 4 — tallest -->
+                <div class="fi d6" style="flex:1;height:100%;background:var(--dark);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:clamp(12px,2vw,20px);display:flex;flex-direction:column;justify-content:flex-end;">
+                    <span style="font-size:var(--label-size);font-weight:700;color:var(--pop);text-transform:uppercase;letter-spacing:0.1em;">Phase 04</span>
+                    <h3 style="color:var(--white);margin-top:8px;">Steward: Bev Edge Cases</h3>
+                    <div style="width:32px;height:2px;background:var(--white);margin:8px 0;"></div>
+                    <ul style="list-style:none;display:flex;flex-direction:column;gap:3px;">
+                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Complex returns &amp; warranty</li>
+                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- External party coordination</li>
+                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Graduated autonomy</li>
                     </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ============================================
-         SLIDE 20: DISCUSSION
-         ============================================ -->
-    <section class="slide light" data-slide="20">
-        <div class="slide-content">
-            <span class="label reveal d1">Discussion &amp; Commitment</span>
-            <h2 class="reveal d2">Four questions to close on</h2>
-            <div class="discussion-items">
-                <div class="disc-item reveal d3">
-                    <span class="disc-num">01</span>
-                    <h3>Which FYC use cases do we pilot first?</h3>
-                    <p>We recommend cart abandonment + order status. Are there others that are higher priority for your team?</p>
-                </div>
-                <div class="disc-item reveal d4">
-                    <span class="disc-num">02</span>
-                    <h3>Which Member Care cases have the highest volume &amp; pain?</h3>
-                    <p>Help us prioritize the first Steward pilot &mdash; billing disputes, curbside issues, membership renewal?</p>
-                </div>
-                <div class="disc-item reveal d5">
-                    <span class="disc-num">03</span>
-                    <h3>What are Bev&rsquo;s most complex shopping issues today?</h3>
-                    <p>Where are your human agents spending the most coordination time on shopping-related cases?</p>
-                </div>
-                <div class="disc-item reveal d6">
-                    <span class="disc-num">04</span>
-                    <h3>Can we set dates for Phase 1 kickoff &amp; Phase 3 pilot?</h3>
-                    <p>We&rsquo;d like to walk out today with a timeline commitment for FYC launch and Steward pilot start.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================
-         SLIDE 21: CLOSE
-         ============================================ -->
-    <section class="slide dark title-slide" data-slide="21">
-        <div class="slide-content">
-            <div class="title-badge reveal d1">BJ&rsquo;s &times; Delight AI</div>
-            <h1 class="reveal d2" style="font-size: clamp(1.8rem, 4.5vw, 3.5rem);">Bev remembers.<br>Members return.<br>Issues resolve.</h1>
-            <p class="subtitle reveal d3">Let&rsquo;s make Bev the best concierge in wholesale.</p>
-            <p class="subtitle reveal d4" style="color: rgba(255,255,255,0.3); font-size: var(--small-size); margin-top: auto;">delight.ai &times; BJ&rsquo;s Wholesale</p>
-        </div>
-    </section>
-
-    </div><!-- /presentation-wrap -->
-
+    </div>
     <script>
-        /* =========================================== ACCESS GATE =========================================== */
-        (function() {
-            const gate = document.getElementById('accessGate');
-            const wrap = document.getElementById('presentationWrap');
-            const input = document.getElementById('accessCode');
-            const CODE = 'bjs';
+        (function(){const g=document.getElementById('accessGate'),w=document.getElementById('presentationWrap'),i=document.getElementById('accessCode');i.addEventListener('input',function(){this.classList.remove('error');if(this.value.toLowerCase()==='bjs'){g.classList.add('hidden');w.classList.add('unlocked');new S();}});i.addEventListener('keydown',function(e){if(e.key==='Enter'&&this.value.toLowerCase()!=='bjs'){this.classList.add('error');this.value='';}});})();
+        (function(){const l='<svg class="logo" viewBox="0 0 985 310" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M556.238 236.195H556.032C556.068 236.195 556.103 236.195 556.139 236.195C556.172 236.195 556.205 236.195 556.238 236.195Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M555.62 112.092C564.058 112.092 571.056 114.562 574.967 116.415L600.075 112.916V132.261H566.94C584.228 132.673 589.579 142.964 589.579 149.962C589.579 166.015 572.908 173.835 555.415 173.835C551.71 173.835 548.417 173.423 545.33 172.806C543.889 173.629 543.066 175.276 543.066 176.923C543.066 180.215 546.565 181.862 550.887 181.862H570.645C589.167 181.862 601.516 191.741 601.516 206.353C601.516 228.546 578.947 236.171 556.139 236.195C531.908 236.173 515.693 228.151 515.693 214.998C515.693 205.942 523.103 198.327 540.802 198.327H543.684C530.1 197.298 522.896 192.976 522.896 185.361C522.896 178.775 529.483 172.806 544.301 172.6C529.277 168.896 520.632 157.37 520.632 142.964C520.633 124.647 535.245 112.092 555.62 112.092ZM546.359 198.944C538.744 198.944 534.216 202.855 534.216 208C534.216 216.232 543.889 218.908 556.238 218.908C570.644 218.908 580.729 215.409 580.729 207.588C580.729 202.649 577.024 198.944 568.586 198.944H546.359ZM555.827 127.528C546.977 127.528 541.213 134.526 541.213 142.758C541.213 152.431 546.977 158.194 555.827 158.194C564.676 158.193 570.439 152.431 570.439 142.758C570.439 134.32 564.676 127.528 555.827 127.528Z" fill="white"/><path d="M160.484 134.925H221.87V156.123H175.527L211.548 192.145L196.524 207.169L160.484 171.129V221.988H139.285V171.385L103.498 207.172L88.474 192.148L88.4797 192.142L88.474 192.136L124.487 156.123H73.6865V134.925H124.279L88.474 99.1192L103.498 84.0948L139.285 119.882V73.8047H160.484V134.925Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M401.52 112.294C427.246 112.294 443.299 132.051 443.299 153.661C443.299 158.189 442.888 162.511 442.27 164.981H377.852C380.734 177.124 390.2 183.916 401.932 183.916C411.193 183.916 419.631 179.182 423.336 173.419L438.36 183.709C431.568 194.206 418.808 202.026 400.903 202.027V201.821C376.617 201.821 357.477 184.533 357.477 156.749C357.477 131.022 375.794 112.294 401.52 112.294ZM401.314 129.582C389.377 129.582 380.734 137.197 377.852 148.31H423.13C422.513 138.637 414.074 129.582 401.314 129.582Z" fill="white"/><path d="M780.229 177.936C786.822 177.936 792.166 183.28 792.166 189.873C792.166 196.465 786.822 201.809 780.229 201.81C773.637 201.81 768.292 196.465 768.292 189.873C768.292 183.28 773.637 177.936 780.229 177.936Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M838.459 113.942C863.568 113.942 874.681 131.024 874.681 147.283V199.558H854.924V174.449C854.924 191.943 844.427 201.617 828.786 201.617C813.35 201.617 801.413 191.326 801.413 175.067C801.413 158.808 812.938 150.37 828.991 148.929L855.129 146.46C855.129 137.816 848.749 131.23 838.459 131.23C828.169 131.23 823.641 138.021 822.406 143.166L804.5 138.227C808.616 122.997 820.965 113.942 838.459 113.942ZM833.108 163.953C825.905 164.776 820.965 168.276 820.965 174.861H821.171C821.171 181.241 826.728 185.357 834.343 185.357C848.543 185.357 854.923 176.096 854.924 165.6V161.895L833.108 163.953Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M346.931 199.349H326.35V167.653C324.498 189.263 313.59 201.407 295.479 201.407C274.486 201.407 258.433 182.06 258.433 156.54C258.433 131.02 274.28 111.673 295.479 111.673C312.561 111.673 324.704 123.405 326.35 143.985V84.0948H346.931V199.349ZM303.505 130.814C290.539 130.814 279.426 141.31 279.426 156.746C279.426 172.593 290.127 182.678 303.711 182.678C317.294 182.678 327.585 171.564 327.585 156.746C327.585 140.693 316.471 130.814 303.505 130.814Z" fill="white"/><path d="M732.211 115.989H755.88V133.689H732.211V172.998C732.211 179.172 735.298 181.436 740.238 181.436H754.027V199.753H738.18L738.386 199.548C723.362 199.548 712.454 193.168 712.454 174.851V133.689H697.224V115.989H712.659V97.2601H732.211V115.989Z" fill="white"/><path d="M508.942 199.554H488.361V114.143H508.942V199.554Z" fill="white"/><path d="M909.95 199.554H889.369V114.143H909.95V199.554Z" fill="white"/><path d="M474.051 199.55H453.47V84.2962H474.051V199.55Z" fill="white"/><path d="M633.554 142.133C633.554 123.199 645.491 111.879 660.515 111.879C679.243 111.879 688.916 126.08 688.916 141.721V199.349H668.335V148.925C668.335 138.84 661.132 131.637 651.253 131.637C640.551 131.637 633.554 139.458 633.554 149.748V199.349H612.973V84.0948H633.554V142.133Z" fill="white"/><path d="M195.339 85.7434C203.296 85.7434 209.746 92.1936 209.746 100.15C209.746 108.107 203.296 114.557 195.339 114.557C187.383 114.557 180.933 108.107 180.932 100.15C180.932 92.1936 187.383 85.7434 195.339 85.7434Z" fill="white"/><path d="M498.687 83.4723C505.28 83.4724 510.624 88.817 510.624 95.4095C510.624 102.002 505.28 107.346 498.687 107.346C492.095 107.346 486.75 102.002 486.75 95.4095C486.75 88.8169 492.095 83.4723 498.687 83.4723Z" fill="white"/><path d="M899.377 83.4723C905.969 83.4724 911.314 88.817 911.314 95.4095C911.313 102.002 905.969 107.346 899.377 107.346C892.784 107.346 887.44 102.002 887.44 95.4095C887.44 88.8169 892.784 83.4723 899.377 83.4723Z" fill="white"/></svg>';
+        const d=l.replace(/fill="white"/g,'fill="#1A1A1A"');document.querySelectorAll('.slide').forEach(s=>{const dk=s.classList.contains('s-dark')||s.classList.contains('s-accent')||s.classList.contains('s-coral');s.insertAdjacentHTML('afterbegin',dk?l:d);});})();
+        class S{constructor(){this.sl=document.querySelectorAll('.slide');this.t=this.sl.length;this.c=0;this.nd();this.io();this.kb();this.up();}
+        nd(){const n=document.getElementById('navDots');this.sl.forEach((_,i)=>{const d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.addEventListener('click',()=>this.go(i));n.appendChild(d);});this.dots=n.querySelectorAll('.nav-dot');}
+        io(){const o=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');const i=parseInt(x.target.dataset.slide);if(!isNaN(i)){this.c=i;this.ud();this.up();}}});},{threshold:0.35});this.sl.forEach(s=>o.observe(s));}
+        kb(){document.addEventListener('keydown',e=>{if(['ArrowDown','ArrowRight',' '].includes(e.key)){e.preventDefault();this.go(Math.min(this.c+1,this.t-1));}else if(['ArrowUp','ArrowLeft'].includes(e.key)){e.preventDefault();this.go(Math.max(this.c-1,0));}});}
+        go(i){this.sl[i].scrollIntoView({behavior:'smooth'});this.c=i;this.ud();this.up();}
+        ud(){this.dots.forEach((d,i)=>d.classList.toggle('active',i===this.c));}
+        up(){document.getElementById('progress').style.width=((this.c+1)/this.t)*100+'%';}}
 
-            input.addEventListener('input', function() {
-                this.classList.remove('error');
-                if (this.value.toLowerCase() === CODE) {
-                    gate.classList.add('hidden');
-                    wrap.classList.add('unlocked');
-                    new SlidePresentation();
-                }
-            });
-
-            input.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && this.value.toLowerCase() !== CODE) {
-                    this.classList.add('error');
-                    this.value = '';
-                }
-            });
-        })();
-
-        /* =========================================== SLIDE CONTROLLER =========================================== */
-        class SlidePresentation {
-            constructor() {
-                this.slides = document.querySelectorAll('.slide');
-                this.totalSlides = this.slides.length;
-                this.currentSlide = 0;
-                this.createNavDots();
-                this.setupIntersectionObserver();
-                this.setupKeyboardNav();
-                this.updateProgress();
+        /* ═══ ORCHESTRATION ANIMATION (Slide 10) ═══ */
+        (function(){
+            function createAnim(){
+                var gen=0;
+                return {
+                    get gen(){return gen;},
+                    start(){return ++gen;},
+                    stop(){++gen;},
+                    after:function(g,delay,fn){setTimeout(function(){if(g===gen)fn();},delay);}
+                };
             }
+            var orchAnim=createAnim();
 
-            createNavDots() {
-                const nav = document.getElementById('navDots');
-                this.slides.forEach((_, i) => {
-                    const dot = document.createElement('button');
-                    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
-                    dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
-                    dot.addEventListener('click', () => this.goToSlide(i));
-                    nav.appendChild(dot);
+            function resetOrch(){
+                var chat=document.getElementById('orchChat');
+                if(chat)chat.innerHTML='';
+                document.querySelectorAll('#orchAnimation .orch-channel').forEach(function(ch){
+                    ch.classList.remove('visible');
+                    var s=ch.querySelector('.orch-channel-status');
+                    if(s){s.className='orch-channel-status pending';s.innerHTML='\u2014';}
                 });
-                this.dots = nav.querySelectorAll('.nav-dot');
+                ['ch-preview-0','ch-preview-1','ch-preview-2','ch-preview-3'].forEach(function(id){
+                    var el=document.getElementById(id);
+                    if(el)el.innerHTML='';
+                });
+                var hub=document.getElementById('orchHub');
+                if(hub)hub.classList.remove('relay');
+                var callout=document.getElementById('driCallout');
+                if(callout)callout.classList.remove('visible');
             }
 
-            setupIntersectionObserver() {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('visible');
-                            const idx = parseInt(entry.target.dataset.slide);
-                            if (!isNaN(idx)) {
-                                this.currentSlide = idx;
-                                this.updateDots();
-                                this.updateProgress();
-                            }
-                        }
+            var orchObs=new IntersectionObserver(function(entries){
+                entries.forEach(function(e){
+                    if(e.isIntersecting){resetOrch();runOrch(orchAnim.start());}
+                    else{orchAnim.stop();resetOrch();}
+                });
+            },{threshold:0.25});
+
+            var orchEl=document.getElementById('orchAnimation');
+            if(orchEl)orchObs.observe(orchEl);
+
+            function runOrch(g){
+                var A=orchAnim;
+                var chat=document.getElementById('orchChat');
+                var channels=document.querySelectorAll('#orchAnimation .orch-channel');
+                var hub=document.getElementById('orchHub');
+
+                function pulse(){hub.classList.remove('relay');void hub.offsetWidth;hub.classList.add('relay');}
+                function msg(type,text,delay){
+                    A.after(g,delay,function(){
+                        var div=document.createElement('div');
+                        div.className='orch-msg '+type;
+                        div.textContent=text;
+                        div.style.cssText='opacity:0;transform:translateY(6px);transition:all 0.4s ease;';
+                        chat.appendChild(div);
+                        requestAnimationFrame(function(){div.style.opacity='1';div.style.transform='translateY(0)';});
+                        chat.scrollTop=chat.scrollHeight;
+                        pulse();
                     });
-                }, { threshold: 0.35 });
-                this.slides.forEach(slide => observer.observe(slide));
-            }
+                }
+                function show(idx,delay){A.after(g,delay,function(){channels[idx].classList.add('visible');pulse();});}
+                function chStatus(idx,cls,html,delay){
+                    A.after(g,delay,function(){
+                        var s=channels[idx].querySelector('.orch-channel-status');
+                        s.className='orch-channel-status '+cls;s.innerHTML=html;
+                        pulse();
+                    });
+                }
+                function chPreview(idx,html,delay){
+                    A.after(g,delay,function(){
+                        var p=document.getElementById('ch-preview-'+idx);
+                        var div=document.createElement('div');
+                        div.className='preview-line';
+                        div.innerHTML=html;
+                        p.appendChild(div);
+                        requestAnimationFrame(function(){div.classList.add('visible');});
+                    });
+                }
+                function taskState(id,state,delay){
+                    A.after(g,delay,function(){
+                        var t=document.getElementById(id);
+                        if(!t)return;
+                        t.className='orch-task '+state;
+                        var icon=t.querySelector('.orch-task-icon');
+                        if(state==='active')icon.innerHTML='<div class="orch-task-spinner"></div>';
+                        else if(state==='done')icon.innerHTML='\u2713';
+                    });
+                }
 
-            setupKeyboardNav() {
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
-                        e.preventDefault();
-                        this.goToSlide(Math.min(this.currentSlide + 1, this.totalSlides - 1));
-                    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-                        e.preventDefault();
-                        this.goToSlide(Math.max(this.currentSlide - 1, 0));
-                    }
+                // Sarah reports the issue
+                msg('user','My curbside order was missing paper towels and olive oil.',0);
+                msg('ai','Let me check your order...',900);
+
+                // System channel: Order API
+                show(0,1600);
+                chStatus(0,'active','<span class="spinner"></span>Querying',1600);
+                chPreview(0,'<span class="out">GET /orders/7829 \u2014 manifest vs delivery</span>',1800);
+                chPreview(0,'<span class="in">2 items confirmed missing from curbside</span>',2600);
+                chStatus(0,'done','\u2713 Done',2800);
+
+                msg('ai','Order #7829 \u2014 2 items confirmed missing from your curbside pickup.',3400);
+
+                // Warehouse channel: Voice call
+                show(1,4200);
+                chStatus(1,'active','<span class="spinner"></span>Calling',4200);
+                chPreview(1,'<div class="preview-call-ring"><div class="ring-dot"></div> Calling BJ\u2019s Warehouse...</div>',4400);
+                chPreview(1,'<div class="preview-call-ring connected"><div class="ring-dot"></div> Confirmed \u2014 replacement available</div>',5200);
+                chStatus(1,'done','\u2713 Verified',5600);
+
+                // Task list appears
+                msg('steward','Confirmed with warehouse. Here\u2019s what I\u2019m doing:',6200);
+                A.after(g,6800,function(){
+                    var tl=document.createElement('div');
+                    tl.className='orch-task-list';
+                    tl.style.cssText='opacity:0;transform:translateY(6px);transition:all 0.4s ease;';
+                    tl.innerHTML='<div class="orch-task-list-title">Live Progress</div>'
+                        +'<div class="orch-task done" id="ot-verify"><div class="orch-task-icon">\u2713</div><span>Verify order</span></div>'
+                        +'<div class="orch-task done" id="ot-warehouse"><div class="orch-task-icon">\u2713</div><span>Contact warehouse</span></div>'
+                        +'<div class="orch-task" id="ot-redeliver"><div class="orch-task-icon">\u25CB</div><span>Arrange redelivery</span></div>'
+                        +'<div class="orch-task" id="ot-approval"><div class="orch-task-icon">\u25CB</div><span>CS approval</span></div>'
+                        +'<div class="orch-task" id="ot-confirm"><div class="orch-task-icon">\u25CB</div><span>Confirm to you</span></div>';
+                    chat.appendChild(tl);
+                    requestAnimationFrame(function(){tl.style.opacity='1';tl.style.transform='translateY(0)';});
+                    chat.scrollTop=chat.scrollHeight;
+                });
+
+                // Member chat channel update
+                show(2,7800);
+                chStatus(2,'active','<span class="spinner"></span>Updating',7800);
+                chPreview(2,'<span class="out">Replacement being prepared. Getting approval for same-day redelivery.</span>',8000);
+                chStatus(2,'done','\u2713 Sent',8600);
+                taskState('ot-redeliver','active',8000);
+                taskState('ot-redeliver','done',8600);
+
+                // CS Desk channel
+                show(3,9400);
+                chStatus(3,'active','<span class="spinner"></span>Pending',9400);
+                taskState('ot-approval','active',9400);
+                chPreview(3,'<span class="out">Order #7829: 2 items missing. Warehouse confirmed. Requesting same-day redelivery.</span>',9600);
+                chPreview(3,'<span class="in">Agent types: 1 (Approved)</span>',10600);
+                chStatus(3,'done','\u2713 Approved',10800);
+                taskState('ot-approval','done',10800);
+
+                // Resolution
+                taskState('ot-confirm','active',11400);
+                msg('steward','Approved! Your paper towels and olive oil will be redelivered by 4pm today. \u2713',11600);
+                taskState('ot-confirm','done',12200);
+
+                // Callout
+                A.after(g,13500,function(){
+                    var co=document.getElementById('driCallout');
+                    if(co)co.classList.add('visible');
                 });
             }
-
-            goToSlide(index) {
-                this.slides[index].scrollIntoView({ behavior: 'smooth' });
-                this.currentSlide = index;
-                this.updateDots();
-                this.updateProgress();
-            }
-
-            updateDots() {
-                this.dots.forEach((dot, i) => dot.classList.toggle('active', i === this.currentSlide));
-            }
-
-            updateProgress() {
-                document.getElementById('progress').style.width =
-                    ((this.currentSlide + 1) / this.totalSlides) * 100 + '%';
-            }
-        }
+        })();
     </script>
 </body>
 </html>
