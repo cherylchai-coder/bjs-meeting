@@ -855,52 +855,82 @@
         <div class="slide-content">
             <div class="line fi d1"></div>
             <span class="label fi d1">Implementation Roadmap</span>
-            <h2 class="fi d2">Four phases to the full concierge</h2>
-            <!-- Ascending staircase steps -->
-            <div style="display:flex;align-items:flex-end;gap:2px;margin-top:clamp(20px,3vw,32px);height:clamp(280px,45vh,400px);">
-                <!-- Phase 1 — shortest -->
-                <div class="fi d3" style="flex:1;height:40%;background:var(--dark);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:clamp(12px,2vw,20px);display:flex;flex-direction:column;justify-content:flex-end;">
-                    <span style="font-size:var(--label-size);font-weight:700;color:var(--pop);text-transform:uppercase;letter-spacing:0.1em;">Phase 01</span>
-                    <h3 style="color:var(--white);margin-top:8px;">FYC Quick Wins</h3>
-                    <div style="width:32px;height:2px;background:var(--white);margin:8px 0;"></div>
-                    <ul style="list-style:none;display:flex;flex-direction:column;gap:3px;">
-                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Cart abandonment nudge</li>
-                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Order &amp; delivery status</li>
-                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Personalized greetings</li>
-                    </ul>
+            <h2 class="fi d2">Two parallel tracks to the full concierge</h2>
+            <!-- Two-track timeline -->
+            <div style="display:flex;flex-direction:column;gap:clamp(12px,2vw,20px);margin-top:clamp(20px,3vw,32px);">
+                <!-- TRACK 1: BEV / FYC -->
+                <div class="fi d3" style="display:flex;gap:2px;align-items:stretch;">
+                    <div style="writing-mode:vertical-lr;text-orientation:mixed;transform:rotate(180deg);font-size:var(--label-size);font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:0.1em;padding:8px 6px;display:flex;align-items:center;justify-content:center;background:rgba(42,125,98,0.1);border-radius:4px 0 0 4px;flex-shrink:0;">Bev &mdash; Shopping</div>
+                    <div style="flex:1;background:var(--dark);border:1px solid rgba(255,255,255,0.1);border-radius:0;padding:clamp(12px,2vw,18px);display:flex;flex-direction:column;justify-content:flex-end;">
+                        <span style="font-size:var(--label-size);font-weight:700;color:var(--pop);text-transform:uppercase;letter-spacing:0.1em;">Phase 01</span>
+                        <h3 style="color:var(--white);margin-top:4px;font-size:var(--body-size);">FYC Quick Wins</h3>
+                        <div style="width:24px;height:2px;background:var(--white);margin:6px 0;"></div>
+                        <ul style="list-style:none;display:flex;flex-direction:column;gap:2px;">
+                            <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Cart abandonment nudge</li>
+                            <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Order &amp; delivery status</li>
+                            <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Personalized greetings</li>
+                        </ul>
+                    </div>
+                    <div style="flex:1;background:var(--dark);border:1px solid rgba(255,255,255,0.1);border-radius:0;padding:clamp(12px,2vw,18px);display:flex;flex-direction:column;justify-content:flex-end;">
+                        <span style="font-size:var(--label-size);font-weight:700;color:var(--pop);text-transform:uppercase;letter-spacing:0.1em;">Phase 02</span>
+                        <h3 style="color:var(--white);margin-top:4px;font-size:var(--body-size);">FYC Strategic Bets</h3>
+                        <div style="width:24px;height:2px;background:var(--white);margin:6px 0;"></div>
+                        <ul style="list-style:none;display:flex;flex-direction:column;gap:2px;">
+                            <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Replenishment reminders</li>
+                            <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Seasonal personalization</li>
+                            <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Loyalty &amp; coupon nudges</li>
+                        </ul>
+                    </div>
+                    <div style="flex:1;background:rgba(42,125,98,0.08);border:1px solid rgba(42,125,98,0.2);border-radius:0 4px 4px 0;padding:clamp(12px,2vw,18px);display:flex;flex-direction:column;justify-content:flex-end;">
+                        <span style="font-size:var(--label-size);font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:0.1em;">Ongoing</span>
+                        <h3 style="color:var(--white);margin-top:4px;font-size:var(--body-size);">Memory Compounds</h3>
+                        <div style="width:24px;height:2px;background:var(--accent2);margin:6px 0;"></div>
+                        <ul style="list-style:none;display:flex;flex-direction:column;gap:2px;">
+                            <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Every interaction builds profile</li>
+                            <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Personalization deepens</li>
+                            <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Revenue per member grows</li>
+                        </ul>
+                    </div>
                 </div>
-                <!-- Phase 2 -->
-                <div class="fi d4" style="flex:1;height:60%;background:var(--dark);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:clamp(12px,2vw,20px);display:flex;flex-direction:column;justify-content:flex-end;">
-                    <span style="font-size:var(--label-size);font-weight:700;color:var(--pop);text-transform:uppercase;letter-spacing:0.1em;">Phase 02</span>
-                    <h3 style="color:var(--white);margin-top:8px;">FYC Strategic Bets</h3>
-                    <div style="width:32px;height:2px;background:var(--white);margin:8px 0;"></div>
-                    <ul style="list-style:none;display:flex;flex-direction:column;gap:3px;">
-                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Replenishment reminders</li>
-                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Seasonal personalization</li>
-                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Loyalty program nudges</li>
-                    </ul>
+                <!-- Convergence arrow -->
+                <div class="fi d4" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:0 40px;">
+                    <div style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></div>
+                    <span style="font-size:var(--tiny-size);color:rgba(255,255,255,0.25);font-weight:600;text-transform:uppercase;letter-spacing:0.1em;white-space:nowrap;">Running in parallel</span>
+                    <div style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></div>
                 </div>
-                <!-- Phase 3 -->
-                <div class="fi d5" style="flex:1;height:80%;background:var(--dark);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:clamp(12px,2vw,20px);display:flex;flex-direction:column;justify-content:flex-end;">
-                    <span style="font-size:var(--label-size);font-weight:700;color:var(--pop);text-transform:uppercase;letter-spacing:0.1em;">Phase 03</span>
-                    <h3 style="color:var(--white);margin-top:8px;">Steward: Member Care</h3>
-                    <div style="width:32px;height:2px;background:var(--white);margin:8px 0;"></div>
-                    <ul style="list-style:none;display:flex;flex-direction:column;gap:3px;">
-                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- AI recommends, human approves</li>
-                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Top 2 highest-pain cases</li>
-                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Track accuracy &rarr; path to L2</li>
-                    </ul>
-                </div>
-                <!-- Phase 4 — tallest -->
-                <div class="fi d6" style="flex:1;height:100%;background:var(--dark);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:clamp(12px,2vw,20px);display:flex;flex-direction:column;justify-content:flex-end;">
-                    <span style="font-size:var(--label-size);font-weight:700;color:var(--pop);text-transform:uppercase;letter-spacing:0.1em;">Phase 04</span>
-                    <h3 style="color:var(--white);margin-top:8px;">Steward: Bev Edge Cases</h3>
-                    <div style="width:32px;height:2px;background:var(--white);margin:8px 0;"></div>
-                    <ul style="list-style:none;display:flex;flex-direction:column;gap:3px;">
-                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Complex returns &amp; warranty</li>
-                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- External party coordination</li>
-                        <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Graduated autonomy</li>
-                    </ul>
+                <!-- TRACK 2: MEMBER CARE / STEWARD -->
+                <div class="fi d5" style="display:flex;gap:2px;align-items:stretch;">
+                    <div style="writing-mode:vertical-lr;text-orientation:mixed;transform:rotate(180deg);font-size:var(--label-size);font-weight:700;color:var(--pop);text-transform:uppercase;letter-spacing:0.1em;padding:8px 6px;display:flex;align-items:center;justify-content:center;background:rgba(232,255,89,0.06);border-radius:4px 0 0 4px;flex-shrink:0;">Member Care</div>
+                    <div style="flex:1;background:var(--dark);border:1px solid rgba(255,255,255,0.1);border-radius:0;padding:clamp(12px,2vw,18px);display:flex;flex-direction:column;justify-content:flex-end;">
+                        <span style="font-size:var(--label-size);font-weight:700;color:var(--pop);text-transform:uppercase;letter-spacing:0.1em;">Phase 01</span>
+                        <h3 style="color:var(--white);margin-top:4px;font-size:var(--body-size);">Launch Member Care</h3>
+                        <div style="width:24px;height:2px;background:var(--white);margin:6px 0;"></div>
+                        <ul style="list-style:none;display:flex;flex-direction:column;gap:2px;">
+                            <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Stand up care channel</li>
+                            <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- AI handles simple cases</li>
+                            <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Baseline volume &amp; patterns</li>
+                        </ul>
+                    </div>
+                    <div style="flex:1;background:var(--dark);border:1px solid rgba(255,255,255,0.1);border-radius:0;padding:clamp(12px,2vw,18px);display:flex;flex-direction:column;justify-content:flex-end;">
+                        <span style="font-size:var(--label-size);font-weight:700;color:var(--pop);text-transform:uppercase;letter-spacing:0.1em;">Phase 02</span>
+                        <h3 style="color:var(--white);margin-top:4px;font-size:var(--body-size);">Steward: L1</h3>
+                        <div style="width:24px;height:2px;background:var(--white);margin:6px 0;"></div>
+                        <ul style="list-style:none;display:flex;flex-direction:column;gap:2px;">
+                            <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- AI recommends, human approves</li>
+                            <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Top 2 highest-pain cases</li>
+                            <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Track accuracy vs. human</li>
+                        </ul>
+                    </div>
+                    <div style="flex:1;background:rgba(232,255,89,0.04);border:1px solid rgba(232,255,89,0.15);border-radius:0 4px 4px 0;padding:clamp(12px,2vw,18px);display:flex;flex-direction:column;justify-content:flex-end;">
+                        <span style="font-size:var(--label-size);font-weight:700;color:var(--pop);text-transform:uppercase;letter-spacing:0.1em;">Phase 03</span>
+                        <h3 style="color:var(--white);margin-top:4px;font-size:var(--body-size);">Steward: L2</h3>
+                        <div style="width:24px;height:2px;background:var(--pop);margin:6px 0;"></div>
+                        <ul style="list-style:none;display:flex;flex-direction:column;gap:2px;">
+                            <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Graduated autonomy</li>
+                            <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Proven cases go end-to-end</li>
+                            <li style="font-size:var(--tiny-size);color:rgba(255,255,255,0.45);">- Expand to Bev edge cases</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
