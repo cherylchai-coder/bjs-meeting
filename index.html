@@ -386,12 +386,126 @@
             <div class="line fi d1"></div>
             <span class="label fi d1">Partnership Overview</span>
             <h2 class="fi d2">Where we started</h2>
-            <!-- PLACEHOLDER MARKER -->
-            <div class="fi d3" style="margin-top:20px;padding:clamp(24px,4vw,40px);border:2px dashed var(--coral);border-radius:16px;text-align:center;">
-                <span style="font-family:var(--font-body);font-size:var(--label-size);font-weight:700;color:var(--coral);text-transform:uppercase;letter-spacing:0.12em;background:rgba(217,79,59,0.15);padding:4px 12px;border-radius:4px;">Placeholder</span>
-                <p style="font-family:var(--font-display);font-size:clamp(1.1rem,2vw,1.5rem);color:rgba(255,255,255,0.5);margin-top:16px;">Need a timeline view of the partnership</p>
-                <p style="font-size:var(--small-size);color:rgba(255,255,255,0.25);margin-top:8px;">Key milestones: initial engagement &rarr; use case identification &rarr; POC scope &rarr; shopping assistant launch &rarr; coupons agent &rarr; membership expert &rarr; today</p>
+            <!-- TIMELINE -->
+            <div class="fi d3" style="margin-top:clamp(12px,2vh,24px);width:100%;">
+
+                <!-- ── ROW 1: Apr–Sep 2025 ── -->
+                <div style="position:relative;width:100%;">
+                    <div style="position:absolute;top:9px;left:12.5%;width:75%;height:2px;background:var(--accent2);z-index:0;"></div>
+                    <div style="display:grid;grid-template-columns:repeat(4,1fr);position:relative;z-index:1;">
+
+                        <!-- 1: Initial Engagement -->
+                        <div style="display:flex;flex-direction:column;align-items:center;">
+                            <div style="width:18px;height:18px;border-radius:50%;background:var(--pop);box-shadow:0 0 0 4px rgba(232,255,89,0.12);flex-shrink:0;"></div>
+                            <div style="height:10px;width:1px;background:rgba(255,255,255,0.15);"></div>
+                            <div style="text-align:center;padding:0 6px;">
+                                <div style="font-family:var(--font-body);font-size:var(--tiny-size);font-weight:700;color:var(--pop);text-transform:uppercase;letter-spacing:0.1em;">Apr 2025</div>
+                                <div style="font-family:var(--font-display);font-size:clamp(0.72rem,1.1vw,0.88rem);font-weight:600;color:var(--white);margin-top:3px;line-height:1.25;">Initial Engagement</div>
+                                <div style="font-size:var(--tiny-size);color:rgba(255,255,255,0.35);margin-top:2px;line-height:1.4;">Partnership begins</div>
+                            </div>
+                        </div>
+
+                        <!-- 2: Use Cases -->
+                        <div style="display:flex;flex-direction:column;align-items:center;">
+                            <div style="width:18px;height:18px;border-radius:50%;background:var(--accent2);flex-shrink:0;"></div>
+                            <div style="height:10px;width:1px;background:rgba(255,255,255,0.15);"></div>
+                            <div style="text-align:center;padding:0 6px;">
+                                <div style="font-family:var(--font-body);font-size:var(--tiny-size);font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;">Spring 2025</div>
+                                <div style="font-family:var(--font-display);font-size:clamp(0.72rem,1.1vw,0.88rem);font-weight:600;color:var(--white);margin-top:3px;line-height:1.25;">Use Cases Defined</div>
+                                <div style="font-size:var(--tiny-size);color:rgba(255,255,255,0.35);margin-top:2px;line-height:1.4;">Product discovery &amp; club inquiries</div>
+                            </div>
+                        </div>
+
+                        <!-- 3: First Build -->
+                        <div style="display:flex;flex-direction:column;align-items:center;">
+                            <div style="width:18px;height:18px;border-radius:50%;background:var(--accent2);flex-shrink:0;"></div>
+                            <div style="height:10px;width:1px;background:rgba(255,255,255,0.15);"></div>
+                            <div style="text-align:center;padding:0 6px;">
+                                <div style="font-family:var(--font-body);font-size:var(--tiny-size);font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;">Jul 2025</div>
+                                <div style="font-family:var(--font-display);font-size:clamp(0.72rem,1.1vw,0.88rem);font-weight:600;color:var(--white);margin-top:3px;line-height:1.25;">First Onsite Build</div>
+                                <div style="font-size:var(--tiny-size);color:rgba(255,255,255,0.35);margin-top:2px;line-height:1.4;">Bev shopping assistant scoped</div>
+                            </div>
+                        </div>
+
+                        <!-- 4: Go Live -->
+                        <div style="display:flex;flex-direction:column;align-items:center;">
+                            <div style="width:18px;height:18px;border-radius:50%;background:var(--accent2);flex-shrink:0;"></div>
+                            <div style="height:10px;width:1px;background:rgba(255,255,255,0.15);"></div>
+                            <div style="text-align:center;padding:0 6px;">
+                                <div style="font-family:var(--font-body);font-size:var(--tiny-size);font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;">Sep 2025</div>
+                                <div style="font-family:var(--font-display);font-size:clamp(0.72rem,1.1vw,0.88rem);font-weight:600;color:var(--white);margin-top:3px;line-height:1.25;">Go Live</div>
+                                <div style="font-size:var(--tiny-size);color:rgba(255,255,255,0.35);margin-top:2px;line-height:1.4;">Bev launches on BJ's platform</div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
+
+                <!-- ── Oct–Nov bridge ── -->
+                <div style="display:flex;align-items:center;gap:8px;margin:clamp(6px,1vh,12px) 0;padding:0 12.5%;">
+                    <div style="flex:1;height:1px;background:rgba(255,255,255,0.07);"></div>
+                    <span style="font-family:var(--font-body);font-size:clamp(0.6rem,0.85vw,0.72rem);color:rgba(255,255,255,0.25);font-style:italic;white-space:nowrap;">Oct &amp; Nov 2025 &mdash; refining &amp; alignment for growth</span>
+                    <div style="flex:1;height:1px;background:rgba(255,255,255,0.07);"></div>
+                </div>
+
+                <!-- ── ROW 2: Dec 2025 → What's Next ── -->
+                <div style="position:relative;width:100%;">
+                    <div style="position:absolute;top:9px;left:12.5%;width:50%;height:2px;background:var(--accent2);z-index:0;"></div>
+                    <div style="position:absolute;top:8px;left:62.5%;width:25%;height:0;border-top:2px dashed rgba(255,255,255,0.18);z-index:0;"></div>
+                    <div style="display:grid;grid-template-columns:repeat(4,1fr);position:relative;z-index:1;align-items:start;">
+
+                        <!-- 5: Dec 2025 -->
+                        <div style="display:flex;flex-direction:column;align-items:center;">
+                            <div style="width:18px;height:18px;border-radius:50%;background:var(--accent2);flex-shrink:0;"></div>
+                            <div style="height:10px;width:1px;background:rgba(255,255,255,0.15);"></div>
+                            <div style="text-align:center;padding:0 6px;">
+                                <div style="font-family:var(--font-body);font-size:var(--tiny-size);font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;">Dec 2025</div>
+                                <div style="font-family:var(--font-display);font-size:clamp(0.72rem,1.1vw,0.88rem);font-weight:600;color:var(--white);margin-top:3px;line-height:1.25;">New Use Cases</div>
+                                <div style="font-size:var(--tiny-size);color:rgba(255,255,255,0.35);margin-top:2px;line-height:1.4;">Membership expert, coupons, member care &amp; promotions</div>
+                            </div>
+                        </div>
+
+                        <!-- 6: Jan 2026 -->
+                        <div style="display:flex;flex-direction:column;align-items:center;">
+                            <div style="width:18px;height:18px;border-radius:50%;background:var(--accent2);flex-shrink:0;"></div>
+                            <div style="height:10px;width:1px;background:rgba(255,255,255,0.15);"></div>
+                            <div style="text-align:center;padding:0 6px;">
+                                <div style="font-family:var(--font-body);font-size:var(--tiny-size);font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;">Jan 2026</div>
+                                <div style="font-family:var(--font-display);font-size:clamp(0.72rem,1.1vw,0.88rem);font-weight:600;color:var(--white);margin-top:3px;line-height:1.25;">Launched Bev</div>
+                                <div style="font-size:var(--tiny-size);color:rgba(255,255,255,0.35);margin-top:2px;line-height:1.4;">Your Membership Expert</div>
+                            </div>
+                        </div>
+
+                        <!-- 7: Mar 2026 — Launching Coupons -->
+                        <div style="display:flex;flex-direction:column;align-items:center;">
+                            <div style="width:18px;height:18px;border-radius:50%;background:var(--pop);box-shadow:0 0 0 4px rgba(232,255,89,0.18);flex-shrink:0;"></div>
+                            <div style="height:10px;width:1px;background:rgba(255,255,255,0.15);"></div>
+                            <div style="text-align:center;padding:0 6px;">
+                                <div style="font-family:var(--font-body);font-size:var(--tiny-size);font-weight:700;color:var(--pop);text-transform:uppercase;letter-spacing:0.1em;">Mar 2026</div>
+                                <div style="font-family:var(--font-display);font-size:clamp(0.72rem,1.1vw,0.88rem);font-weight:600;color:var(--white);margin-top:3px;line-height:1.25;">Launching Coupons</div>
+                                <div style="margin-top:5px;display:inline-block;font-family:var(--font-body);font-size:clamp(0.55rem,0.8vw,0.65rem);font-weight:700;color:var(--coral);text-transform:uppercase;letter-spacing:0.08em;background:rgba(217,79,59,0.18);padding:2px 6px;border-radius:4px;">GO/NO-GO Today</div>
+                            </div>
+                        </div>
+
+                        <!-- 8: What's Next -->
+                        <div style="display:flex;flex-direction:column;align-items:center;">
+                            <div style="width:18px;height:18px;border-radius:50%;background:transparent;border:2px dashed rgba(255,255,255,0.22);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <div style="width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.18);"></div>
+                            </div>
+                            <div style="height:10px;width:1px;background:rgba(255,255,255,0.08);"></div>
+                            <div style="padding:7px 9px;border:1px dashed rgba(255,255,255,0.14);border-radius:10px;width:100%;">
+                                <div style="font-family:var(--font-body);font-size:clamp(0.55rem,0.8vw,0.65rem);font-weight:700;color:var(--pop);text-transform:uppercase;letter-spacing:0.1em;">What&rsquo;s Next</div>
+                                <div style="font-family:var(--font-body);font-size:clamp(0.55rem,0.8vw,0.65rem);font-weight:600;color:rgba(255,255,255,0.38);text-transform:uppercase;letter-spacing:0.08em;margin-top:5px;">Mar 2026</div>
+                                <div style="font-size:var(--tiny-size);color:rgba(255,255,255,0.28);margin-top:2px;line-height:1.4;">FYC rollout &amp; EZ Renewals</div>
+                                <div style="font-family:var(--font-body);font-size:clamp(0.55rem,0.8vw,0.65rem);font-weight:600;color:rgba(255,255,255,0.38);text-transform:uppercase;letter-spacing:0.08em;margin-top:5px;">EOM Mar / Apr 2026</div>
+                                <div style="font-size:var(--tiny-size);color:rgba(255,255,255,0.28);margin-top:2px;line-height:1.4;">Membercare &amp; Promotions</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
             </div>
         </div>
     </section>
