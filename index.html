@@ -15,8 +15,8 @@
             --text: #1A1A1A; --text2: #444; --text3: #777; --white: #FFFFFF;
             --font-display: 'Lora', Georgia, serif;
             --font-body: 'Inter', -apple-system, sans-serif;
-            --title-size: clamp(3.24rem, 7.56vw, 5.94rem);
-            --h2-size: clamp(2.16rem, 4.86vw, 4.1rem);
+            --title-size: clamp(2.5rem, 5.5vw, 4.5rem);
+            --h2-size: clamp(1.6rem, 3.2vw, 2.6rem);
             --h3-size: clamp(1.19rem, 2.16vw, 1.62rem);
             --body-size: clamp(0.88rem, 1.4vw, 1.24rem);
             --small-size: clamp(0.78rem, 1.08vw, 0.99rem);
@@ -68,7 +68,7 @@
         .title-badge { display: inline-block; font-family: var(--font-body); font-size: var(--label-size); font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--pop); border: 1px solid rgba(232,255,89,0.3); padding: 4px 12px; border-radius: 4px; }
         .subtitle { font-family: var(--font-body); font-size: clamp(0.97rem, 1.73vw, 1.3rem); color: rgba(255,255,255,0.72); max-width: 600px; }
         .g { display: grid; gap: var(--gap); } .g2 { grid-template-columns: repeat(2, 1fr); } .g3 { grid-template-columns: repeat(3, 1fr); } .g4 { grid-template-columns: repeat(4, 1fr); }
-        .narrative { font-family: var(--font-display); font-size: clamp(1.73rem, 3.78vw, 3.24rem); font-weight: 500; line-height: 1.2; letter-spacing: -0.02em; max-width: 750px; }
+        .narrative { font-family: var(--font-display); font-size: clamp(1.4rem, 2.8vw, 2.2rem); font-weight: 500; line-height: 1.25; letter-spacing: -0.02em; max-width: 700px; }
         .s-dark .narrative { color: rgba(255,255,255,0.82); } .s-dark .narrative strong { color: var(--white); }
         .s-accent .narrative { color: rgba(255,255,255,0.8); } .s-accent .narrative strong { color: var(--white); }
         .s-warm .narrative { color: var(--text); } .s-coral .narrative { color: rgba(255,255,255,0.85); } .s-coral .narrative strong { color: var(--white); }
@@ -77,7 +77,7 @@
         .bubble-name { font-family: var(--font-body); font-size: var(--label-size); font-weight: 600; font-style: normal; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.72); margin-bottom: 4px; }
         .bubbles-col { display: flex; flex-direction: column; gap: clamp(10px, 1.5vw, 16px); align-items: flex-start; }
         .section-break .slide-content { align-items: flex-start; gap: clamp(6px, 1vh, 12px); }
-        .section-break h2 { font-size: clamp(2.16rem, 5.4vw, 4.32rem); max-width: 700px; }
+        .section-break h2 { font-size: clamp(1.8rem, 3.5vw, 3rem); max-width: 700px; }
         .section-desc { font-size: clamp(0.95rem, 1.62vw, 1.24rem); color: rgba(255,255,255,0.72); max-width: 500px; }
         .s-accent .section-desc { color: rgba(255,255,255,0.78); }
         .section-number { font-family: var(--font-body); font-size: var(--label-size); font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
@@ -848,15 +848,14 @@
         </div>
     </section>
 
-    <!-- 8: THE GAP — BEFORE/AFTER ANIMATED DIAGRAM -->
+    <!-- 8a: THE GAP — TODAY -->
     <section class="slide s-dark" data-slide="21">
         <div class="slide-content">
             <div class="line fi d1"></div>
             <span class="label fi d1">The Resolution Gap</span>
-            <h2 class="fi d2" style="margin-bottom:16px;">Same issue. Two worlds.</h2>
-            <div class="gap-diagram">
-                <!-- TOP PANEL: TODAY -->
-                <div class="gap-panel fi d3">
+            <h2 class="fi d2">Today: AI hits a wall</h2>
+            <div class="gap-diagram" style="margin-top:clamp(24px,4vw,40px);">
+                <div class="gap-panel fi d3" style="padding:clamp(24px,4vw,40px) clamp(24px,3.5vw,36px);">
                     <div class="gap-panel-label" style="color:var(--coral);">Today</div>
                     <div class="gap-flow">
                         <div class="gap-node">AI</div>
@@ -875,10 +874,20 @@
                         <div class="gap-arrow" style="align-self:center;">&rarr;</div>
                         <div class="gap-node">Customer<span class="gap-node-dim">finally gets answer</span></div>
                     </div>
-                    <div class="gap-caption">When other parties need to be involved, AI can&rsquo;t coordinate &mdash; so it hands off to a human who does the work manually.</div>
+                    <div class="gap-caption" style="margin-top:clamp(16px,2.5vw,24px);">When other parties need to be involved, AI can&rsquo;t coordinate &mdash; so it hands off to a human who does the work manually.</div>
                 </div>
-                <!-- BOTTOM PANEL: WITH STEWARD (ANIMATED) -->
-                <div class="gap-panel steward fi d4">
+            </div>
+        </div>
+    </section>
+
+    <!-- 8b: WITH STEWARD -->
+    <section class="slide s-dark" data-slide="22">
+        <div class="slide-content">
+            <div class="line fi d1"></div>
+            <span class="label fi d1">The Resolution Gap</span>
+            <h2 class="fi d2">With Steward: one owner, start to finish</h2>
+            <div class="gap-diagram" style="margin-top:clamp(24px,4vw,40px);">
+                <div class="gap-panel steward fi d3" style="padding:clamp(24px,4vw,40px) clamp(24px,3.5vw,36px);">
                     <div class="gap-panel-label" style="color:var(--accent2);">With Agent Steward</div>
                     <div class="gap-flow">
                         <div class="gap-node">AI</div>
@@ -899,14 +908,14 @@
                         <div class="gap-connector"><div class="gap-connector-bg"></div><div class="gap-connector-fill gc-d4"></div><div class="gap-particle gp-r1"></div></div>
                         <div class="gap-node gap-node-green" style="animation:node-pulse 3s ease infinite 2s;">Customer<span class="gap-node-dim" style="color:var(--accent2);">resolved, first ask</span></div>
                     </div>
-                    <div class="gap-caption">Agent Steward sits in the middle &mdash; coordinating teams, driving follow-ups, keeping the customer informed. One owner, start to finish.</div>
+                    <div class="gap-caption" style="margin-top:clamp(16px,2.5vw,24px);">Agent Steward sits in the middle &mdash; coordinating teams, driving follow-ups, keeping the customer informed. One owner, start to finish.</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- 9: ORCHESTRATION ANIMATION — ONE OWNER, START TO FINISH -->
-    <section class="slide s-light" data-slide="22">
+    <section class="slide s-light" data-slide="23">
         <div class="slide-content">
             <div class="line fi d1"></div>
             <span class="label fi d1">One Owner. Start to Finish.</span>
@@ -1008,7 +1017,7 @@
     </section>
 
     <!-- 11: BRIDGE — WHAT YOU JUST SAW -->
-    <section class="slide s-dark" data-slide="23">
+    <section class="slide s-dark" data-slide="24">
         <div class="slide-content">
             <p class="narrative fi d1">What you just saw is <strong>Level 1.</strong></p>
             <p class="narrative fi d2" style="margin-top:16px;color:rgba(255,255,255,0.75);">AI investigates, coordinates, and recommends. Human approves. But that&rsquo;s not where it ends.</p>
@@ -1017,7 +1026,7 @@
     </section>
 
     <!-- 12: PATH TO AUTONOMY — CLEAN STAIRCASE -->
-    <section class="slide s-light" data-slide="24">
+    <section class="slide s-light" data-slide="25">
         <div class="slide-content">
             <div class="line fi d1"></div>
             <span class="label fi d1">The Path to Autonomy</span>
@@ -1060,7 +1069,7 @@
          ═══════════════════════════════════════════ -->
 
     <!-- 12: ONE PLATFORM — FLYWHEEL DIAGRAM -->
-    <section class="slide s-dark" data-slide="25">
+    <section class="slide s-dark" data-slide="26">
         <div class="slide-content">
             <div class="line fi d1"></div>
             <span class="label fi d1">One Platform</span>
@@ -1123,7 +1132,7 @@
     </section>
 
     <!-- 13: ROADMAP — ASCENDING STAIRCASE -->
-    <section class="slide s-dark" data-slide="26">
+    <section class="slide s-dark" data-slide="27">
         <div class="slide-content">
             <div class="line fi d1"></div>
             <span class="label fi d1">Implementation Roadmap</span>
